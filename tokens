@@ -1,0 +1,60 @@
+create          --> TkCreate
+bot             --> TkBot
+execute         --> TkExecute
+if              --> TkIf
+else            --> TkElse
+while           --> TkWhile
+int             --> TkInt
+bool            --> TkBool
+char            --> TkChar
+store           --> TkStore
+recieve         --> TkRecieve
+on              --> TkOn
+end             --> TkEnd
+activate        --> TkActivate
+activation      --> TkActivation
+advance         --> TkAdvance
+deactivate      --> TkDactivate
+deactivation    --> TkDeactivation
+default         --> TkDefault
+collect         --> TkCollect
+as              --> TkAs
+drop            --> TkDrop
+left            --> TkLeft
+right           --> TkRight
+up              --> TkUp
+down            --> TkDown
+read            --> TkRead
+true            --> TkTrue
+false           --> TkFalse
+
+varX -> TkIdent("varX")
+
+p - TkCharacter('p')
+
+4269 -> TkNum(4269)
+
+
+,   ->  TkComa
+.   ->  TkPunto
+:   ->  TkDosPuntos
+(   ->  TkParAbre
+)   ->  TkParCierra
+
++   -> TkSuma
+-   -> TkResta
+*   -> TkMult
+/   -> TkDiv
+%   -> TkMod
+/\  -> TkConjuncion
+\/  -> TkDisyuncion
+~   -> TkNegacion
+<   -> TkMenor
+<=  -> TkMenorIgual
+>   -> TkMayor
+>=  -> TkMayorIgual
+=   -> TkIgual
+
+
+
+
