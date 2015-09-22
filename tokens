@@ -28,7 +28,7 @@ read            --> TkRead
 true            --> TkTrue
 false           --> TkFalse
 
-varX -> TkIndent("varX")
+varX -> TkIdent("varX")
 
 p - TkCharacter('p')
 
