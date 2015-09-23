@@ -1,15 +1,23 @@
+require_relative 'token.rb'
+
 def lexer(file)
+
     reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
              deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
 
-    /\n| |\t/
+    singles   = /\A(,|\.|:|\+|-|\*|\/|%|~|<|>|=)[ \t\n]/
+
+    megaHash  = Hash[","   =>  "TkComa", "."   =>  "TkPunto", ":"   =>  "TkDosPuntos", "("   =>  "TkParAbre",
+                 ")"   =>  "TkParCierra", "+"   => "TkSuma", "-"   => "TkResta", "*"   => "TkMult", "/"   => "TkDiv", 
+                "%"   => "TkMod", "\/\\"  => "TkConjuncion", "\\\/"  => "TkDisyuncion", "~"   => "TkNegacion", 
+                "<"   => "TkMenor", "<="  => "TkMenorIgual", ">"   => "TkMayor", ">="  => "TkMayorIgual", "="   => "TkIgual"]
+
 
     program = File.read(file)
     line = 1
     column = 1
     has_errors = false
     while not program.empty?
-        # puts "Programa:\n'#{program}'\n\n"
         case program
         when /\A +/s 
             sub = program.slice!(/\A +/)
@@ -17,57 +25,59 @@ def lexer(file)
 
         when reservedW
             sub = program.slice!(reservedW)
+            print Token.new("Tk"+sub.capitalize, line, column), ", "
             column += sub.length
-
+            
         when /\A\n/
             program.slice!(/\A\n/)
             line += 1
             column = 1
 
-        when /\A,[ \n\t]/
-            column += 1
-        when /\A.[ \n\t]/
-            column += 1
-        when /\A:[ \n\t]/
-            column += 1    
-        when /\A\(/
-            column += 1
-        when /\A\)/
-            column += 1
-
-        when /\A\+[ \n\t]/
-            column += 1
-        when /\A\-[ \n\t]/
-            column += 1
-        when /\A\*[ \n\t]/
-            column += 1
-        when /\A\/[ \n\t]/
-            column += 1
-        when /\A\%[ \n\t]/
-            column += 1
-        when /\A\/\\[ \n\t]/ # conjuncion
-            column += 1
-        when /\A\\\/[ \n\t]/ # disjuncion
-            column += 1
-        when /\A~[ \n\t]/
-            column += 1
         when /\A<=[ \n\t]/
-            column += 1
-        when /\A<[ \n\t]/
-            column += 1
+            print Token.new(megaHash[program[0,2]], line, column), ", "
+            column += 2
+            program[0,2] = ''
+
         when /\A>=[ \n\t]/
-            column += 1
-        when /\A>[ \n\t]/
-            column += 1
-        when /\A=[ \n\t]/
-            column += 1
+            print Token.new(megaHash[program[0,2]], line, column), ", "
+            column += 2
+            program[0,2] = ''
 
+        when /\A\/\\[ \n\t]/ # conjunction
+            print Token.new(megaHash[program[0,2]], line, column), ", "
+            column += 2
+            program[0,2] = ''
 
-        else
-            sub = program.slice!(/\A.+/)
-            column += sub.length
+        when /\A\\\/[ \n\t]/ # disjunction
+            print Token.new(megaHash[program[0,2]], line, column), ", "
+            column += 2
+            program[0,2] = ''
+
+        when singles
+            print Token.new(megaHash[program[0]], line, column), ", "
+            column += 1
+            program[0] = ''
+
+        when /\A\(/
+            print Token.new(megaHash[program[0]], line, column), ", "
+            column += 1
+            program[0] = ''
+
+        when /\A\)/
+            print Token.new(megaHash[program[0]], line, column), ", "
+            column += 1
+            program[0] = ''
+
+        #Hasta ahora todo esto lo tomo como identificadores
+        #hay que seguir refinando, para sacar Nums y chars.
+        when /\A\w+ /
+            sub = program.slice!(/\A\w+ /)
+            print TIdent.new("TkIdent", sub,  line, column), ", "
+            column += sub.length - 1
+        #     has_errors = true
         end
 
+    
     end
 end
 

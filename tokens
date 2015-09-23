@@ -32,26 +32,24 @@ varX -> TkIdent("varX")
 p - TkCharacter('p')
 4269 -> TkNum(4269)
 
-
-,   ->  TkComa
-.   ->  TkPunto
-:   ->  TkDosPuntos
-(   ->  TkParAbre
-)   ->  TkParCierra
-
-+   -> TkSuma
--   -> TkResta
-*   -> TkMult
-/   -> TkDiv
-%   -> TkMod
-/\  -> TkConjuncion
-\/  -> TkDisyuncion
-~   -> TkNegacion
-<   -> TkMenor
-<=  -> TkMenorIgual
->   -> TkMayor
->=  -> TkMayorIgual
-=   -> TkIgual
+<=  => TkMenorIgual
+>=  => TkMayorIgual
+/\  => TkConjuncion
+\/  => TkDisyuncion
+,   =>  TkComa
+.   =>  TkPunto
+:   =>  TkDosPuntos
+(   =>  TkParAbre
+)   =>  TkParCierra
++   => TkSuma
+-   => TkResta
+*   => TkMult
+/   => TkDiv
+%   => TkMod
+~   => TkNegacion
+<   => TkMenor
+>   => TkMayor
+=   => TkIgual
 
 
 

@@ -1,6 +1,1 @@
-create if
-Hola
-  Como
-Estas?
-Bien y tu?
-collect
+create if Hola , . / Como Bien /\ false y < <= < tu collect)
