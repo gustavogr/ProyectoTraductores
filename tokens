@@ -29,10 +29,7 @@ true            --> TkTrue
 false           --> TkFalse
 
 varX -> TkIdent("varX")
-
-
 p - TkCharacter('p')
-
 4269 -> TkNum(4269)
 
 

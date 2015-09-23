@@ -35,31 +35,31 @@ def lexer(file)
         when /\A\)/
             column += 1
 
-        when /\A\+/
+        when /\A\+[ \n\t]/
             column += 1
-        when /\A\-/
+        when /\A\-[ \n\t]/
             column += 1
-        when /\A\*/
+        when /\A\*[ \n\t]/
             column += 1
-        when /\A\//
+        when /\A\/[ \n\t]/
             column += 1
-        when /\A\%/
+        when /\A\%[ \n\t]/
             column += 1
-        when /\A\/\\/ # conjuncion
+        when /\A\/\\[ \n\t]/ # conjuncion
             column += 1
-        when /\A\\\// # disjuncion
+        when /\A\\\/[ \n\t]/ # disjuncion
             column += 1
-        when /\A~/
+        when /\A~[ \n\t]/
             column += 1
-        when /\A<=/
+        when /\A<=[ \n\t]/
             column += 1
-        when /\A</
+        when /\A<[ \n\t]/
             column += 1
-        when /\A>=/
+        when /\A>=[ \n\t]/
             column += 1
-        when /\A>/
+        when /\A>[ \n\t]/
             column += 1
-        when /\A=/
+        when /\A=[ \n\t]/
             column += 1
 
 
