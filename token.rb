@@ -5,7 +5,7 @@ class Token
         @column = column
     end
     def to_s
-        "#Tk{@name} #{@line} #{@column}"
+        "Tk#{@name} #{@line} #{@column}"
     end
 end
 

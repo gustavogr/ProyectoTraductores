@@ -5,12 +5,12 @@ def lexer(file)
     reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
              deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
 
-    singles   = /\A(,|\.|:|\+|-|\*|\/|%|~|<|>|=)[ \t\n]/ # Faltan los parentesis
+    singles   = /\A(,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
 
-    megaHash  = Hash[","   =>  "TkComa", "."   =>  "TkPunto", ":"   =>  "TkDosPuntos", "("   =>  "TkParAbre",
-                 ")"   =>  "TkParCierra", "+"   => "TkSuma", "-"   => "TkResta", "*"   => "TkMult", "/"   => "TkDiv", 
-                "%"   => "TkMod", "\/\\"  => "TkConjuncion", "\\\/"  => "TkDisyuncion", "~"   => "TkNegacion", 
-                "<"   => "TkMenor", "<="  => "TkMenorIgual", ">"   => "TkMayor", ">="  => "TkMayorIgual", "="   => "TkIgual"]
+    tokenHash  = Hash[","   =>  "Coma", "."   =>  "Punto", ":"   =>  "DosPuntos", "("   =>  "ParAbre",
+                 ")"   =>  "ParCierra", "+"   => "Suma", "-"   => "Resta", "*"   => "Mult", "/"   => "Div", 
+                "%"   => "Mod", "\/\\"  => "Conjuncion", "\\\/"  => "Disyuncion", "~"   => "Negacion", 
+                "<"   => "Menor", "<="  => "MenorIgual", ">"   => "Mayor", ">="  => "MayorIgual", "="   => "Igual"]
 
 
     program = File.read(file)
@@ -25,8 +25,7 @@ def lexer(file)
 
         when reservedW
             sub = program.slice!(reservedW)
-            # Si cableamos el Tk en las clases hay que quitarlo de aqui
-            print Token.new("Tk"+sub.capitalize, line, column), ", "
+            print Token.new(sub.capitalize, line, column)
             column += sub.length
             
         when /\A\n/
@@ -34,42 +33,28 @@ def lexer(file)
             line += 1
             column = 1
 
-        # Podriamos agrupar todos los simbolos compuestos
-
         when /\A<=[ \n\t]/
-            print Token.new(megaHash[program[0,2]], line, column), ", "
+            print Token.new(tokenHash[program[0,2]], line, column)
             column += 2
             program[0,2] = ''
 
         when /\A>=[ \n\t]/
-            print Token.new(megaHash[program[0,2]], line, column), ", "
+            print Token.new(tokenHash[program[0,2]], line, column)
             column += 2
             program[0,2] = ''
 
         when /\A\/\\[ \n\t]/ # conjunction
-            print Token.new(megaHash[program[0,2]], line, column), ", "
+            print Token.new(tokenHash[program[0,2]], line, column)
             column += 2
             program[0,2] = ''
 
         when /\A\\\/[ \n\t]/ # disjunction
-            print Token.new(megaHash[program[0,2]], line, column), ", "
+            print Token.new(tokenHash[program[0,2]], line, column)
             column += 2
             program[0,2] = ''
 
         when singles
-            print Token.new(megaHash[program[0]], line, column), ", "
-            column += 1
-            program[0] = ''
-
-        # Los parentesis pueden ser parte de singles
-
-        when /\A\(/
-            print Token.new(megaHash[program[0]], line, column), ", "
-            column += 1
-            program[0] = ''
-
-        when /\A\)/
-            print Token.new(megaHash[program[0]], line, column), ", "
+            print Token.new(tokenHash[program[0]], line, column)
             column += 1
             program[0] = ''
 
@@ -77,7 +62,7 @@ def lexer(file)
         #hay que seguir refinando, para sacar Nums y chars.
         when /\A\w+ /
             sub = program.slice!(/\A\w+ /)
-            print TIdent.new("TkIdent", sub,  line, column), ", "
+            #print TIdent.new("TkIdent", sub,  line, column)
             column += sub.length - 1
         #     has_errors = true
         end
