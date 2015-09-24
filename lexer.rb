@@ -71,8 +71,7 @@ def lexer(file)
             column += sub.length
 
         ## Identificadores
-
-        when /\A\w+(\W|\z)/
+        when /\A[a-zA-Z]\w+(\W|\z)/
             sub = program.slice!(/\A[a-zA-Z]\w+/)
             tokensList << TkIdent.new(sub, line, column)
             column += sub.length
@@ -81,11 +80,18 @@ def lexer(file)
         when /\A\$\$.*$/
             sub = program.slice!(/\A\$\$.*$/)
 
+        ## Comentarios multilinea
         when /\A\$-.*?-\$/m
             sub = program.slice!(/\A\$-.*?-\$/m)
             line += sub.count("\n")
             lastLine = sub.slice!(/^.*\z/)
             column = lastLine.length + 1
+
+        when /\A\d+[a-zA-Z]/
+            hasErrors = true
+            sub = program.slice!(/\A\d+/)
+            puts "Error: Caracter inesperado \"#{sub[0]}\" en la fila #{line}, columna #{column}"
+            column += sub.length
 
         else
             sub = program.slice!(0)
@@ -95,10 +101,7 @@ def lexer(file)
     
         end 
     end
-
-    puts tokensList
-    return tokensList
+  
+    return tokensList unless hasErrors
 end
 
-
-lexer("prueba")
