@@ -5,7 +5,7 @@ def lexer(file)
     reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
              deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
 
-    singles   = /\A(,|\.|:|\+|-|\*|\/|%|~|<|>|=)[ \t\n]/
+    singles   = /\A(,|\.|:|\+|-|\*|\/|%|~|<|>|=)[ \t\n]/ # Faltan los parentesis
 
     megaHash  = Hash[","   =>  "TkComa", "."   =>  "TkPunto", ":"   =>  "TkDosPuntos", "("   =>  "TkParAbre",
                  ")"   =>  "TkParCierra", "+"   => "TkSuma", "-"   => "TkResta", "*"   => "TkMult", "/"   => "TkDiv", 
@@ -25,6 +25,7 @@ def lexer(file)
 
         when reservedW
             sub = program.slice!(reservedW)
+            # Si cableamos el Tk en las clases hay que quitarlo de aqui
             print Token.new("Tk"+sub.capitalize, line, column), ", "
             column += sub.length
             
@@ -32,6 +33,8 @@ def lexer(file)
             program.slice!(/\A\n/)
             line += 1
             column = 1
+
+        # Podriamos agrupar todos los simbolos compuestos
 
         when /\A<=[ \n\t]/
             print Token.new(megaHash[program[0,2]], line, column), ", "
@@ -57,6 +60,8 @@ def lexer(file)
             print Token.new(megaHash[program[0]], line, column), ", "
             column += 1
             program[0] = ''
+
+        # Los parentesis pueden ser parte de singles
 
         when /\A\(/
             print Token.new(megaHash[program[0]], line, column), ", "
