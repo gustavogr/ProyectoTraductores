@@ -1,1 +1,12 @@
-create if Hola , . / Como Bien /\ false y < <= < tu collect)
+create
+    int bot contador
+        on activation:
+            store 35.
+        end
+    end
+
+execute
+    $- CALLATE
+        -$ activate
+    activate contador.
+end
