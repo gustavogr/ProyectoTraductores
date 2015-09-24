@@ -5,9 +5,9 @@ def lexer(file)
     reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
              deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
 
-    singles   = /\A(,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
+    symbols   = /\A(>=|<=|\\\/|\/\\|,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
 
-    tokenHash  = Hash[","   =>  "Coma", "."   =>  "Punto", ":"   =>  "DosPuntos", "("   =>  "ParAbre",
+    tokenHash = Hash[","   =>  "Coma", "."   =>  "Punto", ":"   =>  "DosPuntos", "("   =>  "ParAbre",
                  ")"   =>  "ParCierra", "+"   => "Suma", "-"   => "Resta", "*"   => "Mult", "/"   => "Div", 
                 "%"   => "Mod", "\/\\"  => "Conjuncion", "\\\/"  => "Disyuncion", "~"   => "Negacion", 
                 "<"   => "Menor", "<="  => "MenorIgual", ">"   => "Mayor", ">="  => "MayorIgual", "="   => "Igual"]
@@ -23,7 +23,7 @@ def lexer(file)
             sub = program.slice!(/\A +/)
             column += sub.length
 
-        when reservedW
+        when /#{reservedW}\W/ 
             sub = program.slice!(reservedW)
             print Token.new(sub.capitalize, line, column)
             column += sub.length
@@ -33,27 +33,7 @@ def lexer(file)
             line += 1
             column = 1
 
-        when /\A<=[ \n\t]/
-            print Token.new(tokenHash[program[0,2]], line, column)
-            column += 2
-            program[0,2] = ''
-
-        when /\A>=[ \n\t]/
-            print Token.new(tokenHash[program[0,2]], line, column)
-            column += 2
-            program[0,2] = ''
-
-        when /\A\/\\[ \n\t]/ # conjunction
-            print Token.new(tokenHash[program[0,2]], line, column)
-            column += 2
-            program[0,2] = ''
-
-        when /\A\\\/[ \n\t]/ # disjunction
-            print Token.new(tokenHash[program[0,2]], line, column)
-            column += 2
-            program[0,2] = ''
-
-        when singles
+        when symbols
             print Token.new(tokenHash[program[0]], line, column)
             column += 1
             program[0] = ''
