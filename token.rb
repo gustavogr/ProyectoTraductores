@@ -22,6 +22,7 @@ class TkIdent < Token
     end
 end
 
+
 class TkChar < Token
     def initialize(argument, line, column)
         @argument = argument
