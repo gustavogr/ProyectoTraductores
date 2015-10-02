@@ -1,12 +1,1 @@
-create
-    int bot contador
-        on activation:
-            store 35.
-        end
-    end
-
-execute
-    $- CALLATE
-        -$ activate
-    activate contador.
-end
+aaaaaaaaaa3333333333

@@ -1,3 +1,17 @@
+# token.rb
+# 
+# Clases para los Token del Lenguaje
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   2 / 10 / 2015
+
 class Token
     def initialize(name, line, column)
         @name = name 

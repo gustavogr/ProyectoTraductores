@@ -1,3 +1,17 @@
+# lexer.rb
+# 
+# Convierte un programa en bot (string) en tokens del lenguaje BOT
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   2 / 10 / 2015
+
 require_relative 'token.rb'
 
 def lexer(file)
@@ -128,9 +142,9 @@ def lexer(file)
         ## Identificadores no validos
         #  Extrae los identificadores que empiezan con un numero o un _
         #  Este caso reporta el error.
-        when /\A[\d_]+[a-zA-Z]/
+        when /\A[\d_]\w/
+            sub = program.slice!(/\A[\d_]+/)
             hasErrors = true
-            sub = program.slice!(/\A\d+/)
             puts "Error: Caracter inesperado \"#{sub[0]}\" en la fila #{line}, columna #{column}"
             column += sub.length
 
@@ -145,7 +159,7 @@ def lexer(file)
     
         end 
     end
-  
+
     return tokensList unless hasErrors
 end
 

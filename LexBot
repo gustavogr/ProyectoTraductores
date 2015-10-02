@@ -1,3 +1,17 @@
+# lexBot.rb
+# 
+# Script para correr el interprete con un archivo
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   2 / 10 / 2015
+
 #! /bin/bash
 
 ruby LexBot.rb $1
