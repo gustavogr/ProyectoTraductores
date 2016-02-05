@@ -1,3 +1,4 @@
+
 # lexer.rb
 # 
 # Convierte un programa en bot (string) en tokens del lenguaje BOT
@@ -82,7 +83,7 @@ def lexer(file)
         #  palabra reservada.
         when /#{reservedW}(\W|\z)/ 
             sub = program.slice!(reservedW)
-            tokensList << Token.new(sub.capitalize, line, column)
+            tokensList << Token.new(sub.upcase.to_sym, sub.capitalize, line, column)
             column += sub.length
 
         ## Saltos de línea
@@ -97,7 +98,7 @@ def lexer(file)
         #  reservadas no nos afecta que venga despues del simbolo
         when symbols
             sub = program.slice!(symbols)
-            tokensList << Token.new(tokenHash[sub], line, column)
+            tokensList << Token.new(tokenHash[sub].upcase.to_sym, sub, line, column)
             column += sub.length
 
         ## Caracteres

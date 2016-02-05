@@ -1,12 +1,20 @@
 create
-    int bot contador
+    int bot bar
         on activation:
+            store 3.
+        end
+    end
+    int bot contador
+        on default:
             store 35.
         end
     end
-
 execute
-    $- CALLATE
-        -$ activate
     activate contador.
+    $- CALLATE
+         activate -$
+    activate contador.
+    if bar > 2:
+        advance contador.
+    end
 end

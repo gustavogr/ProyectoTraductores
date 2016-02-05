@@ -37,20 +37,22 @@ p - TkCharacter('p')
 /=  => TkNoIgual
 /\  => TkConjuncion
 \/  => TkDisyuncion
+~   => TkNegacion
+<   => TkMenor
+>   => TkMayor
+=   => TkIgual
+
 ,   =>  TkComa
 .   =>  TkPunto
 :   =>  TkDosPuntos
 (   =>  TkParAbre
 )   =>  TkParCierra
+
 +   => TkSuma
 -   => TkResta
 *   => TkMult
 /   => TkDiv
 %   => TkMod
-~   => TkNegacion
-<   => TkMenor
->   => TkMayor
-=   => TkIgual
 
 
 

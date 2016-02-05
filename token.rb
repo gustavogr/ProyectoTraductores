@@ -13,53 +13,59 @@
 #   2 / 10 / 2015
 
 class Token
-    def initialize(name, line, column)
-        @name = name 
+    def initialize(id, value, line, column)
+        @id = id 
+        @value = value
         @line = line
         @column = column
     end
+  
     def to_s
-        "Tk#{@name} #{@line} #{@column}"
+        "Tk#{@value} #{@line} #{@column}"
+    end
+   
+    def get_token
+        return [@id, @value]
     end
 end
 
 class TkIdent < Token
-    def initialize(argument, line, column)
-        @argument = argument
-        @name = "Ident"
+    def initialize(value, line, column)
+        @id = :IDENT 
+        @value = value
         @line = line
         @column = column
     end
 
     def to_s
-        "Tk#{@name}(\"#{@argument}\") #{@line} #{@column}"
-    end
+        "TkIdent(\"#{@value}\") #{@line} #{@column}" 
+   end
 end
 
 
 class TkChar < Token
-    def initialize(argument, line, column)
-        @argument = argument
-        @name = "Character"
+    def initialize(value, line, column)
+        @id = :CHAR 
+        @value = value
         @line = line
         @column = column
     end
 
     def to_s
-        "Tk#{@name}('#{@argument}') #{@line} #{@column}"
+        "TkCharacter('#{@value}') #{@line} #{@column}"
     end
 end
 
 class TkNum < Token
-    def initialize(argument, line, column)
-        @argument = argument
-        @name = "Num"
+    def initialize(value, line, column)
+        @id = :NUM 
+        @value = value
         @line = line
         @column = column
     end
 
     def to_s
-        "Tk#{@name}(#{@argument}) #{@line} #{@column}"
+        "TkNum(#{@value}) #{@line} #{@column}"
     end
 end
 

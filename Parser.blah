@@ -1,0 +1,37 @@
+# class CLASS_NAME
+#   [precedance table]
+#   [token declearations]
+#   [expected number of S/R conflict]
+#   [options]
+#   [semantic value convertion]
+#   [start rule]
+# rule
+#   GRAMMARS
+
+class Parser
+
+prechigh
+  # nonassoc '++'
+  # left     '*' '/'
+  # left     '+' '-'
+  # right    '='
+preclow
+
+
+token 
+
+    CREATE BOT EXECUTE IF ELSE WHILE INT BOOL CHAR STORE RECIEVE ON END ACTIVATE 
+    ACTIVATION ADVANCE DACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
+    DOWN READ TRUE FALSE
+
+    MENORIGUAL MAYORIGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION MENOR MAYOR IGUAL 
+
+    COMA PUNTO DOSPUNTOS PARABRE PARCIERRA 
+
+    SUMA RESTA MULT DIV MOD 
+
+    Ident("varX") Character('p') Num(4269) 
+
+rule
+
+
