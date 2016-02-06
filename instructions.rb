@@ -5,8 +5,8 @@ class ASTNode
     
 end
 
-class UnExprNodeNode
-    def initialize(operator, expression1)
+class UnExprNodeNode < ASTNode
+    def initialize(operator, expression)
         @operator = operator 
         @expr = expression1 
     end
@@ -15,7 +15,7 @@ class UnExprNodeNode
     # end
 end
 
-class BinExprNode
+class BinExprNode < ASTNode
     def initialize(operator, expression1, expression2)
         @operator = operator 
         @expr1 = expression1 
@@ -26,7 +26,7 @@ class BinExprNode
     # end
 end
 
-class ConditionalNode
+class ConditionalNode < ASTNode
     def initialize(condition, ifStmt, elseStmt)
         @condition = condition 
         @ifBody = ifStmt 
@@ -34,16 +34,15 @@ class ConditionalNode
     end
 end
 
-class UndfIterNode
+class UndfIterNode < ASTNode
     def initialize(condition, statement)
         @condition = condition 
         @statement = statement 
-        @expr2 = expression2
     end
 
 end
 
-class StoreNode
+class StoreNode < ASTNode
     def initialize(robot, expression)
         @robot = robot
         @expr = expression
@@ -54,21 +53,20 @@ end
 ################??????????????????
 #### No entiendo bien donde entra la matriz
 # por ahora
-class CollectNode
-    def initialize(variable, valor)
+class CollectNode < ASTNode
+    def initialize(variable, value)
 
     end
 end
 
-class DropNode
-    def initialize(expresion, )
-        
+class DropNode < ASTNode
+    def initialize(expression)
+        @expr = expression
     end
-    
-    
+       
 end
 
-class RobotNode
+class RobotNode < ASTNode
     def initialize(id, value)
         @ident = id
         @value = value
@@ -77,12 +75,19 @@ class RobotNode
     
 end
 
-class Valores
+class VariableNode < ASTNode
     def initialize(id, value)
+        @ident = id
+        @value = value
+    end
+end
+
+
+class Valores < ASTNode
+    def initialize(id, value) 
         @id = id
         @value = value
     end
-    
 end
 
 
