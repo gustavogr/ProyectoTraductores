@@ -1,6 +1,6 @@
 # class CLASS_NAME
 #   [precedance table]
-#   [token declearations]
+#   [token declarations]
 #   [expected number of S/R conflict]
 #   [options]
 #   [semantic value convertion]
@@ -43,19 +43,56 @@ class Parser
     # ...
 
     CREATE 
-    : declaracion 
-    | lambda
-    ;
-
-    declaracion 
-    : type BOT listIdent 
+    : declarationList
     |
     ;
 
+    declarationlist
+    : declaration
+    | declarationList declaration
+    ;
+
+    declaration 
+    : type BOT listIdent 
+    ;
+
+    EXECUTE
+    : ctrlrInstruction PUNTO ctrlrInstruction
+    | 
+    ;
+
+    listBehavior
+    : behavior
+    | listBehavior behavior
+    ;
+
+    behavior
+    : ON ACTIVATION DOSPUNTOS botInstruction
+    | ON DEACTIVATION DOSPUNTOS botInstruction
+    | ON DEFAULT DOSPUNTOS botInstruction
+    ; 
+
+    
+    ctrlrInstruction
+    : CONDITIONAL 
+    | UNDFITER
+    | ACTIVATE  listIdent
+    | DEACTEVATE listIdent
+    | ADVANCE listIdent
+    ; 
 
     listIdent
-    : 
-    | 
+    : IDENT 
+    | listIdent COMA IDENT
+    ;
+
+    CONDITIONAL##Aqui hay un peo con las instrucciones
+    : IF boolExpr DOSPUNTOS botInstruction
+    | IF boolExpre DOSPUNTOS botInstruction ELSE botInstruction
+    ;
+
+    UNDFITER##Aqui hay un peo con las instrucciones
+    : WHILE boolExpr DOSPUNTOS botInstruction
     ;
 
     type
@@ -64,23 +101,14 @@ class Parser
     | CHAR 
     ;
 
-
-
     botInstruction
-    : STORE 
-    | COLLECT
+    : botInstruction PUNTO botInstruction
+    | STORE expression
+    | COLLECT AS VARIABLE
+    | COLLECT 
     | DROP
-    | MOVE
+    | MOVE direction
     ;
-
-    STORE
-    : expression
-    ;
-
-    MOVE
-    : direction expression
-    ;
-
 
     direction
     : LEFT
@@ -97,23 +125,41 @@ class Parser
     | relExpr
     ;
 
+    aritExpr
+    : aritExpr SUMA aritExpr  
+    | aritExpr RESTA aritExpr 
+    | aritExpr MULT aritExpr 
+    | aritExpr DIV aritExpr 
+    | aritExpr MOD aritExpr
+    | unaryMinus aritExpr
+    | PARABRE aritExpr PARCIERRA
+    | literal
+    ;
     
     relExpr
     : aritExpr MENORIGUAL aritExpr 
     | aritExpr MAYORIGUAL aritExpr 
     | aritExpr NOIGUAL aritExpr 
     | aritExpr MENOR aritExpr 
-    | aritExpr MAYOR aritExpr IGUAL aritExpr 
-    NEGACION 
-    
-    | aritExpr CONJUNCION aritExpr 
-    | aritExpr DISYUNCION aritExpr
+    | aritExpr MAYOR aritExpr 
+    | airtExpr IGUAL aritExpr 
+    | boolExpr IGUAL boolExpr
+    | boolExpr NOIGUAL boolExpr 
+    | PARABRE boolExpr PARCIERRA
+    | literal
+    ;
 
+    boolExpr
+    : NEGACION boolExpr
+    | boolExpr CONJUNCION boolExpr 
+    | boolExpr DISYUNCION boolExpr
+    | literal
+    ;
 
     literal
-    : INT
-    | BOOL
-    | CHAR
+    : number#
+    | boole#
+    | char#UN POCO DE CONFUSION AQUI
     ;
 
     variable
@@ -121,9 +167,17 @@ class Parser
     | ME
     ;
 
-    INT
-    : unaryMinus NUMBER
-    | NUMBER 
+    number#algo mas para diferenciar con el tipo?
+    | NUM
+    ;
+
+    bolee
+    : TRUE
+    | FALSE
+    ;
+
+    char
+    : CHARACTER
     ;
 
     # TOKEN
@@ -133,8 +187,4 @@ class Parser
     # ;
     # ...
         
-
-
-
-
 end
