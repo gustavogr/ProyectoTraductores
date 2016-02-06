@@ -15,6 +15,7 @@ class UnExprNodeNode < ASTNode
     # end
 end
 
+### PODRIA SUBDIVIDIRSE EN RELACIONAL, ARITMETICA Y LOGICA
 class BinExprNode < ASTNode
     def initialize(operator, expression1, expression2)
         @operator = operator 
@@ -25,6 +26,7 @@ class BinExprNode < ASTNode
     #     "Tk#{@name} #{@line} #{@column}"
     # end
 end
+
 
 class ConditionalNode < ASTNode
     def initialize(condition, ifStmt, elseStmt)

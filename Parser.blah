@@ -10,30 +10,131 @@
 
 class Parser
 
-prechigh
-  # nonassoc '++'
-  # left     '*' '/'
-  # left     '+' '-'
-  # right    '='
-preclow
+    prechigh
+      # nonassoc '++'
+      # left     '*' '/'
+      # left     '+' '-'
+      # right    '='
+    preclow
 
 
-token 
+    token 
 
-    CREATE BOT EXECUTE IF ELSE WHILE INT BOOL CHAR STORE RECIEVE ON END ACTIVATE 
-    ACTIVATION ADVANCE DACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
-    DOWN READ TRUE FALSE
+        CREATE BOT EXECUTE IF ELSE WHILE INT BOOL CHAR STORE RECIEVE ON END ACTIVATE 
+        ACTIVATION ADVANCE DACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
+        DOWN READ TRUE FALSE
 
-    MENORIGUAL MAYORIGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION MENOR MAYOR IGUAL 
+        MENORIGUAL MAYORIGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION MENOR MAYOR IGUAL 
 
-    COMA PUNTO DOSPUNTOS PARABRE PARCIERRA 
+        COMA PUNTO DOSPUNTOS PARABRE PARCIERRA 
 
-    SUMA RESTA MULT DIV MOD 
+        SUMA RESTA MULT DIV MOD 
 
-    Ident("varX") Character('p') Num(4269) 
+        Ident("varX") Character('p') Num(4269) 
+        ME
 
-rule
+    rule
+
+    # TOKEN
+    # : TOKEN  Accion a realizar
+    # |
+    # |
+    # ;
+    # ...
+
+    CREATE 
+    : declaracion 
+    | lambda
+    ;
+
+    declaracion 
+    : type BOT listIdent 
+    |
+    ;
+
+
+    listIdent
+    : 
+    | 
+    ;
+
+    type
+    : INT
+    | BOOL
+    | CHAR 
+    ;
+
+
+
+    botInstruction
+    : STORE 
+    | COLLECT
+    | DROP
+    | MOVE
+    ;
+
+    STORE
+    : expression
+    ;
+
+    MOVE
+    : direction expression
+    ;
+
+
+    direction
+    : LEFT
+    | RIGHT
+    | UP
+    | DOWN
+    ;
+
+    expression
+    : literal
+    | variable 
+    | aritExpr
+    | boolExpr
+    | relExpr
+    ;
+
+    
+    relExpr
+    : aritExpr MENORIGUAL aritExpr 
+    | aritExpr MAYORIGUAL aritExpr 
+    | aritExpr NOIGUAL aritExpr 
+    | aritExpr MENOR aritExpr 
+    | aritExpr MAYOR aritExpr IGUAL aritExpr 
+    NEGACION 
+    
+    | aritExpr CONJUNCION aritExpr 
+    | aritExpr DISYUNCION aritExpr
+
+
+    literal
+    : INT
+    | BOOL
+    | CHAR
+    ;
+
+    variable
+    : IDENT 
+    | ME
+    ;
+
+    INT
+    : unaryMinus NUMBER
+    | NUMBER 
+    ;
+
+    # TOKEN
+    # : TOKEN  Accion a realizar
+    # |
+    # |
+    # ;
+    # ...
+        
 
 
 
 
+end
