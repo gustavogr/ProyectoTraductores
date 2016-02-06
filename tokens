@@ -1,13 +1,17 @@
 create          --> TkCreate
-bot             --> TkBot
-execute         --> TkExecute
+while           --> TkWhile
 if              --> TkIf
 else            --> TkElse
-while           --> TkWhile
+bot             --> TkBot
+
+execute         --> TkExecute
 int             --> TkInt
 bool            --> TkBool
 char            --> TkChar
+true            --> TkTrue
+false           --> TkFalse
 store           --> TkStore
+
 recieve         --> TkRecieve
 on              --> TkOn
 end             --> TkEnd
@@ -25,8 +29,6 @@ right           --> TkRight
 up              --> TkUp
 down            --> TkDown
 read            --> TkRead
-true            --> TkTrue
-false           --> TkFalse
 
 varX -> TkIdent("varX")
 p - TkCharacter('p')
@@ -54,6 +56,8 @@ p - TkCharacter('p')
 /   => TkDiv
 %   => TkMod
 
+
+me  --> TkMe ????
 
 
 

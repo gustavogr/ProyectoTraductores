@@ -1,5 +1,12 @@
-class UnExpression
-    def initialize(operator, expression)
+class ASTNode
+    def initialize(tree)
+        @tree = tree        
+    end
+    
+end
+
+class UnExprNodeNode
+    def initialize(operator, expression1)
         @operator = operator 
         @expr = expression1 
     end
@@ -8,7 +15,7 @@ class UnExpression
     # end
 end
 
-class BinExpression
+class BinExprNode
     def initialize(operator, expression1, expression2)
         @operator = operator 
         @expr1 = expression1 
@@ -19,19 +26,66 @@ class BinExpression
     # end
 end
 
-class Conditional
-    def initialize(codition, ifStmt, elseStmt)
+class ConditionalNode
+    def initialize(condition, ifStmt, elseStmt)
         @condition = condition 
         @ifBody = ifStmt 
         @elseBody = elseStmt
     end
+end
 
-class UndfIter
+class UndfIterNode
     def initialize(condition, statement)
-        @ex = operator 
-        @expr1 = expression1 
+        @condition = condition 
+        @statement = statement 
         @expr2 = expression2
     end
+
 end
+
+class StoreNode
+    def initialize(robot, expression)
+        @robot = robot
+        @expr = expression
+    end
+    
+end
+
+################??????????????????
+#### No entiendo bien donde entra la matriz
+# por ahora
+class CollectNode
+    def initialize(variable, valor)
+
+    end
+end
+
+class DropNode
+    def initialize(expresion, )
+        
+    end
+    
+    
+end
+
+class RobotNode
+    def initialize(id, value)
+        @ident = id
+        @value = value
+        
+    end
+    
+end
+
+class Valores
+    def initialize(id, value)
+        @id = id
+        @value = value
+    end
+    
+end
+
+
+
 
 
