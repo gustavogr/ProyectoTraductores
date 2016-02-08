@@ -14,11 +14,11 @@
 #   2 / 10 / 2015
 
 require_relative 'token.rb'
+require 'pry'
 
 # Regexp que hace match con cualquier palabra reservada
     
-    ReservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
-             deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
+    
     
     Hola = "paso!!!!!!!!!!!!!!!1"
     
@@ -71,6 +71,9 @@ class Lexer
         hasErrors = false           # Booleano para recordar si hubo un error
         self.tokensList = Array.new
 
+        reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
+             deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
+
         while not program.empty?
 
             case program
@@ -85,9 +88,9 @@ class Lexer
             #  Se usa la regexp reservedW. Luego de la palabra no puede venir 
             #  un caracter valido para palabra debido a que dejaria de ser una
             #  palabra reservada.
-            when /ReservedW(\W|\z)/ 
+            when /reservedW(\W|\z)/ 
                 puts Hola
-                sub = program.slice!(ReservedW)
+                sub = program.slice!(reservedW)
                 puts sub
                 self.tokensList << Token.new(sub.upcase.to_sym, sub.capitalize, line, column)
                 column += sub.length
@@ -103,10 +106,7 @@ class Lexer
             #  Se usa la regexp symbols. A diferencia del caso de las palabras
             #  reservadas no nos afecta que venga despues del simbolo
             when Symbols
-
                 sub = program.slice!(Symbols)
-                puts sub
-                
                 self.tokensList << Token.new(TokenHash[sub].upcase.to_sym, sub, line, column)
                 column += sub.length
 

@@ -21,7 +21,7 @@ class Token
     end
   
     def to_s
-        "Tk#{@value} #{@line} #{@column}"
+        "Tk#{@id} #{@line} #{@column}"
     end
    
     def get_token
