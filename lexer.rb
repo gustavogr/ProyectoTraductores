@@ -16,22 +16,22 @@
 require_relative 'token.rb'
 require 'pry'
 
-# Regexp que hace match con cualquier palabra reservada
-    
-    
-    
-    Hola = "paso!!!!!!!!!!!!!!!1"
-    
+class Lexer
+
     ## 
     #  Regexp que hace match con cualquiera de los simbolos del lenguaje
     #  Es importante notar que los símbolos compuestos se evalúan antes que
     #  los simbolos de un solo caracter para evitar inconsistencias
-
+    
     Symbols   = /\A(>=|<=|\\\/|\/\\|\/=|,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
-
+    
+    # Regexp que hace match con cualquier palabra reservada
+        
+    ReservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
+         deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
     
     # Tabla de Hash para facilitar la busqueda del nombre de cada simbolo
-
+    
     TokenHash = Hash[   ","   => "Coma",
                         "."   => "Punto",
                         ":"   => "DosPuntos",
@@ -52,10 +52,6 @@ require 'pry'
                         "="   => "Igual",
                         "/="  => "NoIgual"
                     ]
-
-
-class Lexer
-
     
     attr_accessor :tokensList 
         
@@ -71,9 +67,6 @@ class Lexer
         hasErrors = false           # Booleano para recordar si hubo un error
         self.tokensList = Array.new
 
-        reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
-             deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
-
         while not program.empty?
 
             case program
@@ -85,13 +78,11 @@ class Lexer
                 column += sub.length
 
             ## Palabras Reservadas
-            #  Se usa la regexp reservedW. Luego de la palabra no puede venir 
+            #  Se usa la regexp ReservedW. Luego de la palabra no puede venir 
             #  un caracter valido para palabra debido a que dejaria de ser una
             #  palabra reservada.
-            when /reservedW(\W|\z)/ 
-                puts Hola
-                sub = program.slice!(reservedW)
-                puts sub
+            when /#{ReservedW}(\W|\z)/ 
+                sub = program.slice!(ReservedW)
                 self.tokensList << Token.new(sub.upcase.to_sym, sub.capitalize, line, column)
                 column += sub.length
 
