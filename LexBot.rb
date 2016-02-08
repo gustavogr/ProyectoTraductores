@@ -16,5 +16,6 @@
 
 require_relative 'lexer.rb' 
 
-tokenList = lexer(ARGV[0])
-puts tokenList.join(", ") unless tokenList == nil
+lex = Lexer.new
+lex.analize(ARGV[0])
+lex.print_tokens

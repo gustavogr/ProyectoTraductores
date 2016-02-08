@@ -15,25 +15,24 @@
 
 require_relative 'token.rb'
 
-class Lexer
-
-    # Regexp que hace match con cualquier palabra reservada
+# Regexp que hace match con cualquier palabra reservada
     
-    reservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
+    ReservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
              deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
-
+    
+    Hola = "paso!!!!!!!!!!!!!!!1"
     
     ## 
     #  Regexp que hace match con cualquiera de los simbolos del lenguaje
     #  Es importante notar que los símbolos compuestos se evalúan antes que
     #  los simbolos de un solo caracter para evitar inconsistencias
 
-    symbols   = /\A(>=|<=|\\\/|\/\\|\/=|,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
+    Symbols   = /\A(>=|<=|\\\/|\/\\|\/=|,|\.|:|\+|-|\(|\)|\*|\/|%|~|<|>|=)/
 
     
     # Tabla de Hash para facilitar la busqueda del nombre de cada simbolo
 
-    tokenHash = Hash[   ","   => "Coma",
+    TokenHash = Hash[   ","   => "Coma",
                         "."   => "Punto",
                         ":"   => "DosPuntos",
                         "("   => "ParAbre",
@@ -53,6 +52,11 @@ class Lexer
                         "="   => "Igual",
                         "/="  => "NoIgual"
                     ]
+
+
+class Lexer
+
+    
     attr_accessor :tokensList 
         
     ##
@@ -65,9 +69,9 @@ class Lexer
         line = 1                    # Contador para mostrar el numero de linea
         column = 1                  # Contador para mostrar el numero de columna
         hasErrors = false           # Booleano para recordar si hubo un error
+        self.tokensList = Array.new
 
         while not program.empty?
-            
 
             case program
             
@@ -81,9 +85,11 @@ class Lexer
             #  Se usa la regexp reservedW. Luego de la palabra no puede venir 
             #  un caracter valido para palabra debido a que dejaria de ser una
             #  palabra reservada.
-            when /#{reservedW}(\W|\z)/ 
-                sub = program.slice!(reservedW)
-                @tokensList << Token.new(sub.upcase.to_sym, sub.capitalize, line, column)
+            when /ReservedW(\W|\z)/ 
+                puts Hola
+                sub = program.slice!(ReservedW)
+                puts sub
+                self.tokensList << Token.new(sub.upcase.to_sym, sub.capitalize, line, column)
                 column += sub.length
 
             ## Saltos de línea
@@ -96,9 +102,12 @@ class Lexer
             ## Símbolos
             #  Se usa la regexp symbols. A diferencia del caso de las palabras
             #  reservadas no nos afecta que venga despues del simbolo
-            when symbols
-                sub = program.slice!(symbols)
-                @tokensList << Token.new(tokenHash[sub].upcase.to_sym, sub, line, column)
+            when Symbols
+
+                sub = program.slice!(Symbols)
+                puts sub
+                
+                self.tokensList << Token.new(TokenHash[sub].upcase.to_sym, sub, line, column)
                 column += sub.length
 
             ## Caracteres
@@ -107,7 +116,7 @@ class Lexer
             #  despues.
             when /\A[a-zA-Z](\W|\z)/
                 sub = program.slice!(/\A\w/)
-                @tokensList << TkChar.new(sub, line, column)
+                self.tokensList << TkChar.new(sub, line, column)
                 column += sub.length
 
             ## Numeros
@@ -115,7 +124,7 @@ class Lexer
             #  Tambien se verifica que no siga un caracter valido de palabra
             when /\A\d+(\W|\z)/
                 sub = program.slice!(/\A\d+/)
-                @tokensList << TkNum.new(sub, line, column) 
+                self.tokensList << TkNum.new(sub, line, column) 
                 column += sub.length
 
             ## Identificadores
@@ -123,7 +132,7 @@ class Lexer
             #  combinacion de caracteres de palabra.
             when /\A[a-zA-Z]\w+(\W|\z)/
                 sub = program.slice!(/\A[a-zA-Z]\w+/)
-                @tokensList << TkIdent.new(sub, line, column)
+                self.tokensList << TkIdent.new(sub, line, column)
                 column += sub.length
 
             ## Comentarios de una línea
@@ -162,8 +171,12 @@ class Lexer
         end
 
         def next_token
-            token = @tokensList.shift
+            token = self.tokensList.shift
             token == nil ? nil : token.get_token
+        end
+
+        def print_tokens
+            puts self.tokensList.join(", ")
         end
 
     end    
