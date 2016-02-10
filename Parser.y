@@ -10,30 +10,34 @@
 
 class Parser
 
-    prechigh
+    #prechigh
       # nonassoc '++'
       # left     '*' '/'
       # left     '+' '-'
       # right    '='
-    preclow
+    #preclow
 
 
     token 
 
         CREATE BOT EXECUTE IF ELSE WHILE INT BOOL CHAR STORE RECIEVE ON END ACTIVATE 
-        ACTIVATION ADVANCE DACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
+        ACTIVATION ADVANCE DEACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
         DOWN READ TRUE FALSE MENORIGUAL MAYORIGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION 
         MENOR MAYOR IGUAL COMA PUNTO DOSPUNTOS PARABRE PARCIERRA SUMA RESTA MULT DIV MOD 
         IDENT CHARACTER NUM ME
 
     rule
 
+    S
+    : program
+    ;
+
     program
     : CREATE declarationList EXECUTE instructionList END
     | EXECUTE instructionList END
     ;
 
-    declarationlist
+    declarationList
     : declaration
     | declarationList declaration
     ;
@@ -79,12 +83,12 @@ class Parser
     ; 
 
     conditional
-    : IF boolExpr DOSPUNTOS instruction END
-    | IF boolExpre DOSPUNTOS instruction ELSE DOSPUNTOS instruction END
+    : IF expression DOSPUNTOS instruction END
+    | IF expression DOSPUNTOS instruction ELSE DOSPUNTOS instruction END
     ;
 
     undfiter
-    : WHILE boolExpr DOSPUNTOS instruction END
+    : WHILE expression DOSPUNTOS instruction END
     ;
 
     botInstruction
