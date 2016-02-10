@@ -1,0 +1,4 @@
+- Terminar el arbol
+- Poner las acciones
+- Agregar \n \t \' a TkChar
+- Impresion del arbol
