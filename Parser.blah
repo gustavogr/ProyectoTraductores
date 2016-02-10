@@ -30,22 +30,16 @@ class Parser
 
         SUMA RESTA MULT DIV MOD 
 
-        Ident("varX") Character('p') Num(4269) 
+        IDENT CHARACTER NUM 
         ME
 
     rule
 
-    # TOKEN
-    # : TOKEN  Accion a realizar
-    # |
-    # |
-    # ;
-    # ...
-
-    CREATE 
-    : declarationList
-    |
+    program
+    : CREATE declarationList EXECUTE instructionList END
+    | EXECUTE instructionList END
     ;
+
 
     declarationlist
     : declaration
@@ -53,46 +47,13 @@ class Parser
     ;
 
     declaration 
-    : type BOT listIdent 
+    : type BOT identifierList behaviorList END
+    | type BOT identifierList END
     ;
 
-    EXECUTE
-    : ctrlrInstruction PUNTO ctrlrInstruction
-    | 
-    ;
-
-    listBehavior
-    : behavior
-    | listBehavior behavior
-    ;
-
-    behavior
-    : ON ACTIVATION DOSPUNTOS botInstruction
-    | ON DEACTIVATION DOSPUNTOS botInstruction
-    | ON DEFAULT DOSPUNTOS botInstruction
-    ; 
-
-    
-    ctrlrInstruction
-    : CONDITIONAL 
-    | UNDFITER
-    | ACTIVATE  listIdent
-    | DEACTEVATE listIdent
-    | ADVANCE listIdent
-    ; 
-
-    listIdent
+    identifierList
     : IDENT 
-    | listIdent COMA IDENT
-    ;
-
-    CONDITIONAL##Aqui hay un peo con las instrucciones
-    : IF boolExpr DOSPUNTOS botInstruction
-    | IF boolExpre DOSPUNTOS botInstruction ELSE botInstruction
-    ;
-
-    UNDFITER##Aqui hay un peo con las instrucciones
-    : WHILE boolExpr DOSPUNTOS botInstruction
+    | identifierList COMA IDENT
     ;
 
     type
@@ -101,13 +62,49 @@ class Parser
     | CHAR 
     ;
 
+    behaviorList
+    : behavior
+    | behaviorList behavior
+    ;
+
+    behavior
+    : ON condition DOSPUNTOS botInstruction END
+    ; 
+
+    instructionList
+    : instruction 
+    | instructionList instruction 
+    ;
+
+    instruction
+    : ACTIVATE  identifierList  PUNTO
+    | ADVANCE identifierList  PUNTO
+    | DEACTIVATE identifierList PUNTO
+    | instruction instruction 
+    | conditional  
+    | undfiter 
+    | program
+    ; 
+
+    conditional
+    : IF boolExpr DOSPUNTOS instruction END
+    | IF boolExpre DOSPUNTOS instruction ELSE DOSPUNTOS instruction END
+    ;
+
+    undfiter
+    : WHILE boolExpr DOSPUNTOS instruction END
+    ;
+
     botInstruction
-    : botInstruction PUNTO botInstruction
-    | STORE expression
-    | COLLECT AS VARIABLE
-    | COLLECT 
-    | DROP
-    | MOVE direction
+    : STORE expression PUNTO
+    | COLLECT AS IDENT PUNTO
+    | COLLECT PUNTO
+    | DROP expression PUNTO
+    | direction PUNTO
+    | direction aritExpr PUNTO
+    | READ PUNTO
+    | READ AS IDENT PUNTO
+    | botInstruction botInstruction
     ;
 
     direction
@@ -117,74 +114,40 @@ class Parser
     | DOWN
     ;
 
-    expression
-    : literal
-    | variable 
-    | aritExpr
+    condition
+    : ACTIVATION
+    | DEACTIVATION
     | boolExpr
-    | relExpr
-    ;
-
-    aritExpr
-    : aritExpr SUMA aritExpr  
-    | aritExpr RESTA aritExpr 
-    | aritExpr MULT aritExpr 
-    | aritExpr DIV aritExpr 
-    | aritExpr MOD aritExpr
-    | unaryMinus aritExpr
-    | PARABRE aritExpr PARCIERRA
-    | literal
-    ;
-    
-    relExpr
-    : aritExpr MENORIGUAL aritExpr 
-    | aritExpr MAYORIGUAL aritExpr 
-    | aritExpr NOIGUAL aritExpr 
-    | aritExpr MENOR aritExpr 
-    | aritExpr MAYOR aritExpr 
-    | airtExpr IGUAL aritExpr 
-    | boolExpr IGUAL boolExpr
-    | boolExpr NOIGUAL boolExpr 
-    | PARABRE boolExpr PARCIERRA
-    | literal
-    ;
-
-    boolExpr
-    : NEGACION boolExpr
-    | boolExpr CONJUNCION boolExpr 
-    | boolExpr DISYUNCION boolExpr
-    | literal
+    | DEFAULT
     ;
 
     literal
-    : number#
-    | boole#
-    | char#UN POCO DE CONFUSION AQUI
-    ;
-
-    variable
-    : IDENT 
+    : NUM
+    | TRUE
+    | FALSE
+    | CHARACTER
+    | IDENT 
     | ME
     ;
 
-    number#algo mas para diferenciar con el tipo?
-    | NUM
+    expression
+    : literal
+    | expression SUMA expression  
+    | expression RESTA expression 
+    | expression MULT expression 
+    | expression DIV expression 
+    | expression MOD expression
+    | RESTA expression
+    | PARABRE expression PARCIERRA
+    | NEGACION expression
+    | expression CONJUNCION expression 
+    | expression DISYUNCION expression
+    | expression MENORIGUAL expression 
+    | expression MAYORIGUAL expression 
+    | expression IGUAL expression 
+    | expression NOIGUAL expression 
+    | expression MENOR expression 
+    | expression MAYOR expression 
     ;
-
-    bolee
-    : TRUE
-    | FALSE
-    ;
-
-    char
-    : CHARACTER
-    ;
-
-    # TOKEN
-    # : TOKEN  Accion a realizar
-    # |
-    # |
-    # ;
-    # ...
         
 end

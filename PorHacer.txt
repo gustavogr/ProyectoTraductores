@@ -2,3 +2,4 @@
 - Poner las acciones
 - Agregar \n \t \' a TkChar
 - Impresion del arbol
+- Resolver el menos unario
