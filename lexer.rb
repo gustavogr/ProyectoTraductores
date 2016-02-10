@@ -14,7 +14,6 @@
 #   2 / 10 / 2015
 
 require_relative 'token.rb'
-require 'pry'
 
 class Lexer
 
@@ -28,7 +27,7 @@ class Lexer
     # Regexp que hace match con cualquier palabra reservada
         
     ReservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
-         deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false)/
+         deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false|me)/
     
     # Tabla de Hash para facilitar la busqueda del nombre de cada simbolo
     
@@ -105,8 +104,8 @@ class Lexer
             #  Hace match con un solo caracter. Al igual que con las palabras
             #  reservadas se pide que no venga un caracter valido de palabra
             #  despues.
-            when /\A[a-zA-Z](\W|\z)/
-                sub = program.slice!(/\A\w/)
+            when /\A'[a-zA-Z]'(\W|\z)/
+                sub = program.slice!(/\A'\w'/)
                 self.tokensList << TkChar.new(sub, line, column)
                 column += sub.length
 

@@ -31,6 +31,7 @@ down            --> TkDown
 read            --> TkRead
 
 varX -> TkIdent("varX")
+me  --> TkMe
 p - TkCharacter('p')
 4269 -> TkNum(4269)
 
@@ -57,7 +58,6 @@ p - TkCharacter('p')
 %   => TkMod
 
 
-me  --> TkMe ????
 
 
 

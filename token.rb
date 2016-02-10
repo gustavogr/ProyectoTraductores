@@ -45,14 +45,14 @@ end
 
 class TkChar < Token
     def initialize(value, line, column)
-        @id = :CHAR 
+        @id = :CHARACTER
         @value = value
         @line = line
         @column = column
     end
 
     def to_s
-        "TkCharacter('#{@value}') #{@line} #{@column}"
+        "TkCharacter(#{@value}) #{@line} #{@column}"
     end
 end
 

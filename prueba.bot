@@ -1,4 +1,4 @@
-create
+create 'd'
     int bot bar
         on activation:
             store 3.
