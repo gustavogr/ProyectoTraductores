@@ -52,7 +52,7 @@ class Parser
     rule
 
     program
-    : CREATE declarationList EXECUTE instructionList END
+    : CREATE declarationList EXECUTE instructionList END  
     | EXECUTE instructionList END
     ;
 

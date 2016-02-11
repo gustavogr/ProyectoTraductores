@@ -1,155 +1,142 @@
-class ASTNode
-    def initialize(node)
-        @tree = node     
+class ProgramNode
+    def initialize
+        @symbolTable = nil
+        @instrList = []
+    end
+
+    def add(instr)
+        @instrList << instr
+    end
+    
+    def to_s(level)
+        #falta para instruccion unica
+        if level == 1 then 
+            "SECUENCE\n" +
+            @instrList.each { |instr| "\t" + instr.to_s(level + 1) + "\n"}
+        else 
+            "NEW_SCOPE\n" +
+            @instrList.each { |instr| "\t"*level + instr.to_s(level + 1) + "\n"}
+        end
+    end 
+end
+
+class IdentListNode 
+    def initialize
+        @identList = []        
+    end
+
+    def add(ident)
+        @identList << ident 
+    end
+    
+    def to_s(level)
+        "\t"*level + "var: \n" + @identList.each { |ident| ident.to_s(level + 1) + "\n"}
     end
 
 end
 
 
-class UnExprNode < ASTNode
+class UnExprNode
     def initialize(operator, expression)
         @operator = operator
         @expr = expression
     end
 
-    def to_s
-        puts "UNARY_EXPR"
-        puts "operator: #{@operator}"
-        puts "operand: " + to_s(@expression)
+    def to_s(level)
+        "UNARY_EXPR\n" +
+        "\t"*level + "operator: #{@operator}\n" +
+        "\t"*level + "operand: " + @expr.to_s(level+1) + "\n"
     end
-  end
-
 end
 
-class BinExprNode < ASTNode
+
+class BinExprNode
     def initialize(operator, expr1, expr2, type)
         @op = operator
         @expr1 = expr1 
         @expr2 = expr2 
         @type = type
+    end
+
+    def to_s(level)
+        "\t"*level + "operation: #{@op}\n" + 
+        "\t"*level + "left operand:" + @expr1.to_s(level+1) + "\n"
+        "\t"*level + "right operand:" + @expr2.to_s(level+1) + "\n"
     end
 end
 
 class AritExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
-        @op = operator
-        @expr1 = expr1 
-        @expr2 = expr2 
-        @type = type
+        super
     end
 
-    def to_s
-        puts "ARIT_EXPR"
-        puts "operation: #{@op}"
-        puts "left operand:" + to_s(@expr1)
-        puts "right operand:" + to_s(@expr2)
+    def to_s(level)
+        "ARIT_EXPR\n" + super
     end
 end
 
 class BoolExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
-        @op = operator
-        @expr1 = expr1 
-        @expr2 = expr2 
-        @type = type
+        super
     end
 
-    def to_s
-        puts "BOOL_EXPR"
-        puts "operation: #{@op}"
-        puts "left operand:" + to_s(@expr1)
-        puts "right operand:" + to_s(@expr2)
+    def to_s(level)
+        "BOOL_EXPR\n" + super
     end
 
 end
 
 class RelExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
-        @op = operator
-        @expr1 = expr1 
-        @expr2 = expr2 
-        @type = type
+        super
     end
 
-    def to_s
-        puts "REL_EXPR"
-        puts "operation: #{@op}"
-        puts "left operand:" + to_s(@expr1)
-        puts "right operand:" + to_s(@expr2)
+    def to_s(level)
+        "REL_EXPR\n" + super
     end
 end
 
-# activate, advance, deactivate
-# aqui puede ir una lista
-
-    
-class identList
-    def initialize(args)
-        
-    end
-    
-    
-end
-
-
-class InstrNode
-    def initialize(id, identList)
-        @id = id
-        @identList = identList
-    end
-
-    def to_s
-        puts "#{@id}"
-        puts "var: " + to_s(identList) 
-    end
-
-end
-
-
-
-class ConditionalNode < ASTNode
+class ConditionalNode
     def initialize(id, condition, instruction1, instruction2)
         @condition = condition 
         @ifBody = instruction1 
         @elseBody = instruction2
     end
-    def to_s
-        puts "CONDITIONAL"
-        puts "condition: " + to_s(@condition)
-        puts "ifBody: " + to_s(@ifBody)
-        puts "elseBody: " + to_s(@elseBody)
+    def to_s(level)
+        "CONDITIONAL\n" +
+        "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
+        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n" +
+        "\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
     end
 
 end
 
-class UndfIterNode < ASTNode
+class UndfIterNode
     def initialize(condition, instruction)
         @condition = condition 
         @body = instruction 
     end
 
-    def to_s
-        puts "UNDF_ITER"
-        puts "condition: " + to_s(@condition)
-        puts "body: " + to_s(@body)
+    def to_s(level)
+        "UNDF_ITER\n" +
+        "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
+        "\t"*level + "body: " + @body.to_s(level+1)
     end
 end
 
-class StoreNode < ASTNode
-    def initialize(robot, expression)
-        @robot = robot
-        @expr = expression
-    end
-    
-end
-
-### Una sola clase valor o varias?
-class Valores < ASTNode
-    def initialize(id, value, type) 
+# activate, deactivate, advance
+class BasicInstrNode
+    def initialize(id)
         @id = id
-        @value = value
+        @identList = identList
+    end
+
+    def to_s(level)
+        "#{@id}"
+        "var: " + identList.to_s 
     end
 end
+
 
 class NumberNode 
     attr_accessor :number
@@ -159,10 +146,9 @@ class NumberNode
     end
 
     def to_s
-        puts self.number
+        self.number
     end
 end
-
 
 class CharNode   
     attr_accessor :char
@@ -172,7 +158,7 @@ class CharNode
     end
 
     def to_s
-        puts "\'#{self.char}\'"
+        "\'#{self.char}\'"
     end
 end
 
@@ -184,7 +170,7 @@ class BoolNode
     end
 
     def to_s
-        puts "\'#{self.bool}\'"
+        self.bool
     end
 end
 
@@ -196,28 +182,9 @@ class VariableNode
     end
 
     def to_s
-        puts self.id
+        self.id
     end
 end
-
-
-class CollectNode < ASTNode
-    def initialize(variable, value)
-
-    end
-end
-
-class DropNode < ASTNode
-    def initialize(expression)
-        @expr = expression
-    end
-       
-end
-
-
-
-
-
 
 
 

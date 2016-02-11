@@ -1,5 +1,9 @@
-- Terminar el arbol
+- Limpiar el arbol
 - Poner las acciones
 - Agregar \n \t \' a TkChar
-- Impresion del arbol
+- Probar Impresion del arbol
 - Resolver el menos unario
+- Metodos para el parser do_parse next_token en clase token
+- Probar todo
+- Teorico-Practico 
+- Informe

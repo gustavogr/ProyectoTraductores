@@ -162,7 +162,7 @@ class Lexer
 
         def next_token
             token = self.tokensList.shift
-            token == nil ? nil : token.get_token
+            token == nil ? [false,false] : token.get_token
         end
 
         def print_tokens
@@ -171,4 +171,5 @@ class Lexer
 
     end    
 end
+
 
