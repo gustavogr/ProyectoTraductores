@@ -3,7 +3,6 @@ class ASTNode
         @tree = node     
     end
 
-
 end
 
 
@@ -80,6 +79,34 @@ class RelExprNode < BinExprNode
     end
 end
 
+# activate, advance, deactivate
+# aqui puede ir una lista
+
+    
+class identList
+    def initialize(args)
+        
+    end
+    
+    
+end
+
+
+class InstrNode
+    def initialize(id, identList)
+        @id = id
+        @identList = identList
+    end
+
+    def to_s
+        puts "#{@id}"
+        puts "var: " + to_s(identList) 
+    end
+
+end
+
+
+
 class ConditionalNode < ASTNode
     def initialize(id, condition, instruction1, instruction2)
         @condition = condition 
@@ -116,12 +143,64 @@ class StoreNode < ASTNode
     
 end
 
+### Una sola clase valor o varias?
+class Valores < ASTNode
+    def initialize(id, value, type) 
+        @id = id
+        @value = value
+    end
+end
+
+class NumberNode 
+    attr_accessor :number
+
+    def initialize(number)
+        self.number = number
+    end
+
+    def to_s
+        puts self.number
+    end
+end
 
 
+class CharNode   
+    attr_accessor :char
 
-################??????????????????
-#### No entiendo bien donde entra la matriz
-# por ahora
+    def initialize(char)
+        self.char = char
+    end
+
+    def to_s
+        puts "\'#{self.char}\'"
+    end
+end
+
+class BoolNode   
+    attr_accessor :bool
+
+    def initialize(bool)
+        self.bool = bool
+    end
+
+    def to_s
+        puts "\'#{self.bool}\'"
+    end
+end
+
+class VariableNode 
+
+    #value and type
+    def initialize(id)
+        self.id = id 
+    end
+
+    def to_s
+        puts self.id
+    end
+end
+
+
 class CollectNode < ASTNode
     def initialize(variable, value)
 
@@ -135,29 +214,8 @@ class DropNode < ASTNode
        
 end
 
-class RobotNode < ASTNode
-    def initialize(id, value)
-        @ident = id
-        @value = value
-        
-    end
-    
-end
-
-class VariableNode < ASTNode
-    def initialize(id, value)
-        @ident = id
-        @value = value
-    end
-end
 
 
-class Valores < ASTNode
-    def initialize(id, value) 
-        @id = id
-        @value = value
-    end
-end
 
 
 

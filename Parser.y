@@ -12,6 +12,10 @@ class Parser
 
     prechigh
 
+        # trantando de desambiguar la secuenciacion
+        # el if tambien deberia dar problemas
+        left SEQ 
+
         right RESTA_UNARIA
         left MULT DIV MOD
         left PLUS MINUS
@@ -23,15 +27,12 @@ class Parser
         nonassoc MENOR MAYOR MENORIGUAL MAYORIGUAL
         nonassoc IGUAL NOIGUAL
 
-
     preclow
 
 
     token 
 
-        CREATE BOT EXECUTE 
-
-        ON READ RECIEVE ME END  
+        CREATE BOT EXECUTE ON READ RECIEVE ME END  
         
         ACTIVATION DEACTIVATION DEFAULT
 
@@ -97,7 +98,7 @@ class Parser
     : ACTIVATE  identifierList  PUNTO
     | ADVANCE identifierList  PUNTO
     | DEACTIVATE identifierList PUNTO
-    | instruction instruction 
+    | instruction =SEQ instruction 
     | conditional  
     | undfiter 
     | program
@@ -121,7 +122,7 @@ class Parser
     | direction expression PUNTO
     | READ PUNTO
     | READ AS IDENT PUNTO
-    | botInstruction botInstruction
+    | botInstruction =SEQ botInstruction 
     ;
 
     direction
