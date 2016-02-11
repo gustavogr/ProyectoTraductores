@@ -10,27 +10,49 @@
 
 class Parser
 
-    #prechigh
-      # nonassoc '++'
-      # left     '*' '/'
-      # left     '+' '-'
-      # right    '='
-    #preclow
+    prechigh
+
+        
+        right RESTA_UNARIA
+        left MULT DIV MOD
+        left PLUS MINUS
+        
+        right NEGACION
+        left CONJUNCION
+        left DISYUNCION
+        
+        nonassoc MENOR MAYOR MENORIGUAL MAYORIGUAL
+        nonassoc IGUAL NOIGUAL
+
+
+    preclow
 
 
     token 
 
-        CREATE BOT EXECUTE IF ELSE WHILE INT BOOL CHAR STORE RECIEVE ON END ACTIVATE 
-        ACTIVATION ADVANCE DEACTIVATE DEACTIVATION DEFAULT COLLECT AS DROP LEFT RIGHT UP 
-        DOWN READ TRUE FALSE MENORIGUAL MAYORIGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION 
-        MENOR MAYOR IGUAL COMA PUNTO DOSPUNTOS PARABRE PARCIERRA SUMA RESTA MULT DIV MOD 
-        IDENT CHARACTER NUM ME
+        CREATE BOT EXECUTE 
+
+        ON READ RECIEVE ME END  
+        
+        ACTIVATION DEACTIVATION DEFAULT
+
+        ACTIVATE DEACTIVATE ADVANCE IF ELSE WHILE 
+
+        STORE COLLECT AS DROP LEFT RIGHT UP DOWN 
+
+        INT BOOL CHAR
+
+        MENORIGUAL MAYORIGUAL MENOR MAYOR IGUAL NOIGUAL CONJUNCION DISYUNCION NEGACION  
+        
+        SUMA RESTA MULT DIV MOD 
+
+        COMA PUNTO DOSPUNTOS PARABRE PARCIERRA 
+
+        IDENT CHARACTER NUM TRUE FALSE 
+
+    start program
 
     rule
-
-    S
-    : program
-    ;
 
     program
     : CREATE declarationList EXECUTE instructionList END
@@ -133,7 +155,7 @@ class Parser
     | expression MULT expression           { puts val[1]}
     | expression DIV expression            { puts val[1]}
     | expression MOD expression            { puts val[1]}
-    | RESTA expression                     { puts val[1]}
+    | RESTA expression =RESTA_UNARIA       { puts val[1]}
     | PARABRE expression PARCIERRA         { puts val[1]}
     | NEGACION expression                  { puts val[1]}
     | expression CONJUNCION expression     { puts val[1]}
