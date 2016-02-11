@@ -1,47 +1,111 @@
 class ASTNode
-    def initialize(tree)
-        @tree = tree        
+    def initialize(node)
+        @tree = node     
     end
-    
+
+
 end
 
-class UnExprNodeNode < ASTNode
+
+class UnExprNode < ASTNode
     def initialize(operator, expression)
-        @operator = operator 
+        @operator = operator
         @expr = expression
     end
-    # def to_s
-    #     "Tk#{@name} #{@line} #{@column}"
-    # end
-end
 
-### PODRIA SUBDIVIDIRSE EN RELACIONAL, ARITMETICA Y LOGICA
-class BinExprNode < ASTNode
-    def initialize(operator, expression1, expression2)
-        @operator = operator 
-        @expr1 = expression1 
-        @expr2 = expression2
+    def to_s
+        puts "UNARY_EXPR"
+        puts "operator: #{@operator}"
+        puts "operand: " + to_s(@expression)
     end
-    # def to_s
-    #     "Tk#{@name} #{@line} #{@column}"
-    # end
+  end
+
 end
 
+class BinExprNode < ASTNode
+    def initialize(operator, expr1, expr2, type)
+        @op = operator
+        @expr1 = expr1 
+        @expr2 = expr2 
+        @type = type
+    end
+end
+
+class AritExprNode < BinExprNode
+    def initialize(operator, expr1, expr2, type)
+        @op = operator
+        @expr1 = expr1 
+        @expr2 = expr2 
+        @type = type
+    end
+
+    def to_s
+        puts "ARIT_EXPR"
+        puts "operation: #{@op}"
+        puts "left operand:" + to_s(@expr1)
+        puts "right operand:" + to_s(@expr2)
+    end
+end
+
+class BoolExprNode < BinExprNode
+    def initialize(operator, expr1, expr2, type)
+        @op = operator
+        @expr1 = expr1 
+        @expr2 = expr2 
+        @type = type
+    end
+
+    def to_s
+        puts "BOOL_EXPR"
+        puts "operation: #{@op}"
+        puts "left operand:" + to_s(@expr1)
+        puts "right operand:" + to_s(@expr2)
+    end
+
+end
+
+class RelExprNode < BinExprNode
+    def initialize(operator, expr1, expr2, type)
+        @op = operator
+        @expr1 = expr1 
+        @expr2 = expr2 
+        @type = type
+    end
+
+    def to_s
+        puts "REL_EXPR"
+        puts "operation: #{@op}"
+        puts "left operand:" + to_s(@expr1)
+        puts "right operand:" + to_s(@expr2)
+    end
+end
 
 class ConditionalNode < ASTNode
-    def initialize(condition, ifStmt, elseStmt)
+    def initialize(id, condition, instruction1, instruction2)
         @condition = condition 
-        @ifBody = ifStmt 
-        @elseBody = elseStmt
+        @ifBody = instruction1 
+        @elseBody = instruction2
     end
+    def to_s
+        puts "CONDITIONAL"
+        puts "condition: " + to_s(@condition)
+        puts "ifBody: " + to_s(@ifBody)
+        puts "elseBody: " + to_s(@elseBody)
+    end
+
 end
 
 class UndfIterNode < ASTNode
-    def initialize(condition, statement)
+    def initialize(condition, instruction)
         @condition = condition 
-        @statement = statement 
+        @body = instruction 
     end
 
+    def to_s
+        puts "UNDF_ITER"
+        puts "condition: " + to_s(@condition)
+        puts "body: " + to_s(@body)
+    end
 end
 
 class StoreNode < ASTNode
@@ -51,6 +115,9 @@ class StoreNode < ASTNode
     end
     
 end
+
+
+
 
 ################??????????????????
 #### No entiendo bien donde entra la matriz

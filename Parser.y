@@ -12,7 +12,6 @@ class Parser
 
     prechigh
 
-        
         right RESTA_UNARIA
         left MULT DIV MOD
         left PLUS MINUS
@@ -150,22 +149,22 @@ class Parser
 
     expression
     : literal
-    | expression SUMA expression           { puts val[1]}
-    | expression RESTA expression          { puts val[1]}
-    | expression MULT expression           { puts val[1]}
-    | expression DIV expression            { puts val[1]}
-    | expression MOD expression            { puts val[1]}
-    | RESTA expression =RESTA_UNARIA       { puts val[1]}
-    | PARABRE expression PARCIERRA         { puts val[1]}
-    | NEGACION expression                  { puts val[1]}
-    | expression CONJUNCION expression     { puts val[1]}
-    | expression DISYUNCION expression     { puts val[1]}
-    | expression MENORIGUAL expression     { puts val[1]}
-    | expression MAYORIGUAL expression     { puts val[1]}
-    | expression IGUAL expression          { puts val[1]}
-    | expression NOIGUAL expression        { puts val[1]}
-    | expression MENOR expression          { puts val[1]}
-    | expression MAYOR expression          { puts val[1]}
+    | expression SUMA expression          
+    | expression RESTA expression         
+    | expression MULT expression          
+    | expression DIV expression           
+    | expression MOD expression           
+    | RESTA expression =RESTA_UNARIA      
+    | PARABRE expression PARCIERRA        
+    | NEGACION expression                 
+    | expression CONJUNCION expression    
+    | expression DISYUNCION expression    
+    | expression MENORIGUAL expression    
+    | expression MAYORIGUAL expression    
+    | expression IGUAL expression         
+    | expression NOIGUAL expression       
+    | expression MENOR expression         
+    | expression MAYOR expression         
     ;
         
 end

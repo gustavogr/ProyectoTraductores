@@ -148,37 +148,37 @@ rule 66 expression: expression MAYOR expression
 
   $end (0) 
   error (1) 
-  ELSE (2) 25
-  RESTA_UNARIA (3) 
-  MULT (4) 53
-  DIV (5) 54
-  MOD (6) 55
-  PLUS (7) 
-  MINUS (8) 
-  NEGACION (9) 58
-  CONJUNCION (10) 59
-  DISYUNCION (11) 60
-  MENOR (12) 65
-  MAYOR (13) 66
-  MENORIGUAL (14) 61
-  MAYORIGUAL (15) 62
-  IGUAL (16) 63
-  NOIGUAL (17) 64
-  CREATE (18) 1
-  BOT (19) 5 6
-  EXECUTE (20) 1 2
-  ON (21) 14
-  READ (22) 33 34
-  RECIEVE (23) 
-  ME (24) 49
-  END (25) 1 2 5 6 14 24 25 26
-  ACTIVATION (26) 40
-  DEACTIVATION (27) 41
-  DEFAULT (28) 43
-  ACTIVATE (29) 17
-  DEACTIVATE (30) 19
-  ADVANCE (31) 18
-  IF (32) 24 25
+  RESTA_UNARIA (2) 
+  MULT (3) 53
+  DIV (4) 54
+  MOD (5) 55
+  PLUS (6) 
+  MINUS (7) 
+  NEGACION (8) 58
+  CONJUNCION (9) 59
+  DISYUNCION (10) 60
+  MENOR (11) 65
+  MAYOR (12) 66
+  MENORIGUAL (13) 61
+  MAYORIGUAL (14) 62
+  IGUAL (15) 63
+  NOIGUAL (16) 64
+  CREATE (17) 1
+  BOT (18) 5 6
+  EXECUTE (19) 1 2
+  ON (20) 14
+  READ (21) 33 34
+  RECIEVE (22) 
+  ME (23) 49
+  END (24) 1 2 5 6 14 24 25 26
+  ACTIVATION (25) 40
+  DEACTIVATION (26) 41
+  DEFAULT (27) 43
+  ACTIVATE (28) 17
+  DEACTIVATE (29) 19
+  ADVANCE (30) 18
+  IF (31) 24 25
+  ELSE (32) 25
   WHILE (33) 26
   STORE (34) 27
   COLLECT (35) 28 29
@@ -1195,7 +1195,6 @@ state 74
   24) conditional : IF expression DOSPUNTOS instruction _ END
   25) conditional : IF expression DOSPUNTOS instruction _ ELSE DOSPUNTOS instruction END
 
-  ELSE          shift, and go to state 98
   CREATE        shift, and go to state 2
   EXECUTE       shift, and go to state 3
   END           shift, and go to state 97
@@ -1203,6 +1202,7 @@ state 74
   DEACTIVATE    shift, and go to state 15
   ADVANCE       shift, and go to state 14
   IF            shift, and go to state 19
+  ELSE          shift, and go to state 98
   WHILE         shift, and go to state 20
 
   instruction   go to state 27
