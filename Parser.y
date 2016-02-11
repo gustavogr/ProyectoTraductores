@@ -11,16 +11,12 @@
 class Parser
 
     prechigh
-
-        # trantando de desambiguar la secuenciacion
-        # el if tambien deberia dar problemas
-        left SEQ 
-
+    
         right RESTA_UNARIA
-        left MULT DIV MOD
-        left PLUS MINUS
-        
         right NEGACION
+        
+        left MULT DIV MOD
+        left SUMA RESTA
         left CONJUNCION
         left DISYUNCION
         
@@ -49,6 +45,7 @@ class Parser
         COMA PUNTO DOSPUNTOS PARABRE PARCIERRA 
 
         IDENT CHARACTER NUM TRUE FALSE 
+        RESTA_UNARIA
 
     start program
 
@@ -86,31 +83,12 @@ class Parser
     ;
 
     behavior
-    : ON condition DOSPUNTOS botInstruction END
+    : ON condition DOSPUNTOS botInstructionList END
     ; 
 
-    instructionList
-    : instruction 
-    | instructionList instruction 
-    ;
-
-    instruction
-    : ACTIVATE  identifierList  PUNTO
-    | ADVANCE identifierList  PUNTO
-    | DEACTIVATE identifierList PUNTO
-    | instruction =SEQ instruction 
-    | conditional  
-    | undfiter 
-    | program
-    ; 
-
-    conditional
-    : IF expression DOSPUNTOS instruction END
-    | IF expression DOSPUNTOS instruction ELSE DOSPUNTOS instruction END
-    ;
-
-    undfiter
-    : WHILE expression DOSPUNTOS instruction END
+    botInstructionList
+    : botInstruction
+    | botInstructionList botInstruction
     ;
 
     botInstruction
@@ -122,7 +100,29 @@ class Parser
     | direction expression PUNTO
     | READ PUNTO
     | READ AS IDENT PUNTO
-    | botInstruction =SEQ botInstruction 
+    ;
+
+    instructionList
+    : instruction 
+    | instructionList instruction 
+    ;
+
+    instruction
+    : ACTIVATE  identifierList  PUNTO
+    | ADVANCE identifierList  PUNTO
+    | DEACTIVATE identifierList PUNTO 
+    | conditional  
+    | undfiter 
+    | program
+    ; 
+
+    conditional
+    : IF expression DOSPUNTOS instructionList END
+    | IF expression DOSPUNTOS instructionList ELSE DOSPUNTOS instructionList END
+    ;
+
+    undfiter
+    : WHILE expression DOSPUNTOS instructionList END
     ;
 
     direction
