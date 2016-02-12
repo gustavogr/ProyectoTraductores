@@ -7,7 +7,7 @@
 require 'racc/parser.rb'
 class Parser < Racc::Parser
 
-module_eval(<<'...end Parser.y/module_eval...', 'Parser.y', 174)
+module_eval(<<'...end Parser.y/module_eval...', 'Parser.y', 165)
 
 require "./ast.rb"
 
@@ -458,14 +458,14 @@ Racc_debug_parser = false
 
 # reduce 0 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 54)
+module_eval(<<'.,.,', 'Parser.y', 45)
   def _reduce_1(val, _values, result)
      result = ProgramNode.new(val[3])
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 55)
+module_eval(<<'.,.,', 'Parser.y', 46)
   def _reduce_2(val, _values, result)
      result = ProgramNode.new(val[1])
     result
@@ -480,14 +480,14 @@ module_eval(<<'.,.,', 'Parser.y', 55)
 
 # reduce 6 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 69)
+module_eval(<<'.,.,', 'Parser.y', 60)
   def _reduce_7(val, _values, result)
      result = IdentListNode.new().add(VariableNode.new(val[0]))
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 70)
+module_eval(<<'.,.,', 'Parser.y', 61)
   def _reduce_8(val, _values, result)
      result = val[0].add(VariableNode.new(val[2])) 
     result
@@ -526,35 +526,35 @@ module_eval(<<'.,.,', 'Parser.y', 70)
 
 # reduce 24 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 105)
+module_eval(<<'.,.,', 'Parser.y', 96)
   def _reduce_25(val, _values, result)
      result = InstListNode.new().add(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 106)
+module_eval(<<'.,.,', 'Parser.y', 97)
   def _reduce_26(val, _values, result)
      result = val[0].add(val[1]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 110)
+module_eval(<<'.,.,', 'Parser.y', 101)
   def _reduce_27(val, _values, result)
      result = BasicInstrNode.new(:ACTIVATE, val[1]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 111)
+module_eval(<<'.,.,', 'Parser.y', 102)
   def _reduce_28(val, _values, result)
      result = BasicInstrNode.new(:ADVANCE, val[1]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 112)
+module_eval(<<'.,.,', 'Parser.y', 103)
   def _reduce_29(val, _values, result)
      result = BasicInstrNode.new(:DEACTIVATE, val[1]) 
     result
@@ -567,21 +567,21 @@ module_eval(<<'.,.,', 'Parser.y', 112)
 
 # reduce 32 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 119)
+module_eval(<<'.,.,', 'Parser.y', 110)
   def _reduce_33(val, _values, result)
      result = ConditionalNode.new(val[1], val[3], nil)
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 120)
+module_eval(<<'.,.,', 'Parser.y', 111)
   def _reduce_34(val, _values, result)
-    result = ConditionalNode.new(val[1], val[3], val[5])
+    result = ConditionalNode.new(val[1], val[3], val[6])
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 124)
+module_eval(<<'.,.,', 'Parser.y', 115)
   def _reduce_35(val, _values, result)
      result = UndfIterNode.new(val[1], val[3])
     result
@@ -604,42 +604,42 @@ module_eval(<<'.,.,', 'Parser.y', 124)
 
 # reduce 43 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 142)
+module_eval(<<'.,.,', 'Parser.y', 133)
   def _reduce_44(val, _values, result)
      result = NumberNode.new(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 143)
+module_eval(<<'.,.,', 'Parser.y', 134)
   def _reduce_45(val, _values, result)
      result = BoolNode.new(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 144)
+module_eval(<<'.,.,', 'Parser.y', 135)
   def _reduce_46(val, _values, result)
      result = BoolNode.new(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 145)
+module_eval(<<'.,.,', 'Parser.y', 136)
   def _reduce_47(val, _values, result)
      result = CharNode.new(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 146)
+module_eval(<<'.,.,', 'Parser.y', 137)
   def _reduce_48(val, _values, result)
      result = VariableNode.new(val[0]) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 147)
+module_eval(<<'.,.,', 'Parser.y', 138)
   def _reduce_49(val, _values, result)
      result = VariableNode.new(val[0]) 
     result
@@ -648,112 +648,112 @@ module_eval(<<'.,.,', 'Parser.y', 147)
 
 # reduce 50 omitted
 
-module_eval(<<'.,.,', 'Parser.y', 152)
+module_eval(<<'.,.,', 'Parser.y', 143)
   def _reduce_51(val, _values, result)
      result = AritExprNode.new(:SUMA, val[0], val[2], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 153)
+module_eval(<<'.,.,', 'Parser.y', 144)
   def _reduce_52(val, _values, result)
      result = AritExprNode.new(:RESTA, val[0], val[2], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 154)
+module_eval(<<'.,.,', 'Parser.y', 145)
   def _reduce_53(val, _values, result)
      result = AritExprNode.new(:MULT, val[0], val[2], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 155)
+module_eval(<<'.,.,', 'Parser.y', 146)
   def _reduce_54(val, _values, result)
      result = AritExprNode.new(:DIV, val[0], val[2], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 156)
+module_eval(<<'.,.,', 'Parser.y', 147)
   def _reduce_55(val, _values, result)
      result = AritExprNode.new(:MOD, val[0], val[2], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 157)
+module_eval(<<'.,.,', 'Parser.y', 148)
   def _reduce_56(val, _values, result)
      result = UnExprNode.new(:RESTA, val[1], :int) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 158)
+module_eval(<<'.,.,', 'Parser.y', 149)
   def _reduce_57(val, _values, result)
      result = val[1] 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 159)
+module_eval(<<'.,.,', 'Parser.y', 150)
   def _reduce_58(val, _values, result)
      result = UnExprNode.new(:NEGACION, val[1], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 160)
+module_eval(<<'.,.,', 'Parser.y', 151)
   def _reduce_59(val, _values, result)
      result = BoolExprNode.new(:CONJUNCION, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 161)
+module_eval(<<'.,.,', 'Parser.y', 152)
   def _reduce_60(val, _values, result)
      result = BoolExprNode.new(:DISJUNCION, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 162)
+module_eval(<<'.,.,', 'Parser.y', 153)
   def _reduce_61(val, _values, result)
      result = RelExprNode.new(:MENORIGUAL, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 163)
+module_eval(<<'.,.,', 'Parser.y', 154)
   def _reduce_62(val, _values, result)
      result = RelExprNode.new(:MAYORIGUAL, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 164)
+module_eval(<<'.,.,', 'Parser.y', 155)
   def _reduce_63(val, _values, result)
      result = RelExprNode.new(:IGUAL, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 165)
+module_eval(<<'.,.,', 'Parser.y', 156)
   def _reduce_64(val, _values, result)
      result = RelExprNode.new(:NOIGUAL, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 166)
+module_eval(<<'.,.,', 'Parser.y', 157)
   def _reduce_65(val, _values, result)
      result = RelExprNode.new(:MENOR, val[0], val[2], :bool) 
     result
   end
 .,.,
 
-module_eval(<<'.,.,', 'Parser.y', 167)
+module_eval(<<'.,.,', 'Parser.y', 158)
   def _reduce_66(val, _values, result)
      result = RelExprNode.new(:MAYOR, val[0], val[2], :bool) 
     result
