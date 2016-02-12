@@ -20,7 +20,7 @@ require_relative 'Parser.tab.rb'
 
 lex = Lexer.new
 lex.analize(ARGV[0])
-#lex.print_tokens
+lex.print_tokens
 
 parser = Parser.new(lex)
 arbol = parser.parse

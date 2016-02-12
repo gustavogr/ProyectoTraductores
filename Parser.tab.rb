@@ -482,14 +482,14 @@ module_eval(<<'.,.,', 'Parser.y', 55)
 
 module_eval(<<'.,.,', 'Parser.y', 69)
   def _reduce_7(val, _values, result)
-     result = IdentListNode.new().add(val[0]) 
+     result = IdentListNode.new().add(VariableNode.new(val[0]))
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 70)
   def _reduce_8(val, _values, result)
-     result = val[0].add(val[2]) 
+     result = val[0].add(VariableNode.new(val[2])) 
     result
   end
 .,.,

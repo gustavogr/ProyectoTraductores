@@ -10,7 +10,7 @@ create
         end
     end
 execute
-    activate contador. $$, bar esto da peos en la accion agregar
+    activate contador, bar. $$, bar esto da peos en la accion agregar
     $- CALLATE
          activate -$
     activate blaaak.

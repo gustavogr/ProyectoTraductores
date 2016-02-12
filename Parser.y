@@ -67,8 +67,8 @@ class Parser
     ;
 
     identifierList
-    : IDENT                         { result = IdentListNode.new().add(val[0]) }
-    | identifierList COMA IDENT     { result = val[0].add(val[2]) }
+    : IDENT                         { result = IdentListNode.new().add(VariableNode.new(val[0]))}
+    | identifierList COMA IDENT     { result = val[0].add(VariableNode.new(val[2])) } 
     ;
 
     type

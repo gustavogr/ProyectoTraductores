@@ -38,14 +38,14 @@ class IdentListNode
 
     def add(ident)
         @identList << ident 
-        #return self
+        return self
     end
     
     def to_s(level)
         printable = ""
-        #var = "var: "
-        @identList.each {|ident| printable += ident.to_s(level + 1) + "\n"}
-        return "holaaaa"      
+        var = "var: "
+        @identList.each {|ident| printable += "\t"*level + var + ident.to_s(level + 1) + "\n"}
+        printable
     end
 
 end
@@ -142,14 +142,14 @@ end
 
 # activate, deactivate, advance
 class BasicInstrNode
-    def initialize(id, identList)
+    def initialize(id, identifiers)
         @id = id
-        @identList = identList
+        @identifiers = identifiers 
     end
 
     def to_s(level)
         "#{@id}\n" +
-        "\t"*level + @identList.to_s ##################(level+1)
+        "\t"*level + @identifiers.to_s(level) ##################(level+1)
     end
 end
 
