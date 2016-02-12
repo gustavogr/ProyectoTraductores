@@ -38,13 +38,14 @@ class IdentListNode
 
     def add(ident)
         @identList << ident 
+        #return self
     end
     
     def to_s(level)
         printable = ""
-        var = "var: "
+        #var = "var: "
         @identList.each {|ident| printable += ident.to_s(level + 1) + "\n"}
-        printable      
+        return "holaaaa"      
     end
 
 end
@@ -148,7 +149,7 @@ class BasicInstrNode
 
     def to_s(level)
         "#{@id}\n" +
-        "\t"*level + @identList.to_s 
+        "\t"*level + @identList.to_s ##################(level+1)
     end
 end
 
@@ -197,7 +198,7 @@ class VariableNode
     end
 
     def to_s(level)
-        @id.to_s
+        @id
     end
 end
 
