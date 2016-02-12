@@ -1,24 +1,29 @@
 class ProgramNode
-    def initialize
+    def initialize(instructions)
         @symbolTable = nil
-        @instrList = []
+        @instrList = instructions
     end
 
-    def add(instr)
-        @instrList << instr
+    def to_s(level)
+        @instrList.to_s
+    end 
+end
+
+class InstListNode 
+    def initialize
+        @instList = []        
+    end
+
+    def add(ident)
+        @instList << ident 
     end
     
     def to_s(level)
-        #falta para instruccion unica
-        if level == 1 then 
-            "SECUENCE\n" +
-            @instrList.each { |instr| "\t" + instr.to_s(level + 1) + "\n"}
-        else 
-            "NEW_SCOPE\n" +
-            @instrList.each { |instr| "\t"*level + instr.to_s(level + 1) + "\n"}
-        end
-    end 
+        @instList.each { |inst| inst.to_s(level + 1) + "\n"}
+    end
+
 end
+
 
 class IdentListNode 
     def initialize
@@ -37,9 +42,10 @@ end
 
 
 class UnExprNode
-    def initialize(operator, expression)
+    def initialize(operator, expression, type)
         @operator = operator
         @expr = expression
+        @type = type
     end
 
     def to_s(level)
@@ -97,7 +103,7 @@ class RelExprNode < BinExprNode
 end
 
 class ConditionalNode
-    def initialize(id, condition, instruction1, instruction2)
+    def initialize(condition, instruction1, instruction2)
         @condition = condition 
         @ifBody = instruction1 
         @elseBody = instruction2
@@ -126,7 +132,7 @@ end
 
 # activate, deactivate, advance
 class BasicInstrNode
-    def initialize(id)
+    def initialize(id, identList)
         @id = id
         @identList = identList
     end
