@@ -4,8 +4,8 @@ class ProgramNode
         @instructions = instructions
     end
 
-    def to_s(level)
-        @instrList.to_s
+    def to_s
+        @instructions.to_s(1)
     end 
 end
 
@@ -20,11 +20,16 @@ class InstListNode
     end
     
     def to_s(level)
-        @instList.each { |inst| inst.to_s(level + 1) + "\n"}
+        if @instList.size > 1 then 
+            printable = "" 
+            @instList.each { |inst| printable += "\t"*level + inst.to_s(level + 1) + "\n"}
+            "SECUENCE\n" + printable 
+        else
+            @instList[0].to_s(level)
+        end
     end
 
 end
-
 
 class IdentListNode 
     def initialize
@@ -36,7 +41,10 @@ class IdentListNode
     end
     
     def to_s(level)
-        "\t"*level + "var: \n" + @identList.each { |ident| ident.to_s(level + 1) + "\n"}
+        printable = ""
+        var = "var: "
+        @identList.each {|ident| printable += ident.to_s(level + 1) + "\n"}
+        printable      
     end
 
 end
@@ -67,8 +75,8 @@ class BinExprNode
 
     def to_s(level)
         "\t"*level + "operation: #{@op}\n" + 
-        "\t"*level + "left operand:" + @expr1.to_s(level+1) + "\n"
-        "\t"*level + "right operand:" + @expr2.to_s(level+1) + "\n"
+        "\t"*level + "left operand: " + @expr1.to_s(level+1) + "\n" +
+        "\t"*level + "right operand: " + @expr2.to_s(level+1) + "\n"
     end
 end
 
@@ -112,8 +120,8 @@ class ConditionalNode
     def to_s(level)
         "CONDITIONAL\n" +
         "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
-        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n" +
-        "\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
+        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n" #+
+        #{}"\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
     end
 
 end
@@ -139,8 +147,8 @@ class BasicInstrNode
     end
 
     def to_s(level)
-        "#{@id}"
-        "var: " + identList.to_s 
+        "#{@id}\n" +
+        "\t"*level + @identList.to_s 
     end
 end
 
@@ -152,7 +160,7 @@ class NumberNode
         @number = number
     end
 
-    def to_s
+    def to_s(level)
         @number
     end
 end
@@ -164,7 +172,7 @@ class CharNode
         @char = char
     end
 
-    def to_s
+    def to_s(level)
         "\'#{self.char}\'"
     end
 end
@@ -176,7 +184,7 @@ class BoolNode
         @bool = bool
     end
 
-    def to_s
+    def to_s(level)
         @bool
     end
 end
@@ -188,8 +196,8 @@ class VariableNode
         @id = id 
     end
 
-    def to_s
-        @id
+    def to_s(level)
+        @id.to_s
     end
 end
 

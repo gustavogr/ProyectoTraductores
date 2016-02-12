@@ -24,5 +24,5 @@ lex.analize(ARGV[0])
 
 parser = Parser.new(lex)
 arbol = parser.parse
-puts "Resultado:"
+puts arbol
 p arbol
