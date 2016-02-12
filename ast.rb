@@ -1,7 +1,7 @@
 class ProgramNode
     def initialize(instructions)
         @symbolTable = nil
-        @instrList = instructions
+        @instructions = instructions
     end
 
     def to_s(level)
@@ -14,8 +14,9 @@ class InstListNode
         @instList = []        
     end
 
-    def add(ident)
-        @instList << ident 
+    def add(inst)
+        @instList << inst
+        return self 
     end
     
     def to_s(level)
@@ -148,11 +149,11 @@ class NumberNode
     attr_accessor :number
 
     def initialize(number)
-        self.number = number
+        @number = number
     end
 
     def to_s
-        self.number
+        @number
     end
 end
 
@@ -160,7 +161,7 @@ class CharNode
     attr_accessor :char
 
     def initialize(char)
-        self.char = char
+        @char = char
     end
 
     def to_s
@@ -172,11 +173,11 @@ class BoolNode
     attr_accessor :bool
 
     def initialize(bool)
-        self.bool = bool
+        @bool = bool
     end
 
     def to_s
-        self.bool
+        @bool
     end
 end
 
@@ -184,11 +185,11 @@ class VariableNode
 
     #value and type
     def initialize(id)
-        self.id = id 
+        @id = id 
     end
 
     def to_s
-        self.id
+        @id
     end
 end
 

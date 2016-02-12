@@ -15,7 +15,7 @@ require "./ast.rb"
         @tokens = tokens
     end
 
-    def parser
+    def parse
         do_parse
     end
 
@@ -484,14 +484,14 @@ module_eval(<<'.,.,', 'Parser.y', 55)
 
 module_eval(<<'.,.,', 'Parser.y', 69)
   def _reduce_7(val, _values, result)
-     result = IdentListNode.new().add(val[0])
+     result = IdentListNode.new().add(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 70)
   def _reduce_8(val, _values, result)
-     result = val[0].add(val[1])
+     result = val[0].add(val[1]) 
     result
   end
 .,.,
@@ -530,14 +530,14 @@ module_eval(<<'.,.,', 'Parser.y', 70)
 
 module_eval(<<'.,.,', 'Parser.y', 105)
   def _reduce_25(val, _values, result)
-     result = InstListNode.new().add(val[0])
+     result = InstListNode.new().add(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 106)
   def _reduce_26(val, _values, result)
-     result = val[0].add(val[1])
+     result = val[0].add(val[1]) 
     result
   end
 .,.,

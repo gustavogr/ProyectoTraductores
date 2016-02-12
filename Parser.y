@@ -67,8 +67,8 @@ class Parser
     ;
 
     identifierList
-    : IDENT                         { result = IdentListNode.new().add(val[0])}
-    | identifierList COMA IDENT     { result = val[0].add(val[1])}
+    : IDENT                         { result = IdentListNode.new().add(val[0]) }
+    | identifierList COMA IDENT     { result = val[0].add(val[1]) }
     ;
 
     type
@@ -103,8 +103,8 @@ class Parser
     ;
 
     instructionList
-    : instruction                       { result = InstListNode.new().add(val[0])}
-    | instructionList instruction       { result = val[0].add(val[1])}
+    : instruction                       { result = InstListNode.new().add(val[0]) }
+    | instructionList instruction       { result = val[0].add(val[1]) }
     ;
 
     instruction
@@ -178,7 +178,7 @@ require "./ast.rb"
         @tokens = tokens
     end
 
-    def parser
+    def parse
         do_parse
     end
 

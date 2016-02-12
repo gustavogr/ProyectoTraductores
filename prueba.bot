@@ -1,4 +1,4 @@
-create 'd'
+create 
     int bot bar
         on activation:
             store 3.
@@ -13,7 +13,7 @@ execute
     activate contador.
     $- CALLATE
          activate -$
-    activate contador.
+    activate blaaak.
     if bar > 2:
         advance contador.
     end
