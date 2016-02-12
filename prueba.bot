@@ -10,11 +10,14 @@ create
         end
     end
 execute
-    activate contador, bar. $$, bar esto da peos en la accion agregar
+    deactivate contador, bar. $$, bar esto da peos en la accion agregar
     $- CALLATE
          activate -$
-    activate blaaak.
-    if bar > 2:
-        advance contador.
+    deactivate blaaak.
+    if 1 <= 3:
+        advance contador, blah, quepaso, acevedo.
+    $$else:
+    $$    deactivate aa.
     end
+
 end

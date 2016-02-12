@@ -26,8 +26,9 @@ class Lexer
     
     # Regexp que hace match con cualquier palabra reservada
         
-    ReservedW = /\A(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|activate|activation|advance|
-         deactivate|deactivation|default|collect|as|drop|left|right|up|down|read|true|false|me)/
+    ReservedW = /\A(?x)(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|deactivate|
+        activate|activation|advance|deactivation|default|collect|as|drop|left|right|up|down|
+        read|true|false|me)/
     
     # Tabla de Hash para facilitar la busqueda del nombre de cada simbolo
     

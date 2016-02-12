@@ -1,12 +1,3 @@
-# class CLASS_NAME
-#   [precedance table]
-#   [token declarations]
-#   [expected number of S/R conflict]
-#   [options]
-#   [semantic value convertion]
-#   [start rule]
-# rule
-#   GRAMMARS
 
 class Parser
 
@@ -118,7 +109,7 @@ class Parser
 
     conditional
     : IF expression DOSPUNTOS instructionList END               { result = ConditionalNode.new(val[1], val[3], nil)}
-    | IF expression DOSPUNTOS instructionList ELSE DOSPUNTOS instructionList END    {result = ConditionalNode.new(val[1], val[3], val[5])}
+    | IF expression DOSPUNTOS instructionList ELSE DOSPUNTOS instructionList END    {result = ConditionalNode.new(val[1], val[3], val[6])}
     ;
 
     undfiter

@@ -4,8 +4,13 @@ class ProgramNode
         @instructions = instructions
     end
 
-    def to_s
-        @instructions.to_s(1)
+    def to_s(level=1)
+        if level == 1 then 
+            @instructions.to_s(1)
+        else
+            "NEW_SCOPE\n" + 
+            "\t"*level + @instructions.to_s(level+1) 
+        end
     end 
 end
 
@@ -26,6 +31,7 @@ class InstListNode
             "SECUENCE\n" + printable 
         else
             @instList[0].to_s(level)
+        
         end
     end
 
@@ -118,11 +124,16 @@ class ConditionalNode
         @ifBody = instruction1 
         @elseBody = instruction2
     end
+
     def to_s(level)
-        "CONDITIONAL\n" +
+        printable = "CONDITIONAL\n" +
         "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
-        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n" #+
-        #{}"\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
+        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n"
+        
+        if @elseBody != nil then
+            printable += "\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
+        end
+        printable
     end
 
 end
@@ -149,7 +160,7 @@ class BasicInstrNode
 
     def to_s(level)
         "#{@id}\n" +
-        "\t"*level + @identifiers.to_s(level) ##################(level+1)
+        @identifiers.to_s(level) #(level+1)
     end
 end
 
