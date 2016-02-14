@@ -1,0 +1,24 @@
+create
+ int bot ale,pablo,pepe 
+ on deactivation:
+   store 5/\5.
+   collect.
+   left.
+   send.
+ end
+
+end
+execute
+ activate pepe,j,k,u,l,r,t,e,a.
+ advance a3.
+ deactivate pepe4.
+ if 8+8>9+9:
+   if false:
+    activate pepe.
+   end
+ end
+
+while 9+4-1<0:
+  advance n.
+end
+end
