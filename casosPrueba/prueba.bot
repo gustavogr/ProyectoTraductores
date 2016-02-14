@@ -1,0 +1,23 @@
+create 
+    int bot bar
+        on activation:
+            store 3.
+        end
+    end
+    int bot contador
+        on default:
+            store 35.
+        end
+    end
+execute
+    deactivate contador, bar.
+    $- CALLATE
+         activate -$
+    deactivate blaaak.
+    if 1 <= 3:
+        advance contador, blah, quepaso, acevedo, h.
+    $$else:
+    $$    deactivate aa.
+    end
+
+end
