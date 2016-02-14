@@ -1,5 +1,0 @@
-execute 
-    deactivate aa.
-    activate aa.
-    read.
-end

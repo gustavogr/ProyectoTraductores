@@ -121,8 +121,8 @@ class Lexer
             ## Identificadores
             #  Deben empezar con una letra y luego puede venir cualquier
             #  combinacion de caracteres de palabra.
-            when /\A[a-zA-Z]\w+(\W|\z)/
-                sub = program.slice!(/\A[a-zA-Z]\w+/)
+            when /\A[a-zA-Z]\w*(\W|\z)/
+                sub = program.slice!(/\A[a-zA-Z]\w*/)
                 self.tokensList << TkIdent.new(sub, line, column)
                 column += sub.length
 
