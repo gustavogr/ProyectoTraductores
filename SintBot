@@ -1,4 +1,4 @@
-# lexBot.rb
+# SintBot
 # 
 # Script para correr el interprete con un archivo
 #
@@ -14,4 +14,4 @@
 
 #! /bin/bash
 
-ruby LexBot.rb $1
+ruby SintBot.rb $1

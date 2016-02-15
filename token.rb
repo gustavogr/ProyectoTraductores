@@ -10,7 +10,7 @@
 #   https://github.com/gutielr/ProyectoTraductores 
 #
 # Ultima modificacion: 
-#   2 / 10 / 2015
+#   15 / 02 / 2016
 
 class Token
     def initialize(id, value, line, column)
@@ -41,7 +41,6 @@ class TkIdent < Token
         "TkIdent(\"#{@value}\") #{@line} #{@column}" 
    end
 end
-
 
 class TkChar < Token
     def initialize(value, line, column)

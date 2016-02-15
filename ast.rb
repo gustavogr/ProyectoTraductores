@@ -1,3 +1,20 @@
+# ast.rb
+# 
+# Archivo que contiene la estructura del Arbol Sintactico
+# Abstracto
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   15 / 02 / 2016
+
+# Nodo que simboliza el programa.
+
 class ProgramNode
     def initialize(instructions)
         @symbolTable = nil
@@ -9,11 +26,12 @@ class ProgramNode
             @instructions.to_s(1)
         else
             "NEW_SCOPE\n" + 
-            "\t"*level + @instructions.to_s(level+1) 
+            "    "*level + @instructions.to_s(level+1) 
         end
     end 
 end
 
+# Nodo que contiene una lista de instruciones
 class InstListNode 
     def initialize
         @instList = []        
@@ -27,16 +45,15 @@ class InstListNode
     def to_s(level)
         if @instList.size > 1 then 
             printable = "" 
-            @instList.each { |inst| printable += "\t"*level + inst.to_s(level + 1) + "\n"}
+            @instList.each { |inst| printable += "    "*level + inst.to_s(level + 1)}
             "SECUENCE\n" + printable 
         else
             @instList[0].to_s(level)
-        
         end
     end
-
 end
 
+# Nodo que contiene una lista de Identificadores
 class IdentListNode 
     def initialize
         @identList = []        
@@ -49,14 +66,14 @@ class IdentListNode
     
     def to_s(level)
         printable = ""
-        var = "var: "
-        @identList.each {|ident| printable += "\t"*level + var + ident.to_s(level + 1) + "\n"}
+        var = "- var: "
+        @identList.each {|ident| printable += "    "*level + var + ident.to_s(level + 1) + "\n"}
         printable
     end
 
 end
 
-
+# Nodo que contiene una Expresion Unaria
 class UnExprNode
     def initialize(operator, expression, type)
         @operator = operator
@@ -66,12 +83,12 @@ class UnExprNode
 
     def to_s(level)
         "UNARY_EXPR\n" +
-        "\t"*level + "operator: #{@operator}\n" +
-        "\t"*level + "operand: " + @expr.to_s(level+1) + "\n"
+        "    "*level + "operator: #{@operator}\n" +
+        "    "*level + "operand: " + @expr.to_s(level+1)
     end
 end
 
-
+# Nodo que contiene una Expresion Binaria
 class BinExprNode
     def initialize(operator, expr1, expr2, type)
         @op = operator
@@ -81,12 +98,13 @@ class BinExprNode
     end
 
     def to_s(level)
-        "\t"*level + "operation: #{@op}\n" + 
-        "\t"*level + "left operand: " + @expr1.to_s(level+1) + "\n" +
-        "\t"*level + "right operand: " + @expr2.to_s(level+1) + "\n"
+        "    "*level + "- operation: #{@op}\n" + 
+        "    "*level + "- left operand: " + @expr1.to_s(level+1) + "\n" +
+        "    "*level + "- right operand: " + @expr2.to_s(level+1)
     end
 end
 
+# Nodo que contiene una Expresion Aritmetica
 class AritExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
         super
@@ -97,6 +115,7 @@ class AritExprNode < BinExprNode
     end
 end
 
+# Nodo que contiene una Expresion Booleana
 class BoolExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
         super
@@ -108,6 +127,7 @@ class BoolExprNode < BinExprNode
 
 end
 
+# Nodo que contiene una Expresion Relacional
 class RelExprNode < BinExprNode
     def initialize(operator, expr1, expr2, type)
         super
@@ -118,6 +138,7 @@ class RelExprNode < BinExprNode
     end
 end
 
+# Nodo que contiene respresentacion de una clausula IF-THEN-ELSE
 class ConditionalNode
     def initialize(condition, instruction1, instruction2)
         @condition = condition 
@@ -127,17 +148,18 @@ class ConditionalNode
 
     def to_s(level)
         printable = "CONDITIONAL\n" +
-        "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
-        "\t"*level + "ifBody: " + @ifBody.to_s(level+1) + "\n"
+        "    "*level + "- condition: " + @condition.to_s(level+1) + "\n" +
+        "    "*level + "- ifBody: " + @ifBody.to_s(level+1)
         
         if @elseBody != nil then
-            printable += "\t"*level + "elseBody: " + @elseBody.to_s(level+1) + "\n" 
+            printable += "    "*level + "- elseBody: " + @elseBody.to_s(level+1)
         end
         printable
     end
 
 end
 
+# Nodo que contiene la representacion de la Iteracion Indefinida
 class UndfIterNode
     def initialize(condition, instruction)
         @condition = condition 
@@ -146,12 +168,12 @@ class UndfIterNode
 
     def to_s(level)
         "UNDF_ITER\n" +
-        "\t"*level + "condition: " + @condition.to_s(level+1) + "\n" +
-        "\t"*level + "body: " + @body.to_s(level+1)
+        "    "*level + "- condition: " + @condition.to_s(level+1) + "\n" +
+        "    "*level + "- body: " + @body.to_s(level+1)
     end
 end
 
-# activate, deactivate, advance
+# Nodo que contiene instrucciones basicas como: Activate, Deactivate, Advance
 class BasicInstrNode
     def initialize(id, identifiers)
         @id = id
@@ -164,7 +186,7 @@ class BasicInstrNode
     end
 end
 
-
+# Nodo que contiene Numeros Enteros
 class NumberNode 
     attr_accessor :number
 
@@ -177,6 +199,7 @@ class NumberNode
     end
 end
 
+# Nodo que contiene caracteres de BOT
 class CharNode   
     attr_accessor :char
 
@@ -189,6 +212,7 @@ class CharNode
     end
 end
 
+# Nodo que contiene True o False
 class BoolNode   
     attr_accessor :bool
 
@@ -201,6 +225,7 @@ class BoolNode
     end
 end
 
+# Nodo que contiene una Variable
 class VariableNode 
 
     #value and type

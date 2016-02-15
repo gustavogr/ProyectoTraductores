@@ -1,0 +1,115 @@
+# Gramatica.txt
+# 
+# Gramatica Implantada para el Analisis Sintactico
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   15 / 02 / 2016
+
+Gramatica:
+
+
+program ->  CREATE declarationList EXECUTE instructionList END    
+        | EXECUTE instructionList END                           
+
+
+declarationList ->  declaration
+                | declarationList declaration
+
+
+declaration ->  type BOT identifierList behaviorList END
+            | type BOT identifierList END
+
+
+identifierList -> IDENT                         
+            | identifierList, IDENT     
+
+
+type -> INT
+    | BOOL
+    | CHAR 
+
+
+behaviorList -> behavior
+            | behaviorList behavior
+
+
+behavior -> ON condition: botInstructionList END
+
+
+botInstructionList -> botInstruction
+                | botInstructionList botInstruction
+
+
+botInstruction ->   STORE expression.
+            | COLLECT AS IDENT.
+            | COLLECT.
+            | DROP expression.
+            | direction.
+            | direction expression.
+            | READ.
+            | READ AS IDENT.
+            | SEND.
+
+
+instructionList -> instruction                       
+                | instructionList instruction       
+
+
+instruction -> ACTIVATE  identifierList.       
+        | ADVANCE identifierList.         
+        | DEACTIVATE identifierList.       
+        | conditional  
+        | undfiter 
+        | program
+
+
+conditional ->  IF expression: instructionList END               
+            | IF expression: instructionList ELSE-> instructionList END 
+
+
+undfiter -> WHILE expression: instructionList END        
+
+
+direction -> LEFT
+        | RIGHT
+        | UP
+        | DOWN
+
+condition -> ACTIVATION
+        | DEACTIVATION
+        | expression
+        | DEFAULT
+
+literal -> NUM                   
+    | TRUE                  
+    | FALSE                 
+    | CHARACTER             
+    | IDENT                 
+    | ME                    
+
+expression -> literal
+        | expression + expression          
+        | expression - expression         
+        | expression * expression          
+        | expression / expression           
+        | expression % expression           
+        | - expression
+        | (expression)
+        | ~ expression                 
+        | expression /\ expression    
+        | expression \/ expression    
+        | expression <= expression    
+        | expression >= expression    
+        | expression = expression         
+        | expression /= expression       
+        | expression < expression         
+        | expression > expression         
+
+        

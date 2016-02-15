@@ -1,3 +1,16 @@
+# Parser.y
+# 
+# Archivo que usa la herramienta para generar el Parser
+#
+# Autores:
+#   Gustavo Gutierrez   11-10428
+#   Jose Pascarella     11-10743
+#
+# Repositorio:
+#   https://github.com/gutielr/ProyectoTraductores 
+#
+# Ultima modificacion: 
+#   15 / 02 / 2016
 
 class Parser
 
