@@ -11,8 +11,7 @@
 #   https://github.com/gutielr/ProyectoTraductores 
 #
 # Ultima modificacion: 
-#   2 / 10 / 2015
-
+#   15 / 02 / 2016
 
 require_relative 'lexer.rb' 
 require_relative 'Parser.tab.rb' 
@@ -20,7 +19,14 @@ require_relative 'Parser.tab.rb'
 
 lex = Lexer.new
 lex.analize(ARGV[0])
+#lex.print_tokens
 
-parser = Parser.new(lex)
-arbol = parser.parse
-puts arbol
+begin
+    parser = Parser.new(lex)
+    arbol = parser.parse
+    puts arbol
+    #p arbol
+rescue ParseError => e 
+    print "Syntax error: "
+    puts e
+end

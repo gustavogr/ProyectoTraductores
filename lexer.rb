@@ -11,7 +11,7 @@
 #   https://github.com/gutielr/ProyectoTraductores 
 #
 # Ultima modificacion: 
-#   2 / 10 / 2015
+#   15 / 02 / 2016
 
 require_relative 'token.rb'
 
@@ -27,7 +27,7 @@ class Lexer
     # Regexp que hace match con cualquier palabra reservada
         
     ReservedW = /\A(?x)(bot|execute|if|create|else|while|int|bool|char|store|recieve|on|end|deactivate|
-        activate|activation|advance|deactivation|default|collect|as|drop|left|right|up|down|
+        activate|activation|advance|deactivation|default|collect|as|drop|left|right|up|down|send|
         read|true|false|me)/
     
     # Tabla de Hash para facilitar la busqueda del nombre de cada simbolo

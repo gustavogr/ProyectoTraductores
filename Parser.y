@@ -25,7 +25,7 @@ class Parser
 
         ACTIVATE DEACTIVATE ADVANCE IF ELSE WHILE 
 
-        STORE COLLECT AS DROP LEFT RIGHT UP DOWN 
+        STORE COLLECT AS DROP LEFT RIGHT UP DOWN SEND READ 
 
         INT BOOL CHAR
 
@@ -91,6 +91,7 @@ class Parser
     | direction expression PUNTO
     | READ PUNTO
     | READ AS IDENT PUNTO
+    | SEND PUNTO
     ;
 
     instructionList
