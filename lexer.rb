@@ -105,8 +105,8 @@ class Lexer
             #  Hace match con un solo caracter. Al igual que con las palabras
             #  reservadas se pide que no venga un caracter valido de palabra
             #  despues.
-            when /\A'[a-zA-Z]'(\W|\z)/
-                sub = program.slice!(/\A'\w'/)
+            when /\A'([a-zA-Z]|\\n|\\t|\\')'(\W|\z)/
+                sub = program.slice!(/\A'(\w|\\n|\\t|\\')'/)
                 self.tokensList << TkChar.new(sub, line, column)
                 column += sub.length
 

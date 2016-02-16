@@ -182,7 +182,7 @@ class BasicInstrNode
 
     def to_s(level)
         "#{@id}\n" +
-        @identifiers.to_s(level) #(level+1)
+        @identifiers.to_s(level)
     end
 end
 

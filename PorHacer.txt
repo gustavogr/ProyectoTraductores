@@ -1,2 +1,1 @@
-- Agregar \n \t \' a TkChar
 - Teorico-Practico 
