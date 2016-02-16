@@ -1,0 +1,41 @@
+Introducción
+Para la segunda etapa del proyecto se pidió desarrollar un Parser para el lenguaje BOT especificado en el enunciado del Proyecto. Se realiza el analisis sintactico de los tokens generados por el lexer ya implementado. Para lo que se creo una gramatica libre de contexto, que con sus acciones fuera generando un arbol sintactico abstracto, salida final del Parser.
+
+Correcciones del Lexer
+En la implementacion del parser, se encontraron pequenos problemas en el lexer que provienen de una mala interpretacion del enunciado de la primera etapa. No se tomaron en cuanta las comillas simples para la interpretacion de los caracteres, por lo tanto una letra unica, se tomaba como un TkCharacter, cuando en realidad los caracteres son letras encerradas en comillas simples (' ').
+
+La Gramatica
+Para la implementacion de la gramatica, la herramienta usada fue RACC (Ruby Another Compiler Compiler) sugerida por el profesor de la materia,que es un generador de parsers LALR https://github.com/tenderlove/racc.
+
+Se tomaron las definiciones del enunciado y se fueron creando reglas que generaran el lenguaje manteniendolas recursivas izquierdas. Luego,surgen problemas de shift/reduce por la ambiguedad de los programas generados que se resolvieron agregando la precedencia y asociatividad necesarias con prioridad en los operadores unarios.
+
+Al tener la gramatica, se contruyo una estructura concreta que respresentara el AST con su metodo de impresion, que esta compuesta de las siguientes clases en el archivo <ast.rb>:
+
+Programa que contiene un programa en bot o puede simbolizar un nuevo alcance
+
+Lista de Instrucciones
+
+Lista de Identificadores
+
+Expresion Unaria 
+
+Expresiones Aritmeticas, Booleanas y Relacionales
+
+Condicional
+
+Iteracion Indefinida
+
+Intrucciones Basicas como Activate, Deactivate y Advance
+
+Y una clase para cada literal Variables, Numeros, Caracteres y Booleanos.
+
+Cada una con sus argumentos caracteristicos, como operaciones, operandos, expresiones o literales segun sea el caso.
+
+Para finalizar, solo falto hacer la conexion entre la gramatica creda y el arbol implementado, para esto se agregaron acciones a la gramatica que no son mas que codigo que se ejecuta al encontrar una regla bien construida que al ejecutarse agregan el nodo que corresponda al arbol en construccion. 
+
+El arbol generado representa las operaciones con su orden de ejecucion y con esto se finaliza el analisis sintactico de la lista de Tokens recibida.
+
+Se suministra el archivo con la gramatica <Parser.y> al generador de parsers (RACC) para que la transforme en el parser a usar sobre la lista de Tokens de BOT ejecutando:
+
+racc Parser.y 
+

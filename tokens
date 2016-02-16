@@ -29,6 +29,7 @@ right           --> TkRight
 up              --> TkUp
 down            --> TkDown
 read            --> TkRead
+send            --> TkSend
 
 varX -> TkIdent("varX")
 me  --> TkMe

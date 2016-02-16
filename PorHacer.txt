@@ -1,5 +1,1 @@
-- Agregar \n \t \' a TkChar
-- Probar Impresion del arbol
-- Probar todo
 - Teorico-Practico 
-- Informe
