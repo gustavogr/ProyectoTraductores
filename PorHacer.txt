@@ -1,1 +1,3 @@
-- Teorico-Practico 
+- Tabla de Simbolos (Listo esqueleto)
+- Redeclaraciones
+- type checking

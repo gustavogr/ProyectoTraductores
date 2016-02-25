@@ -61,13 +61,13 @@ class Parser
     ;
 
     declarationList
-    : declaration
+    : declaration                           
     | declarationList declaration
     ;
 
     declaration 
-    : type BOT identifierList behaviorList END
-    | type BOT identifierList END
+    : type BOT identifierList behaviorList END              # Insert
+    | type BOT identifierList END                           # Insert
     ;
 
     identifierList
@@ -96,14 +96,14 @@ class Parser
     ;
 
     botInstruction
-    : STORE expression PUNTO
+    : STORE expression PUNTO                    
     | COLLECT AS IDENT PUNTO
     | COLLECT PUNTO
     | DROP expression PUNTO
     | direction PUNTO
     | direction expression PUNTO
     | READ PUNTO
-    | READ AS IDENT PUNTO
+    | READ AS IDENT PUNTO                       #insert
     | SEND PUNTO
     ;
 
