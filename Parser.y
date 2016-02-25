@@ -145,12 +145,12 @@ class Parser
     ;
 
     literal
-    : NUM                   { result = NumberNode.new(val[0]) }
-    | TRUE                  { result = BoolNode.new(val[0]) }
-    | FALSE                 { result = BoolNode.new(val[0]) }
-    | CHARACTER             { result = CharNode.new(val[0]) }
-    | IDENT                 { result = VariableNode.new(val[0]) }
-    | ME                    { result = VariableNode.new(val[0]) }
+    : NUM                   { result = NumberNode.new(val[0], :int)}
+    | TRUE                  { result = BoolNode.new(val[0], :bool)}
+    | FALSE                 { result = BoolNode.new(val[0], :bool)}
+    | CHARACTER             { result = CharNode.new(val[0], :char)}
+    | IDENT                 { result = VariableNode.new(val[0], :ident)}
+    | ME                    { result = VariableNode.new(val[0], :ident)}
     ;
 
     expression

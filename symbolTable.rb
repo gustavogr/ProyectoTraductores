@@ -4,6 +4,9 @@ class SymAttribute
         @value = nil
     end
 
+    
+
+    
 end
 
 
@@ -30,5 +33,10 @@ class SymbolTable
         puts "variable #{name} no existe."
 
     end
+
+    def update(name, value)
+        #manejar error tipos
+        self.lookup(name)
+
     
 end

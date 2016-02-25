@@ -106,7 +106,7 @@ end
 
 # Nodo que contiene una Expresion Aritmetica
 class AritExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
+    def initialize(operator, expr1, expr2, value)
         super
     end
 
@@ -117,7 +117,7 @@ end
 
 # Nodo que contiene una Expresion Booleana
 class BoolExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
+    def initialize(operator, expr1, expr2, value)
         super
     end
 
@@ -129,7 +129,7 @@ end
 
 # Nodo que contiene una Expresion Relacional
 class RelExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
+    def initialize(operator, expr1, expr2, value)
         super
     end
 
@@ -186,55 +186,38 @@ class BasicInstrNode
     end
 end
 
-# Nodo que contiene Numeros Enteros
-class NumberNode 
-    attr_accessor :number
-
-    def initialize(number)
-        @number = number
+class Terminal
+    def initialize(value, type)
+        @value = value
+        @type = type
     end
+end
 
-    def to_s(level)
-        @number
+# Nodo que contiene Numeros Enteros
+class NumberNode < Terminal
+    def initialize(value, type)
+        super
     end
 end
 
 # Nodo que contiene caracteres de BOT
-class CharNode   
-    attr_accessor :char
-
-    def initialize(char)
-        @char = char
-    end
-
-    def to_s(level)
-        "\'#{self.char}\'"
+class CharNode < Terminal 
+    def initialize(value, type)
+        super
     end
 end
 
 # Nodo que contiene True o False
-class BoolNode   
-    attr_accessor :bool
-
-    def initialize(bool)
-        @bool = bool
-    end
-
-    def to_s(level)
-        @bool
+class BoolNode < Terminal
+    def initialize(value, type)
+        super
     end
 end
 
 # Nodo que contiene una Variable
-class VariableNode 
-
-    #value and type
-    def initialize(id)
-        @id = id 
-    end
-
-    def to_s(level)
-        @id
+class VariableNode < Terminal 
+    def initialize(value, type)
+        super 
     end
 end
 
