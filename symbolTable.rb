@@ -3,10 +3,6 @@ class SymAttribute
         @type = type
         @value = nil
     end
-
-    
-
-    
 end
 
 
@@ -31,12 +27,16 @@ class SymbolTable
         end    
         @father.lookup(name) unless @father == nil
         puts "variable #{name} no existe."
+        return false
 
     end
 
     def update(name, value)
-        #manejar error tipos
-        self.lookup(name)
-
+        if var = self.lookup(name) then 
+            var.value = value
+        else
+            puts "La variable no ha sido inicializada"
+        end
+    end
     
 end
