@@ -17,7 +17,7 @@
 
 class ProgramNode
     def initialize(instructions)
-        @symbolTable = nil
+        #@symbolTable = nil
         @instructions = instructions
     end
 
@@ -81,6 +81,10 @@ class UnExprNode
         @type = type
     end
 
+    def check
+        raise "#{@operator} #{@expr.type}" unless @expr.type == @type 
+    end
+
     def to_s(level)
         "UNARY_EXPR\n" +
         "    "*level + "operator: #{@operator}\n" +
@@ -97,6 +101,10 @@ class BinExprNode
         @type = type
     end
 
+    def check
+        raise "Error en #{@op}" unless @expr1.type == @type and @expr1.type == @expr2.type
+    end
+
     def to_s(level)
         "    "*level + "- operation: #{@op}\n" + 
         "    "*level + "- left operand: " + @expr1.to_s(level+1) + "\n" +
@@ -106,7 +114,7 @@ end
 
 # Nodo que contiene una Expresion Aritmetica
 class AritExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, value)
+    def initialize(operator, expr1, expr2, type)
         super
     end
 
@@ -117,7 +125,7 @@ end
 
 # Nodo que contiene una Expresion Booleana
 class BoolExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, value)
+    def initialize(operator, expr1, expr2, type)
         super
     end
 
@@ -129,8 +137,12 @@ end
 
 # Nodo que contiene una Expresion Relacional
 class RelExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, value)
+    def initialize(operator, expr1, expr2, type)
         super
+    end
+
+    def check
+        raise "Error en #{op}" unless (@expr1.type == :int or @expr1.type == :bool) and @expr1.type == @expr2.type 
     end
 
     def to_s(level)
@@ -144,6 +156,10 @@ class ConditionalNode
         @condition = condition 
         @ifBody = instruction1 
         @elseBody = instruction2
+    end
+
+    def check  
+        raise "Error en condicion de Condicional" unless @condition == :bool
     end
 
     def to_s(level)
@@ -164,6 +180,10 @@ class UndfIterNode
     def initialize(condition, instruction)
         @condition = condition 
         @body = instruction 
+    end
+
+    def check
+        raise "Error en condicion de Iteracion" unless @condition.type == :bool
     end
 
     def to_s(level)
