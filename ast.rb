@@ -29,6 +29,12 @@ class ProgramNode
             "    "*level + @instructions.to_s(level+1) 
         end
     end 
+
+    def check
+        @instructions.check
+    end
+
+
 end
 
 # Nodo que contiene una lista de instruciones
@@ -51,6 +57,11 @@ class InstListNode
             @instList[0].to_s(level)
         end
     end
+
+    def check
+        @instList.each {|inst| inst.check}
+    end
+
 end
 
 # Nodo que contiene una lista de Identificadores
@@ -71,6 +82,10 @@ class IdentListNode
         printable
     end
 
+    def check
+        @identList.each {|ident| ident.check}
+    end
+
 end
 
 # Nodo que contiene una Expresion Unaria
@@ -82,7 +97,9 @@ class UnExprNode
     end
 
     def check
-        raise "#{@operator} #{@expr.type}" unless @expr.type == @type 
+        expT = @expr.check
+        raise "Error: #{@operator} #{expT}" unless expT == @type
+        @type
     end
 
     def to_s(level)
@@ -102,7 +119,10 @@ class BinExprNode
     end
 
     def check
-        raise "Error en #{@op}" unless @expr1.type == @type and @expr1.type == @expr2.type
+        exp1 = @expr1.check
+        exp2 = @expr2.check
+        raise "Error: #{exp1} #{@op} #{exp2}" unless exp1 == @type and exp1 == exp2
+        @type
     end
 
     def to_s(level)
@@ -132,7 +152,6 @@ class BoolExprNode < BinExprNode
     def to_s(level)
         "BOOL_EXPR\n" + super
     end
-
 end
 
 # Nodo que contiene una Expresion Relacional
@@ -142,7 +161,10 @@ class RelExprNode < BinExprNode
     end
 
     def check
-        raise "Error en #{op}" unless (@expr1.type == :int or @expr1.type == :bool) and @expr1.type == @expr2.type 
+        exp1 = @expr1.check
+        exp2 = @expr2.check
+        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :int or exp1 == :bool) and exp1 == exp2
+        @type 
     end
 
     def to_s(level)
@@ -159,7 +181,7 @@ class ConditionalNode
     end
 
     def check  
-        raise "Error en condicion de Condicional" unless @condition == :bool
+        raise "Error: Expresion de Condicional" unless @condition.check == :bool
     end
 
     def to_s(level)
@@ -172,7 +194,6 @@ class ConditionalNode
         end
         printable
     end
-
 end
 
 # Nodo que contiene la representacion de la Iteracion Indefinida
@@ -183,7 +204,7 @@ class UndfIterNode
     end
 
     def check
-        raise "Error en condicion de Iteracion" unless @condition.type == :bool
+        raise "Error: Condicion de Iteracion" unless @condition.check == :bool
     end
 
     def to_s(level)
@@ -200,6 +221,10 @@ class BasicInstrNode
         @identifiers = identifiers 
     end
 
+    def check
+        @identifiers.check 
+    end 
+
     def to_s(level)
         "#{@id}\n" +
         @identifiers.to_s(level)
@@ -210,6 +235,10 @@ class Terminal
     def initialize(value, type)
         @value = value
         @type = type
+    end
+    
+    def check
+        @type
     end
 end
 
@@ -238,6 +267,10 @@ end
 class VariableNode < Terminal 
     def initialize(value, type)
         super 
+    end
+
+    def check
+        #Chequear en la tabla de simbolos?
     end
 end
 

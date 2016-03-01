@@ -1,4 +1,5 @@
 - Tabla de Simbolos (Listo esqueleto)
-- Redeclaraciones
-- type checking
-- clase tipo
+- type checking     (casi listo)
+- arbol se imprime en ingles y errores en espanol
+- clase tipo        (hasta ahora uso simbolos)
+- comportamientos, asignaciones...
