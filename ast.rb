@@ -64,6 +64,102 @@ class InstListNode
 
 end
 
+class BotInstListNone
+    def initialize
+        @instList = []
+    end
+
+    def add(inst)
+        @instList << inst
+        return self
+    end
+
+    def check
+       @instList.each {|inst| inst.check} 
+    end
+
+end
+
+class BehaviorListNone
+    def initialize
+        @bhList = []
+        @type = nil
+    end
+
+    def add(inst)
+        @bhList << inst
+        return self
+    end
+
+    def check
+        #Chequear por defaults y activates
+        @bhList.each {|behavior| behavior.symTable.add("me", @type); behavior.check}
+
+    end
+
+end
+
+class BehaviorNode
+    def initialize(condition, instructions)
+        @condition = condition
+        @instructions = instructions
+        @symTable = SymbolTable.new()
+    end
+    
+    def check
+        condT = @condition.check 
+        condT == :bool # or activation or...
+        @instructions.check
+    end
+end
+
+class StoreNode
+    def initialize(expr)
+        @expr = expr
+    end
+
+    def check
+        exprT = expr.check
+        #exprT == type Robot 
+    end
+
+end
+
+# Guarda el valor de la matriz en el robot
+class CollectNode
+    def initialize(ident="me")
+        @ident = ident
+    end
+
+    def check
+        #lookup
+    end
+end
+
+class DropNode
+    def initialize(expr)
+        @expr = expr
+    end
+
+    def check
+        @expr.check
+    end
+
+end
+
+class MoveNode
+    def initialize(to, expr=nil)
+        @to = to
+        @expr = expr
+    end
+    
+    def check
+        expT = @expr.check # luego debe ser no negativa
+    end
+    
+end
+
+
 # Nodo que contiene una lista de Identificadores
 class IdentListNode 
     def initialize
@@ -182,6 +278,8 @@ class ConditionalNode
 
     def check  
         raise "Error: Expresion de Condicional" unless @condition.check == :bool
+        @ifBody.check
+        @elseBody.check
     end
 
     def to_s(level)
@@ -205,6 +303,7 @@ class UndfIterNode
 
     def check
         raise "Error: Condicion de Iteracion" unless @condition.check == :bool
+        @body.check
     end
 
     def to_s(level)
@@ -282,9 +381,9 @@ class SymAttribute
     def initialize(type)
         @type = type
         @value = nil
+        @behaviors = BehaviorListNone.new()
     end
 end
-
 
 # Clase que representa una Tabla de Simbolos
 class SymbolTable
