@@ -13,12 +13,14 @@
 # Ultima modificacion: 
 #   15 / 02 / 2016
 
-# Nodo que simboliza el programa.
+$currentTable = nil
 
+# Nodo que simboliza el programa.
 class ProgramNode
     def initialize(instructions)
         @symTable = SymbolTable.new()
         @instructions = instructions
+        @declarations = declarations
     end
 
     def to_s(level=1)
@@ -31,9 +33,15 @@ class ProgramNode
     end 
     
     def check
-        @instructions.check                         
+        @symTable.father = $currentTable
+        $currentTable = @symTable
+        @instructions.check 
+        $currentTable = @symTable.father
     end
 end
+
+
+
 
 # Nodo que contiene una lista de instruciones
 class InstListNode 
@@ -48,8 +56,6 @@ class InstListNode
     
     def to_s(level)
         if @instList.size > 1 then 
-
-
             printable = "" 
             @instList.each { |inst| printable += "    "*level + inst.to_s(level + 1)}
             "SECUENCE\n" + printable 
@@ -412,6 +418,8 @@ end
 
 # Clase que representa una Tabla de Simbolos
 class SymbolTable
+    attr_accessor :father
+
     def initialize(father)
         @father = father
         @symbols = Hash.new
