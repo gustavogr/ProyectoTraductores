@@ -48,6 +48,8 @@ class InstListNode
     
     def to_s(level)
         if @instList.size > 1 then 
+
+
             printable = "" 
             @instList.each { |inst| printable += "    "*level + inst.to_s(level + 1)}
             "SECUENCE\n" + printable 
@@ -71,8 +73,7 @@ class BehaviorNode
     
     def check
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
-            condT = @condition.check 
-            condT == :BOOL # or activation or...
+            @condition.check == :BOOL
         end
         @instructions.check
     end
@@ -300,7 +301,7 @@ class ConditionalNode
     def check  
         raise "Error: Expresion de Condicional" unless @condition.check == :BOOL
         @ifBody.check
-        @elseBody.check
+        @elseBody.check unless @elseBody == nil
     end
 
     def to_s(level)
