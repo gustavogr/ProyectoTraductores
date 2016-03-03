@@ -483,14 +483,14 @@ module_eval(<<'.,.,', 'Parser.y', 59)
 
 module_eval(<<'.,.,', 'Parser.y', 63)
   def _reduce_3(val, _values, result)
-     result = SymbolTable.new().insertL(val[0][0], val[0][1], val[0][2]) 
+     result = SymbolTable.new().insertL(val[0][0], SymAttribute.new(val[0][1], val[0][2])) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 64)
   def _reduce_4(val, _values, result)
-     result = val[0].insertL(val[1][0], val[1][1], val[1][2]) 
+     result = val[0].insertL(val[1][0], SymAttribute.new(val[1][1], val[1][2])) 
     result
   end
 .,.,

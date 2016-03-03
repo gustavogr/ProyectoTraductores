@@ -38,7 +38,8 @@ class ProgramNode
     end
 
     def check
-        @instructions.check                         
+        @instructions.check
+        @symTable.checkBehaviors                         
     end
 end
 
@@ -105,7 +106,6 @@ end
 class BehaviorListNode
     def initialize
         @bhList = []
-        @type = nil
     end
 
     def add(inst)
@@ -113,9 +113,15 @@ class BehaviorListNode
         return self
     end
 
+    def initTables(bot)
+        @bhList.each { |behavior| 
+            behavior.symTable.insert("me", bot)
+        }
+    end
+
     def check
         #Chequear por defaults y activates
-        @bhList.each {|behavior| behavior.symTable.add("me", @type); behavior.check}
+        @bhList.each { |behavior| behavior.check }
     end
 end
 
@@ -366,7 +372,7 @@ class Terminal
     end
     
     def to_s(level)
-        return "    "*level + @value
+        @value
     end
 
     def check
@@ -414,7 +420,8 @@ end
 ####################
 
 class SymAttribute 
-    attr_accessor :value
+    attr_accessor :value 
+    attr_reader :type
 
     def initialize(type, behaviors)
         @type = type
@@ -433,16 +440,16 @@ class SymbolTable
         @symbols = Hash.new
     end
 
-    def insertL(list, type, behaviors)
-        list.identList.each {|ident| insert(ident.value, type, behaviors)}
+    def insertL(list, attributes)
+        list.identList.each {|ident| insert(ident.value, attributes)}
         return self
     end
 
-    def insert(name, type, behaviors=nil)
+    def insert(name, attributes)
         if @symbols.key?(name) then 
             raise "variable #{name}, ya existe en la tabla de simbolos."
         else
-            @symbols[name] = SymAttribute.new(type, behaviors)
+            @symbols[name] = attributes
             return self
         end
     end
@@ -453,7 +460,6 @@ class SymbolTable
         end    
         @father.lookup(name) unless @father == nil
         raise "variable #{name} no existe."
-        return false
 
     end
 
@@ -463,6 +469,14 @@ class SymbolTable
         else
             puts "La variable no ha sido inicializada"
         end
+    end
+
+    def checkBehaviors()
+        @symbols.each { |key, attributes|
+            attributes.behaviors.initTables(attributes)
+            attributes.behaviors.check()
+
+        }
     end
     
 end
