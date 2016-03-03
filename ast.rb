@@ -72,7 +72,7 @@ class BehaviorNode
     def check
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
             condT = @condition.check 
-            condT == :bool # or activation or...
+            condT == :BOOL # or activation or...
         end
         @instructions.check
     end
@@ -252,7 +252,7 @@ end
 # Nodo que contiene una Expresion Aritmetica
 class AritExprNode < BinExprNode
     def initialize(operator, expr1, expr2)
-        super(operator, expr1, expr2, :int)
+        super(operator, expr1, expr2, :INT)
     end
 
     def to_s(level)
@@ -263,7 +263,7 @@ end
 # Nodo que contiene una Expresion Booleana
 class BoolExprNode < BinExprNode
     def initialize(operator, expr1, expr2)
-        super(operator, expr1, expr2, :bool)
+        super(operator, expr1, expr2, :BOOL)
     end
 
     def to_s(level)
@@ -274,13 +274,13 @@ end
 # Nodo que contiene una Expresion Relacional
 class RelExprNode < BinExprNode
     def initialize(operator, expr1, expr2)
-        super(operator, expr1, expr2, :bool)
+        super(operator, expr1, expr2, :BOOL)
     end
 
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :int or exp1 == :bool) and exp1 == exp2
+        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :INT or exp1 == :BOOL) and exp1 == exp2
         @type 
     end
 
@@ -298,7 +298,7 @@ class ConditionalNode
     end
 
     def check  
-        raise "Error: Expresion de Condicional" unless @condition.check == :bool
+        raise "Error: Expresion de Condicional" unless @condition.check == :BOOL
         @ifBody.check
         @elseBody.check
     end
@@ -323,7 +323,7 @@ class UndfIterNode
     end
 
     def check
-        raise "Error: Condicion de Iteracion" unless @condition.check == :bool
+        raise "Error: Condicion de Iteracion" unless @condition.check == :BOOL
         @body.check
     end
 
@@ -365,21 +365,21 @@ end
 # Nodo que contiene Numeros Enteros
 class NumberNode < Terminal
     def initialize(value)
-        super(value, :int)
+        super(value, :INT)
     end
 end
 
 # Nodo que contiene caracteres de BOT
 class CharNode < Terminal 
     def initialize(value)
-        super(value, :char)
+        super(value, :CHAR)
     end
 end
 
 # Nodo que contiene True o False
 class BoolNode < Terminal
     def initialize(value)
-        super(value, :bool)
+        super(value, :BOOL)
     end
 end
 
