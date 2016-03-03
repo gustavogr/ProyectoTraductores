@@ -483,8 +483,7 @@ class SymbolTable
             return @symbols[name]
         end    
         @father.lookup(name) unless @father == nil
-        raise "variable #{name} no existe."
-
+        return false
     end
 
     def update(name, value)
