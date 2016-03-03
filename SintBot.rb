@@ -23,6 +23,7 @@ begin
     parser = Parser.new(lex)
     arbol = parser.parse
     puts arbol
+    arbol.printSymTable()
 
 rescue ParseError => e 
     print "Syntax error: "

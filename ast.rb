@@ -17,8 +17,8 @@ $currentTable = nil
 
 # Nodo que simboliza el programa.
 class ProgramNode
-    def initialize(instructions)
-        @symTable = SymbolTable.new()
+    def initialize(instructions, symTable)
+        @symTable = symTable
         @instructions = instructions
         @declarations = declarations
     end
@@ -32,6 +32,13 @@ class ProgramNode
         end
     end 
     
+    ###########
+    # DEBUGGEO
+    ###########
+    def printSymTable()
+        p @symTable
+    end
+
     def check
         @symTable.father = $currentTable
         $currentTable = @symTable
@@ -364,6 +371,10 @@ class Terminal
         @type = type
     end
     
+    def to_s(level)
+        @value
+    end
+
     def check
         @type
     end
@@ -392,7 +403,9 @@ end
 
 # Nodo que contiene una Variable
 class VariableNode < Terminal 
-    def initialize(value, type)
+    attr_accessor :value
+
+    def initialize(value)
         super(value, :ident)
     end
 
@@ -407,12 +420,12 @@ end
 ####################
 
 class SymAttribute 
-    attr_accessor :type, :value
+    attr_accessor :value
 
-    def initialize(type)
+    def initialize(type, behaviors)
         @type = type
         @value = nil
-        @behaviors = nil
+        @behaviors = behaviors
     end
 end
 
@@ -420,20 +433,21 @@ end
 class SymbolTable
     attr_accessor :father
 
-    def initialize(father)
+    def initialize()
         @father = father
         @symbols = Hash.new
     end
 
-    def insertL(list, type)
-        list.identList.each {|ident| insert(ident.value, type)}
+    def insertL(list, type, behaviors)
+        list.identList.each {|ident| insert(ident.value, type, behaviors)}
         return self
+    end
 
-    def insert(name, type)
+    def insert(name, type, behaviors=nil)
         if @symbols.key?(name) then 
             raise "variable #{name}, ya existe en la tabla de simbolos."
         else
-            @symbols[name] = SymAttribute.new(type)
+            @symbols[name] = SymAttribute.new(type, behaviors)
             return self
         end
     end

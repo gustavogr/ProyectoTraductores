@@ -56,18 +56,18 @@ class Parser
     rule
 
     program
-    : CREATE declarationList EXECUTE instructionList END    { result = ProgramNode.new(val[3])}
-    | EXECUTE instructionList END                           { result = ProgramNode.new(val[1])}
+    : CREATE declarationList EXECUTE instructionList END    { result = ProgramNode.new(val[3], val[1])}
+    | EXECUTE instructionList END                           { result = ProgramNode.new(val[1], SymbolTable.new())}
     ;
 
     declarationList
-    : declaration                           
-    | declarationList declaration
+    : declaration                                           { result = SymbolTable.new().insertL(val[0][0], val[0][1], val[0][2]) }           
+    | declarationList declaration                           { result = val[0].insertL(val[1][0], val[1][1], val[1][2]) }
     ;
 
     declaration 
-    : type BOT identifierList behaviorList END              # Insert
-    | type BOT identifierList END                           # Insert
+    : type BOT identifierList behaviorList END              { result = [ val[2], val[0], val[3]] }
+    | type BOT identifierList END                           { result = [ val[2], val[0], BehaviorListNode.new() ] }
     ;
 
     identifierList
@@ -91,7 +91,7 @@ class Parser
     ; 
 
     botInstructionList
-    : botInstruction                        { result = BotInstructionListNode.new().add(val[0]) }
+    : botInstruction                        { result = BotInstListNode.new().add(val[0]) }
     | botInstructionList botInstruction     { result = val[0].add(val[1]) }
     ;
 
@@ -100,8 +100,8 @@ class Parser
     | COLLECT AS IDENT PUNTO            { result = CollectNode.new(val[2]) }
     | COLLECT PUNTO                     { result = CollectNode.new() }
     | DROP expression PUNTO             { result = DropNode.new(val[1]) }
-    | direction PUNTO                   { result = MoveNode.new() }
-    | direction expression PUNTO        { result = MoveNode.new(val[1]) }
+    | direction PUNTO                   { result = MoveNode.new(val[0]) }
+    | direction expression PUNTO        { result = MoveNode.new(val[0], val[1]) }
     | READ PUNTO                        { result = ReadNode.new() }
     | READ AS IDENT PUNTO               { result = ReadNode.new(val[2]) }
     | SEND PUNTO                        { result = SnedNode.new() }
