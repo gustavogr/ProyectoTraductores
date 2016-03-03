@@ -24,6 +24,11 @@ begin
     arbol = parser.parse
     puts arbol
     arbol.printSymTable()
+    arbol.check()
+    puts
+    puts
+    arbol.printSymTable()
+
 
 rescue ParseError => e 
     print "Syntax error: "

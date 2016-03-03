@@ -20,7 +20,6 @@ class ProgramNode
     def initialize(instructions, symTable)
         @symTable = symTable
         @instructions = instructions
-        @declarations = declarations
     end
 
     def to_s(level=1)
@@ -40,6 +39,7 @@ class ProgramNode
     end
 
     def check
+        @symTable.checkBehaviors                         
         @symTable.father = $currentTable
         $currentTable = @symTable
         @instructions.check 
@@ -58,7 +58,7 @@ class InstListNode
 
     def add(inst)
         @instList << inst
-        return self 
+        self 
     end
     
     def to_s(level)
@@ -78,6 +78,7 @@ class InstListNode
 end
 
 class BehaviorNode
+
     attr_accessor :symTable
 
     def initialize(condition, instructions)
@@ -87,11 +88,21 @@ class BehaviorNode
     end
     
     def check
+        oldTable = $currentTable
+        $currentTable = @symTable 
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
             @condition.check == :BOOL
         end
         @instructions.check
+        $currentTable = oldTable
     end
+
+    def duplicate
+        result = self.clone
+        result.symTable = SymbolTable.new()
+        result
+    end
+
 end
 
 class BotInstListNode
@@ -101,7 +112,7 @@ class BotInstListNode
 
     def add(inst)
         @instList << inst
-        return self
+        self
     end
 
     def check
@@ -114,18 +125,33 @@ end
 class BehaviorListNode
     def initialize
         @bhList = []
-        @type = nil
     end
 
     def add(inst)
         @bhList << inst
-        return self
+        self
+    end
+
+    def initTables(bot)
+        @bhList.each { |behavior|
+            behavior.symTable.insert("me", bot)
+        }
     end
 
     def check
         #Chequear por defaults y activates
         @bhList.each {|behavior| $currentTable = behavior.symTable }
+
     end
+
+    def duplicate
+        result = BehaviorListNode.new()
+        @bhList.each { |behavior| 
+            result.add(behavior.duplicate)
+        }
+        result
+    end
+
 end
 
 class StoreNode
@@ -134,8 +160,8 @@ class StoreNode
     end
 
     def check
-        exprT = expr.check
-        #exprT == type Robot
+        exprT = @expr.check
+        $currentTable.lookup("me").type == exprT
     end
 
 end
@@ -144,11 +170,10 @@ end
 class CollectNode
     def initialize(ident="me")
         @ident = ident
+        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
-        #agregar TS
-        #lookup
     end
 end
 
@@ -178,21 +203,18 @@ end
 class ReadNode
     def initialize(ident="me")
         @ident = ident
+        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
-        # 
-        # agregar TS
     end
 end
 
 class SendNode
     def initialize
-
     end
 
     def check
-
     end
 end
 
@@ -206,7 +228,7 @@ class IdentListNode
 
     def add(ident)
         @identList << ident 
-        return self
+        self
     end
     
     def to_s(level)
@@ -423,7 +445,8 @@ end
 ####################
 
 class SymAttribute 
-    attr_accessor :value
+    attr_accessor :value 
+    attr_reader :type, :behaviors
 
     def initialize(type, behaviors)
         @type = type
@@ -442,16 +465,16 @@ class SymbolTable
     end
 
     def insertL(list, type, behaviors)
-        list.identList.each {|ident| insert(ident.value, type, behaviors)}
-        return self
+        list.identList.each {|ident| insert(ident.value, SymAttribute.new(type,behaviors.duplicate))}
+        self
     end
 
-    def insert(name, type, behaviors=nil)
+    def insert(name, attributes)
         if @symbols.key?(name) then 
             raise "variable #{name}, ya existe en la tabla de simbolos."
         else
-            @symbols[name] = SymAttribute.new(type, behaviors)
-            return self
+            @symbols[name] = attributes
+            self
         end
     end
 
@@ -461,7 +484,6 @@ class SymbolTable
         end    
         @father.lookup(name) unless @father == nil
         raise "variable #{name} no existe."
-        return false
 
     end
 
@@ -469,8 +491,15 @@ class SymbolTable
         if var = self.lookup(name) then 
             var.value = value
         else
-            puts "La variable no ha sido inicializada"
+            raise "La variable #{name} no ha sido inicializada"
         end
+    end
+
+    def checkBehaviors()
+        @symbols.each { |key, attributes|
+            attributes.behaviors.initTables(attributes)
+            attributes.behaviors.check()
+        }
     end
     
 end
