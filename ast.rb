@@ -20,7 +20,6 @@ class ProgramNode
     def initialize(instructions, symTable)
         @symTable = symTable
         @instructions = instructions
-        @declarations = declarations
     end
 
     def to_s(level=1)
@@ -59,7 +58,7 @@ class InstListNode
 
     def add(inst)
         @instList << inst
-        return self 
+        self 
     end
     
     def to_s(level)
@@ -79,6 +78,9 @@ class InstListNode
 end
 
 class BehaviorNode
+
+    attr_accessor :symTable
+
     def initialize(condition, instructions)
         @condition = condition
         @instructions = instructions
@@ -86,11 +88,21 @@ class BehaviorNode
     end
     
     def check
+        oldTable = $currentTable
+        $currentTable = @symTable 
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
             @condition.check == :BOOL
         end
         @instructions.check
+        $currentTable = oldTable
     end
+
+    def duplicate
+        result = self.clone
+        result.symTable = SymbolTable.new()
+        result
+    end
+
 end
 
 class BotInstListNode
@@ -100,7 +112,7 @@ class BotInstListNode
 
     def add(inst)
         @instList << inst
-        return self
+        self
     end
 
     def check
@@ -116,11 +128,11 @@ class BehaviorListNode
 
     def add(inst)
         @bhList << inst
-        return self
+        self
     end
 
     def initTables(bot)
-        @bhList.each { |behavior| 
+        @bhList.each { |behavior|
             behavior.symTable.insert("me", bot)
         }
     end
@@ -129,6 +141,15 @@ class BehaviorListNode
         #Chequear por defaults y activates
         @bhList.each { |behavior| behavior.check }
     end
+
+    def duplicate
+        result = BehaviorListNode.new()
+        @bhList.each { |behavior| 
+            result.add(behavior.duplicate)
+        }
+        result
+    end
+
 end
 
 class StoreNode
@@ -137,8 +158,8 @@ class StoreNode
     end
 
     def check
-        exprT = expr.check
-        #exprT == type Robot
+        exprT = @expr.check
+        $currentTable.lookup("me").type == exprT
     end
 
 end
@@ -147,11 +168,10 @@ end
 class CollectNode
     def initialize(ident="me")
         @ident = ident
+        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
-        #agregar TS
-        #lookup
     end
 end
 
@@ -181,21 +201,18 @@ end
 class ReadNode
     def initialize(ident="me")
         @ident = ident
+        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
-        # 
-        # agregar TS
     end
 end
 
 class SendNode
     def initialize
-
     end
 
     def check
-
     end
 end
 
@@ -209,7 +226,7 @@ class IdentListNode
 
     def add(ident)
         @identList << ident 
-        return self
+        self
     end
     
     def to_s(level)
@@ -427,7 +444,7 @@ end
 
 class SymAttribute 
     attr_accessor :value 
-    attr_reader :type
+    attr_reader :type, :behaviors
 
     def initialize(type, behaviors)
         @type = type
@@ -445,9 +462,9 @@ class SymbolTable
         @symbols = Hash.new
     end
 
-    def insertL(list, attributes)
-        list.identList.each {|ident| insert(ident.value, attributes)}
-        return self
+    def insertL(list, type, behaviors)
+        list.identList.each {|ident| insert(ident.value, SymAttribute.new(type,behaviors.duplicate))}
+        self
     end
 
     def insert(name, attributes)
@@ -455,7 +472,7 @@ class SymbolTable
             raise "variable #{name}, ya existe en la tabla de simbolos."
         else
             @symbols[name] = attributes
-            return self
+            self
         end
     end
 
@@ -472,7 +489,7 @@ class SymbolTable
         if var = self.lookup(name) then 
             var.value = value
         else
-            puts "La variable no ha sido inicializada"
+            raise "La variable #{name} no ha sido inicializada"
         end
     end
 
@@ -480,7 +497,6 @@ class SymbolTable
         @symbols.each { |key, attributes|
             attributes.behaviors.initTables(attributes)
             attributes.behaviors.check()
-
         }
     end
     

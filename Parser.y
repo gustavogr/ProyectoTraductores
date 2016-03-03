@@ -61,8 +61,8 @@ class Parser
     ;
 
     declarationList
-    : declaration                                           { result = SymbolTable.new().insertL(val[0][0], SymAttribute.new(val[0][1], val[0][2])) }           
-    | declarationList declaration                           { result = val[0].insertL(val[1][0], SymAttribute.new(val[1][1], val[1][2])) }
+    : declaration                                           { result = SymbolTable.new().insertL(val[0][0], val[0][1], val[0][2]) }           
+    | declarationList declaration                           { result = val[0].insertL(val[1][0], val[1][1], val[1][2]) }
     ;
 
     declaration 
