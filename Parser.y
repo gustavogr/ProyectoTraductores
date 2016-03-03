@@ -149,8 +149,8 @@ class Parser
     | TRUE                  { result = BoolNode.new(val[0])}
     | FALSE                 { result = BoolNode.new(val[0])}
     | CHARACTER             { result = CharNode.new(val[0])}
-    | IDENT                 { result = VariableNode.new(val[0], :ident)}
-    | ME                    { result = VariableNode.new(val[0], :ident)}
+    | IDENT                 { result = VariableNode.new(val[0])}
+    | ME                    { result = VariableNode.new(val[0])}
     ;
 
     expression

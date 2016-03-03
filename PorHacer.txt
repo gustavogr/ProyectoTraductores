@@ -1,7 +1,6 @@
 - Tabla de Simbolos (Listo esqueleto)
 - Jerarquizacion de ST scopes
 - type checking con la tabla de simbolos
-- clase tipo        (hasta ahora uso simbolos)
 - comportamientos, asignaciones...
 - atributos de un nodo variable
 - Teorico-Practico

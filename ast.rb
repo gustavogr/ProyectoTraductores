@@ -181,6 +181,8 @@ end
 
 # Nodo que contiene una lista de Identificadores
 class IdentListNode 
+    attr_accessor :identList 
+
     def initialize
         @identList = []        
     end
@@ -384,7 +386,7 @@ end
 # Nodo que contiene una Variable
 class VariableNode < Terminal 
     def initialize(value, type)
-        super 
+        super(value, :ident)
     end
 
 
@@ -414,11 +416,16 @@ class SymbolTable
         @symbols = Hash.new
     end
 
+    def insertL(list, type)
+        list.identList.each {|ident| insert(ident.value, type)}
+        return self
+
     def insert(name, type)
         if @symbols.key?(name) then 
-            puts "variable #{name}, ya existe en la tabla de simbolos."
+            raise "variable #{name}, ya existe en la tabla de simbolos."
         else
             @symbols[name] = SymAttribute.new(type)
+            return self
         end
     end
 
@@ -427,7 +434,7 @@ class SymbolTable
             return @symbols[name]
         end    
         @father.lookup(name) unless @father == nil
-        puts "variable #{name} no existe."
+        raise "variable #{name} no existe."
         return false
 
     end
