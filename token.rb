@@ -10,7 +10,7 @@
 #   https://github.com/gutielr/ProyectoTraductores 
 #
 # Ultima modificacion: 
-#   15 / 02 / 2016
+#   02 / 03 / 2016
 
 class Token
     def initialize(id, value, line, column)
@@ -31,10 +31,7 @@ end
 
 class TkIdent < Token
     def initialize(value, line, column)
-        @id = :IDENT 
-        @value = value
-        @line = line
-        @column = column
+        super(:IDENT, value, line, column)
     end
 
     def to_s
@@ -44,10 +41,7 @@ end
 
 class TkChar < Token
     def initialize(value, line, column)
-        @id = :CHARACTER
-        @value = value
-        @line = line
-        @column = column
+        super(:CHARACTER, value, line, column)
     end
 
     def to_s
@@ -57,10 +51,7 @@ end
 
 class TkNum < Token
     def initialize(value, line, column)
-        @id = :NUM 
-        @value = value
-        @line = line
-        @column = column
+        super(:NUM, value, line, column)
     end
 
     def to_s

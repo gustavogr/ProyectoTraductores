@@ -33,8 +33,6 @@ class ProgramNode
     def check
         @instructions.check                         
     end
-
-
 end
 
 # Nodo que contiene una lista de instruciones
@@ -72,9 +70,10 @@ class BehaviorNode
     end
     
     def check
-        if 
-        condT = @condition.check 
-        condT == :bool # or activation or...
+        if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
+            condT = @condition.check 
+            condT == :bool # or activation or...
+        end
         @instructions.check
     end
 end
@@ -92,8 +91,8 @@ class BotInstListNode
     def check
        @instList.each {|inst| inst.check} 
     end
-
 end
+
 
 class BehaviorListNode
     def initialize
@@ -109,9 +108,7 @@ class BehaviorListNode
     def check
         #Chequear por defaults y activates
         @bhList.each {|behavior| behavior.symTable.add("me", @type); behavior.check}
-
     end
-
 end
 
 class StoreNode
@@ -121,7 +118,7 @@ class StoreNode
 
     def check
         exprT = expr.check
-        #exprT == type Robot 
+        #exprT == type Robot
     end
 
 end
@@ -133,7 +130,7 @@ class CollectNode
     end
 
     def check
-
+        #agregar TS
         #lookup
     end
 end
@@ -167,17 +164,18 @@ class ReadNode
     end
 
     def check
-        #
+        # 
+        # agregar TS
     end
 end
 
 class SendNode
     def initialize
-        
+
     end
 
     def check
-        
+
     end
 end
 
@@ -405,7 +403,7 @@ class SymAttribute
     def initialize(type)
         @type = type
         @value = nil
-        @behaviors = BehaviorListNode.new()
+        @behaviors = nil
     end
 end
 
