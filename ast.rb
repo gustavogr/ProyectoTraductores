@@ -64,7 +64,22 @@ class InstListNode
 
 end
 
-class BotInstListNone
+class BehaviorNode
+    def initialize(condition, instructions)
+        @condition = condition
+        @instructions = instructions
+        @symTable = SymbolTable.new()
+    end
+    
+    def check
+        if 
+        condT = @condition.check 
+        condT == :bool # or activation or...
+        @instructions.check
+    end
+end
+
+class BotInstListNode
     def initialize
         @instList = []
     end
@@ -80,7 +95,7 @@ class BotInstListNone
 
 end
 
-class BehaviorListNone
+class BehaviorListNode
     def initialize
         @bhList = []
         @type = nil
@@ -97,20 +112,6 @@ class BehaviorListNone
 
     end
 
-end
-
-class BehaviorNode
-    def initialize(condition, instructions)
-        @condition = condition
-        @instructions = instructions
-        @symTable = SymbolTable.new()
-    end
-    
-    def check
-        condT = @condition.check 
-        condT == :bool # or activation or...
-        @instructions.check
-    end
 end
 
 class StoreNode
@@ -132,6 +133,7 @@ class CollectNode
     end
 
     def check
+
         #lookup
     end
 end
@@ -154,11 +156,30 @@ class MoveNode
     end
     
     def check
-        expT = @expr.check # luego debe ser no negativa
+        expT = @expr.check unless @expr == nil # luego debe ser no negativa
     end
     
 end
 
+class ReadNode
+    def initialize(ident="me")
+        @ident = ident
+    end
+
+    def check
+        #
+    end
+end
+
+class SendNode
+    def initialize
+        
+    end
+
+    def check
+        
+    end
+end
 
 # Nodo que contiene una lista de Identificadores
 class IdentListNode 
@@ -384,7 +405,7 @@ class SymAttribute
     def initialize(type)
         @type = type
         @value = nil
-        @behaviors = BehaviorListNone.new()
+        @behaviors = BehaviorListNode.new()
     end
 end
 
