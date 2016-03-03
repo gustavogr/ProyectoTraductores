@@ -76,35 +76,35 @@ class Parser
     ;
 
     type
-    : INT
-    | BOOL
-    | CHAR 
+    : INT           { result = :INT }
+    | BOOL          { result = :BOOL }
+    | CHAR          { result = :CHAR   }
     ;
 
     behaviorList
-    : behavior
-    | behaviorList behavior
+    : behavior                  { result = BehaviorListNode.new().add(val[0]) }
+    | behaviorList behavior     { result = val[0].add(val[1]) }
     ;
 
     behavior
-    : ON condition DOSPUNTOS botInstructionList END
+    : ON condition DOSPUNTOS botInstructionList END     { result = BehaviorNode.new(val[1],val[3]) }
     ; 
 
     botInstructionList
-    : botInstruction
-    | botInstructionList botInstruction
+    : botInstruction                        { result = BotInstructionListNode.new().add(val[0]) }
+    | botInstructionList botInstruction     { result = val[0].add(val[1]) }
     ;
 
     botInstruction
-    : STORE expression PUNTO                    
-    | COLLECT AS IDENT PUNTO
-    | COLLECT PUNTO
-    | DROP expression PUNTO
-    | direction PUNTO
-    | direction expression PUNTO
-    | READ PUNTO
-    | READ AS IDENT PUNTO                       #insert
-    | SEND PUNTO
+    : STORE expression PUNTO            { result = StoreNode.new(val[1]) }        
+    | COLLECT AS IDENT PUNTO            { result = CollectNode.new(val[2]) }
+    | COLLECT PUNTO                     { result = CollectNode.new() }
+    | DROP expression PUNTO             { result = DropNode.new(val[1]) }
+    | direction PUNTO                   { result = MoveNode.new() }
+    | direction expression PUNTO        { result = MoveNode.new(val[1]) }
+    | READ PUNTO                        { result = ReadNode.new() }
+    | READ AS IDENT PUNTO               { result = ReadNode.new(val[2]) }
+    | SEND PUNTO                        { result = SnedNode.new() }
     ;
 
     instructionList
@@ -131,17 +131,17 @@ class Parser
     ;
 
     direction
-    : LEFT
-    | RIGHT
-    | UP
-    | DOWN
+    : LEFT                  { result = :LEFT }
+    | RIGHT                 { result = :RIGHT }
+    | UP                    { result = :UP }
+    | DOWN                  { result = :DOWN }
     ;
 
     condition
-    : ACTIVATION
-    | DEACTIVATION
+    : ACTIVATION            { result = :ACTIVATION }
+    | DEACTIVATION          { result = :DEACTIVATION }
     | expression
-    | DEFAULT
+    | DEFAULT               { result = :DEFAULT }
     ;
 
     literal
