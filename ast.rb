@@ -230,8 +230,8 @@ end
 
 # Nodo que contiene una Expresion Aritmetica
 class AritExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
-        super
+    def initialize(operator, expr1, expr2)
+        super(operator, expr1, expr2, :int)
     end
 
     def to_s(level)
@@ -241,8 +241,8 @@ end
 
 # Nodo que contiene una Expresion Booleana
 class BoolExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
-        super
+    def initialize(operator, expr1, expr2)
+        super(operator, expr1, expr2, :bool)
     end
 
     def to_s(level)
@@ -252,8 +252,8 @@ end
 
 # Nodo que contiene una Expresion Relacional
 class RelExprNode < BinExprNode
-    def initialize(operator, expr1, expr2, type)
-        super
+    def initialize(operator, expr1, expr2)
+        super(operator, expr1, expr2, :bool)
     end
 
     def check

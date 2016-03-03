@@ -155,22 +155,22 @@ class Parser
 
     expression
     : literal
-    | expression SUMA expression          { result = AritExprNode.new(:SUMA, val[0], val[2], :int) }
-    | expression RESTA expression         { result = AritExprNode.new(:RESTA, val[0], val[2], :int) }
-    | expression MULT expression          { result = AritExprNode.new(:MULT, val[0], val[2], :int) }
-    | expression DIV expression           { result = AritExprNode.new(:DIV, val[0], val[2], :int) }
-    | expression MOD expression           { result = AritExprNode.new(:MOD, val[0], val[2], :int) }
+    | expression SUMA expression          { result = AritExprNode.new(:SUMA, val[0], val[2]) }
+    | expression RESTA expression         { result = AritExprNode.new(:RESTA, val[0], val[2]) }
+    | expression MULT expression          { result = AritExprNode.new(:MULT, val[0], val[2]) }
+    | expression DIV expression           { result = AritExprNode.new(:DIV, val[0], val[2]) }
+    | expression MOD expression           { result = AritExprNode.new(:MOD, val[0], val[2]) }
     | RESTA expression =RESTA_UNARIA      { result = UnExprNode.new(:RESTA, val[1], :int) }
     | PARABRE expression PARCIERRA        { result = val[1] }
     | NEGACION expression                 { result = UnExprNode.new(:NEGACION, val[1], :bool) }
-    | expression CONJUNCION expression    { result = BoolExprNode.new(:CONJUNCION, val[0], val[2], :bool) }
-    | expression DISYUNCION expression    { result = BoolExprNode.new(:DISJUNCION, val[0], val[2], :bool) }
-    | expression MENORIGUAL expression    { result = RelExprNode.new(:MENORIGUAL, val[0], val[2], :bool) }
-    | expression MAYORIGUAL expression    { result = RelExprNode.new(:MAYORIGUAL, val[0], val[2], :bool) }
-    | expression IGUAL expression         { result = RelExprNode.new(:IGUAL, val[0], val[2], :bool) }
-    | expression NOIGUAL expression       { result = RelExprNode.new(:NOIGUAL, val[0], val[2], :bool) }
-    | expression MENOR expression         { result = RelExprNode.new(:MENOR, val[0], val[2], :bool) }
-    | expression MAYOR expression         { result = RelExprNode.new(:MAYOR, val[0], val[2], :bool) }
+    | expression CONJUNCION expression    { result = BoolExprNode.new(:CONJUNCION, val[0], val[2]) }
+    | expression DISYUNCION expression    { result = BoolExprNode.new(:DISJUNCION, val[0], val[2]) }
+    | expression MENORIGUAL expression    { result = RelExprNode.new(:MENORIGUAL, val[0], val[2]) }
+    | expression MAYORIGUAL expression    { result = RelExprNode.new(:MAYORIGUAL, val[0], val[2]) }
+    | expression IGUAL expression         { result = RelExprNode.new(:IGUAL, val[0], val[2]) }
+    | expression NOIGUAL expression       { result = RelExprNode.new(:NOIGUAL, val[0], val[2]) }
+    | expression MENOR expression         { result = RelExprNode.new(:MENOR, val[0], val[2]) }
+    | expression MAYOR expression         { result = RelExprNode.new(:MAYOR, val[0], val[2]) }
     ;
         
 end
