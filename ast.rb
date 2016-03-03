@@ -343,22 +343,22 @@ end
 
 # Nodo que contiene Numeros Enteros
 class NumberNode < Terminal
-    def initialize(value, type)
-        super
+    def initialize(value)
+        super(value, :int)
     end
 end
 
 # Nodo que contiene caracteres de BOT
 class CharNode < Terminal 
-    def initialize(value, type)
-        super
+    def initialize(value)
+        super(value, :char)
     end
 end
 
 # Nodo que contiene True o False
 class BoolNode < Terminal
-    def initialize(value, type)
-        super
+    def initialize(value)
+        super(value, :bool)
     end
 end
 
@@ -367,6 +367,7 @@ class VariableNode < Terminal
     def initialize(value, type)
         super 
     end
+
 
     def check
         #Chequear en la tabla de simbolos?
