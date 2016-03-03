@@ -56,8 +56,8 @@ class Parser
     rule
 
     program
-    : CREATE declarationList EXECUTE instructionList END    { result = ProgramNode.new(val[3], val[1])}
-    | EXECUTE instructionList END                           { result = ProgramNode.new(val[1], SymbolTable.new())}
+    : CREATE declarationList EXECUTE instructionList END    { result = ProgramNode.new(val[3], val[1]) }
+    | EXECUTE instructionList END                           { result = ProgramNode.new(val[1], SymbolTable.new()) }
     ;
 
     declarationList
@@ -66,19 +66,19 @@ class Parser
     ;
 
     declaration 
-    : type BOT identifierList behaviorList END              { result = [ val[2], val[0], val[3]] }
+    : type BOT identifierList behaviorList END              { result = [ val[2], val[0], val[3] ] }
     | type BOT identifierList END                           { result = [ val[2], val[0], BehaviorListNode.new() ] }
     ;
 
     identifierList
-    : IDENT                         { result = IdentListNode.new().add(VariableNode.new(val[0]))}
+    : IDENT                         { result = IdentListNode.new().add(VariableNode.new(val[0])) }
     | identifierList COMA IDENT     { result = val[0].add(VariableNode.new(val[2])) } 
     ;
 
     type
     : INT           { result = :INT }
     | BOOL          { result = :BOOL }
-    | CHAR          { result = :CHAR   }
+    | CHAR          { result = :CHAR }
     ;
 
     behaviorList
@@ -122,12 +122,12 @@ class Parser
     ; 
 
     conditional
-    : IF expression DOSPUNTOS instructionList END               { result = ConditionalNode.new(val[1], val[3], nil)}
-    | IF expression DOSPUNTOS instructionList ELSE DOSPUNTOS instructionList END    {result = ConditionalNode.new(val[1], val[3], val[6])}
+    : IF expression DOSPUNTOS instructionList END               { result = ConditionalNode.new(val[1], val[3], nil) }
+    | IF expression DOSPUNTOS instructionList ELSE DOSPUNTOS instructionList END    {result = ConditionalNode.new(val[1], val[3], val[6]) }
     ;
 
     undfiter
-    : WHILE expression DOSPUNTOS instructionList END        { result = UndfIterNode.new(val[1], val[3])}
+    : WHILE expression DOSPUNTOS instructionList END        { result = UndfIterNode.new(val[1], val[3]) }
     ;
 
     direction
@@ -145,12 +145,12 @@ class Parser
     ;
 
     literal
-    : NUM                   { result = NumberNode.new(val[0])}
-    | TRUE                  { result = BoolNode.new(val[0])}
-    | FALSE                 { result = BoolNode.new(val[0])}
-    | CHARACTER             { result = CharNode.new(val[0])}
-    | IDENT                 { result = VariableNode.new(val[0])}
-    | ME                    { result = VariableNode.new(val[0])}
+    : NUM                   { result = NumberNode.new(val[0]) }
+    | TRUE                  { result = BoolNode.new(val[0]) }
+    | FALSE                 { result = BoolNode.new(val[0]) }
+    | CHARACTER             { result = CharNode.new(val[0]) }
+    | IDENT                 { result = VariableNode.new(val[0]) }
+    | ME                    { result = VariableNode.new(val[0]) }
     ;
 
     expression

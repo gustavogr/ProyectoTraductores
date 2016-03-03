@@ -78,6 +78,8 @@ class InstListNode
 end
 
 class BehaviorNode
+    attr_accessor :symTable
+
     def initialize(condition, instructions)
         @condition = condition
         @instructions = instructions
@@ -104,6 +106,7 @@ class BotInstListNode
 
     def check
        @instList.each {|inst| inst.check} 
+
     end
 end
 
@@ -121,7 +124,7 @@ class BehaviorListNode
 
     def check
         #Chequear por defaults y activates
-        @bhList.each {|behavior| behavior.symTable.add("me", @type); behavior.check}
+        @bhList.each {|behavior| $currentTable = behavior.symTable }
     end
 end
 
