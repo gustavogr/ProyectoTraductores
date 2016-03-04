@@ -1,0 +1,28 @@
+Errores Estaticos
+- Condicion booleanas del if y el while
+- Utilizacion de la palabra "me" fuera de un comportamiento
+- Errores de tipos en las expresiones
+- Variables de una expresion previamente declaradas
+- Read y COLLECT: si esta el as se debe crear una variable que no debe haber sido declarada antes en el mismo alcance
+- Move: expresion de tipo entero
+- Los robots a avanazar deben haber sido creados
+- Los robots a desactivar deben haber sido creados
+- Solo debe haber un activation, deactivation y default aunque solo dice esto sobre el default explicitamente
+- El default debe venir de ultimo con excepcion de activation y deactivation
+- Para la instrucciones de controlador, las variables visibles seran solo los robots 
+- Para las instrucciones de robot las variables visibles seran unicamente las creadas dentro del comportamiento especificco y siempre estara disponible la variable me 
+- Chequeo de expresiones binarias y unarias
+- Chequeo de redeclaraciones 
+
+
+Errores Dinamicos 
+- Usar el valor de un robot que no haya alamacenado nada aun
+- Los robots a activar deben haber sido creados y no estar ya activos 
+- Los robots a avanazar deben haber sido creados y activados
+- Los robots a desactivar deben haber sido creados y activados
+- Variables de una expresion previamente inicializadas
+- STORE: el tipo del valor resultante debe ser igual al valor de robot
+- COLLECT: si la posicion de la matriz esta vacia o no es del tipo del robot 
+- MOVE: epresion entera no negativa
+- READ: tipo igual al del robot
+- Division entre 0 
