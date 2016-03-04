@@ -14,6 +14,8 @@ Errores Estaticos
 - Chequeo de expresiones binarias y unarias
 - Chequeo de redeclaraciones 
 
+No se si el me es usa en las expresiones de los behavior, creo que no.
+
 
 Errores Dinamicos 
 - Usar el valor de un robot que no haya alamacenado nada aun

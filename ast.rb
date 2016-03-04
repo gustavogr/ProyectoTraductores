@@ -139,8 +139,17 @@ class BehaviorListNode
     end
 
     def check
-        #Chequear por defaults y activates
-        @bhList.each {|behavior| $currentTable = behavior.symTable }
+        ac = deac = default = 0
+
+        @bhList.each {|behavior| 
+            cond = behavior.condition
+            ac += 1 if cond == :ACTIVATION 
+            deac += 1 if cond == :DEACTIVATION
+            default += 1 if cond == :DEFAULT
+            $currentTable = behavior.symTable
+            raise "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
+        }
+        raise "Error: condicion default de robot" if defaul == 1 and cond != :DEFAULT 
 
     end
 
