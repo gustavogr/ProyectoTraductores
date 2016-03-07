@@ -80,6 +80,7 @@ end
 class BehaviorNode
 
     attr_accessor :symTable
+    attr_reader :condition
 
     def initialize(condition, instructions)
         @condition = condition
@@ -146,10 +147,10 @@ class BehaviorListNode
             ac += 1 if cond == :ACTIVATION 
             deac += 1 if cond == :DEACTIVATION
             default += 1 if cond == :DEFAULT
-            $currentTable = behavior.symTable
+            behavior.check()
             raise "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
+            raise "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
         }
-        raise "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
 
     end
 
@@ -181,10 +182,11 @@ end
 class CollectNode
     def initialize(ident="me")
         @ident = ident
-        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
+        meType = $currentTable.lookup('me').type
+        $currentTable.insert(@ident, SymAttribute.new(meType,nil)) unless @ident == "me"
     end
 end
 
@@ -215,10 +217,11 @@ end
 class ReadNode
     def initialize(ident="me")
         @ident = ident
-        $currentTable.insert(ident, :UNDEF) unless ident == "me"
     end
 
     def check
+        meType = $currentTable.lookup('me').type
+        $currentTable.insert(@ident, SymAttribute.new(meType,nil)) unless @ident == "me"
     end
 end
 
@@ -266,7 +269,7 @@ class UnExprNode
 
     def check
         expT = @expr.check
-        raise "Error: #{@operator} #{expT}" unless expT == @type or expT == :UNDEF
+        raise "Error: #{@operator} #{expT}" unless expT == @type
         @type
     end
 
@@ -289,7 +292,7 @@ class BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == @type and exp1 == exp2) or exp1 == :UNDEF or exp2 == :UNDEF
+        raise "Error: #{exp1} #{@op} #{exp2}" unless exp1 == @type and exp1 == exp2
         @type
     end
 
@@ -331,8 +334,7 @@ class RelExprNode < BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless ((exp1 == :INT or exp1 == :BOOL) and exp1 == exp2) or
-                                                                            exp1 == :UNDEF or exp2 == :UNDEF
+        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :INT or exp1 == :BOOL) and exp1 == exp2
         @type 
     end
 
