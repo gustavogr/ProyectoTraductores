@@ -15,6 +15,10 @@
 
 $currentTable = nil
 
+class ContextError < StandardError
+end
+
+
 # Nodo que simboliza el programa.
 class ProgramNode
     def initialize(instructions, symTable)
@@ -148,8 +152,8 @@ class BehaviorListNode
             deac += 1 if cond == :DEACTIVATION
             default += 1 if cond == :DEFAULT
             behavior.check()
-            raise "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
-            raise "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
+            raise ContextError, "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
+            raise ContextError, "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
         }
 
     end
@@ -172,7 +176,7 @@ class StoreNode
     def check
         exprT = @expr.check
         if $currentTable.lookup("me").type != exprT then
-            raise "Store: tipo de la expresion #{@expr} no es compatible con el BOT."
+            raise ContextError, "Store: tipo de la expresion #{@expr} no es compatible con el BOT."
         end
     end
 
@@ -209,7 +213,7 @@ class MoveNode
     
     def check
         expT = @expr.check unless @expr == nil # luego debe ser no negativa
-        raise "Move: #{@expr} no es de tipo entero." unless @expr == nil or expT == :INT
+        raise ContextError, "Move: #{@expr} no es de tipo entero." unless @expr == nil or expT == :INT
     end
     
 end
@@ -269,7 +273,7 @@ class UnExprNode
 
     def check
         expT = @expr.check
-        raise "Error: #{@operator} #{expT}" unless expT == @type
+        raise ContextError, "Error de tipo. Operador:#{@operator}. Tipo de operando: #{expT}." unless expT == @type
         @type
     end
 
@@ -292,7 +296,7 @@ class BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless exp1 == @type and exp1 == exp2
+        raise ContextError, "Error de tipo. Operador: #{@op}. Tipos de operando #{exp1} #{exp2}" unless exp1 == @type and exp1 == exp2
         @type
     end
 
@@ -334,7 +338,7 @@ class RelExprNode < BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :INT or exp1 == :BOOL) and exp1 == exp2
+        raise ContextError, "Error de tipo. Operador: #{@op}. Tipos de operando #{exp1} #{exp2}" unless (exp1 == :INT or exp1 == :BOOL) and exp1 == exp2
         @type 
     end
 
@@ -352,7 +356,7 @@ class ConditionalNode
     end
 
     def check  
-        raise "Error: Expresion de Condicional" unless @condition.check == :BOOL
+        raise ContextError, "Error: Expresion de condicional no es de tipo booleano." unless @condition.check == :BOOL
         @ifBody.check
         @elseBody.check unless @elseBody == nil
     end
@@ -377,7 +381,7 @@ class UndfIterNode
     end
 
     def check
-        raise "Error: Condicion de Iteracion" unless @condition.check == :BOOL
+        raise ContextError, "Error: Condicion de Iteracion no es de tipo booleano." unless @condition.check == :BOOL
         @body.check
     end
 
@@ -454,7 +458,7 @@ class VariableNode < Terminal
         if result = $currentTable.lookup(@value) then
             return result.type
         else
-            raise "Variable #{@value} no inicializada."
+            raise ContextError, "Variable #{@value} no inicializada."
         end      
     end
 end
@@ -490,7 +494,7 @@ class SymbolTable
 
     def insert(name, attributes)
         if @symbols.key?(name) then 
-            raise "Redeclaracion de la variable #{name}."
+            raise ContextError, "Redeclaracion de la variable #{name}."
         else
             @symbols[name] = attributes
             self
@@ -501,7 +505,7 @@ class SymbolTable
         if @symbols.key?(name)
             return @symbols[name]
         end    
-        @father.lookup(name) unless @father == nil
+        return @father.lookup(name) unless @father == nil
         return false
     end
 
@@ -509,7 +513,7 @@ class SymbolTable
         if var = self.lookup(name) then 
             var.value = value
         else
-            raise "La variable #{name} no ha sido inicializada"
+            raise ContextError, "La variable #{name} no ha sido inicializada"
         end
     end
 

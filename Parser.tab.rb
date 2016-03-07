@@ -469,14 +469,14 @@ Racc_debug_parser = false
 
 module_eval(<<'.,.,', 'Parser.y', 58)
   def _reduce_1(val, _values, result)
-     result = ProgramNode.new(val[3], val[1])
+     result = ProgramNode.new(val[3], val[1]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 59)
   def _reduce_2(val, _values, result)
-     result = ProgramNode.new(val[1], SymbolTable.new())
+     result = ProgramNode.new(val[1], SymbolTable.new()) 
     result
   end
 .,.,
@@ -497,7 +497,7 @@ module_eval(<<'.,.,', 'Parser.y', 64)
 
 module_eval(<<'.,.,', 'Parser.y', 68)
   def _reduce_5(val, _values, result)
-     result = [ val[2], val[0], val[3]] 
+     result = [ val[2], val[0], val[3] ] 
     result
   end
 .,.,
@@ -511,7 +511,7 @@ module_eval(<<'.,.,', 'Parser.y', 69)
 
 module_eval(<<'.,.,', 'Parser.y', 73)
   def _reduce_7(val, _values, result)
-     result = IdentListNode.new().add(VariableNode.new(val[0]))
+     result = IdentListNode.new().add(VariableNode.new(val[0])) 
     result
   end
 .,.,
@@ -539,7 +539,7 @@ module_eval(<<'.,.,', 'Parser.y', 79)
 
 module_eval(<<'.,.,', 'Parser.y', 80)
   def _reduce_11(val, _values, result)
-     result = :CHAR   
+     result = :CHAR 
     result
   end
 .,.,
@@ -637,7 +637,7 @@ module_eval(<<'.,.,', 'Parser.y', 105)
 
 module_eval(<<'.,.,', 'Parser.y', 106)
   def _reduce_25(val, _values, result)
-     result = SnedNode.new() 
+     result = SendNode.new() 
     result
   end
 .,.,
@@ -685,21 +685,21 @@ module_eval(<<'.,.,', 'Parser.y', 117)
 
 module_eval(<<'.,.,', 'Parser.y', 124)
   def _reduce_34(val, _values, result)
-     result = ConditionalNode.new(val[1], val[3], nil)
+     result = ConditionalNode.new(val[1], val[3], nil) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 125)
   def _reduce_35(val, _values, result)
-    result = ConditionalNode.new(val[1], val[3], val[6])
+    result = ConditionalNode.new(val[1], val[3], val[6]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 129)
   def _reduce_36(val, _values, result)
-     result = UndfIterNode.new(val[1], val[3])
+     result = UndfIterNode.new(val[1], val[3]) 
     result
   end
 .,.,
@@ -757,42 +757,42 @@ module_eval(<<'.,.,', 'Parser.y', 143)
 
 module_eval(<<'.,.,', 'Parser.y', 147)
   def _reduce_45(val, _values, result)
-     result = NumberNode.new(val[0])
+     result = NumberNode.new(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 148)
   def _reduce_46(val, _values, result)
-     result = BoolNode.new(val[0])
+     result = BoolNode.new(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 149)
   def _reduce_47(val, _values, result)
-     result = BoolNode.new(val[0])
+     result = BoolNode.new(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 150)
   def _reduce_48(val, _values, result)
-     result = CharNode.new(val[0])
+     result = CharNode.new(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 151)
   def _reduce_49(val, _values, result)
-     result = VariableNode.new(val[0])
+     result = VariableNode.new(val[0]) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 152)
   def _reduce_50(val, _values, result)
-     result = VariableNode.new(val[0])
+     result = VariableNode.new('me') 
     result
   end
 .,.,

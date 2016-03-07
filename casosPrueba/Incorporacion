@@ -1,23 +1,32 @@
 create
 
-   int bot b
+   int bot b,c,zeta,ene
+    on activation:
+      send.
+    end
+    on deactivation:
+      collect.
+    end
+    on default:
+      collect.
+    end
    end
 
 execute
     advance b.
-    if true < false:
+    if true \/ false:
          deactivate c.
     else: 
          advance zeta.
     end
 
 
-    while m <= n:
-        activate pepe.
+    while c <= 3:
+        activate zeta.
     end
     
     create
-       bool bot c
+       bool bot ene,z,i,j,juana
        end
     execute
 
@@ -26,7 +35,7 @@ execute
        while i /= j :
            advance i.
            if ene=juana:
-              activate pepe.
+              activate i.
            end
        end
 

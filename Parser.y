@@ -104,7 +104,7 @@ class Parser
     | direction expression PUNTO        { result = MoveNode.new(val[0], val[1]) }
     | READ PUNTO                        { result = ReadNode.new() }
     | READ AS IDENT PUNTO               { result = ReadNode.new(val[2]) }
-    | SEND PUNTO                        { result = SnedNode.new() }
+    | SEND PUNTO                        { result = SendNode.new() }
     ;
 
     instructionList
@@ -150,7 +150,7 @@ class Parser
     | FALSE                 { result = BoolNode.new(val[0]) }
     | CHARACTER             { result = CharNode.new(val[0]) }
     | IDENT                 { result = VariableNode.new(val[0]) }
-    | ME                    { result = VariableNode.new(val[0]) }
+    | ME                    { result = VariableNode.new('me') }
     ;
 
     expression

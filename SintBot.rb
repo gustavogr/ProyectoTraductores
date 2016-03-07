@@ -22,15 +22,17 @@ lex.analize(ARGV[0])
 begin
     parser = Parser.new(lex)
     arbol = parser.parse
-    puts arbol
-    arbol.printSymTable()
+    #arbol.printSymTable()
     arbol.check()
-    puts
-    puts
-    arbol.printSymTable()
+    puts arbol
 
 
 rescue ParseError => e 
-    print "Syntax error: "
+    print "Error de sintaxis: "
     puts e
+
+rescue ContextError => e
+	print "Error de contexto: "
+	puts e
 end
+

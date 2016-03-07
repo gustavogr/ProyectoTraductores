@@ -5,10 +5,10 @@ create
      end
  end
  int bot bar
-     on activation:
+     on me > 1:
         collect as a.
         read as b.
-        drop a + 3.
+        drop a < 'a'.
      end
  end
 
