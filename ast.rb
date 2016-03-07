@@ -149,7 +149,7 @@ class BehaviorListNode
             $currentTable = behavior.symTable
             raise "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
         }
-        raise "Error: condicion default de robot" if defaul == 1 and cond != :DEFAULT 
+        raise "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
 
     end
 
@@ -170,7 +170,9 @@ class StoreNode
 
     def check
         exprT = @expr.check
-        $currentTable.lookup("me").type == exprT
+        if $currentTable.lookup("me").type != exprT then
+            raise "Store: tipo de la expresion #{@expr} no es compatible con el BOT."
+        end
     end
 
 end
@@ -205,6 +207,7 @@ class MoveNode
     
     def check
         expT = @expr.check unless @expr == nil # luego debe ser no negativa
+        raise "Move: #{@expr} no es de tipo entero." unless @expr == nil or expT == :INT
     end
     
 end
@@ -263,7 +266,7 @@ class UnExprNode
 
     def check
         expT = @expr.check
-        raise "Error: #{@operator} #{expT}" unless expT == @type
+        raise "Error: #{@operator} #{expT}" unless expT == @type or expT == :UNDEF
         @type
     end
 
@@ -286,7 +289,7 @@ class BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless exp1 == @type and exp1 == exp2
+        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == @type and exp1 == exp2) or exp1 == :UNDEF or exp2 == :UNDEF
         @type
     end
 
@@ -328,7 +331,8 @@ class RelExprNode < BinExprNode
     def check
         exp1 = @expr1.check
         exp2 = @expr2.check
-        raise "Error: #{exp1} #{@op} #{exp2}" unless (exp1 == :INT or exp1 == :BOOL) and exp1 == exp2
+        raise "Error: #{exp1} #{@op} #{exp2}" unless ((exp1 == :INT or exp1 == :BOOL) and exp1 == exp2) or
+                                                                            exp1 == :UNDEF or exp2 == :UNDEF
         @type 
     end
 
@@ -444,8 +448,12 @@ class VariableNode < Terminal
     end
 
 
-    def check
-        #Chequear en la tabla de simbolos?
+    def check      
+        if result = $currentTable.lookup(@value) then
+            return result.type
+        else
+            raise "Variable #{@value} no inicializada."
+        end      
     end
 end
 
@@ -480,7 +488,7 @@ class SymbolTable
 
     def insert(name, attributes)
         if @symbols.key?(name) then 
-            raise "variable #{name}, ya existe en la tabla de simbolos."
+            raise "Redeclaracion de la variable #{name}."
         else
             @symbols[name] = attributes
             self
