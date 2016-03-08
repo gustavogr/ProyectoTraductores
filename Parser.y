@@ -177,7 +177,7 @@ end
 
 ---- inner
 
-require "./ast.rb"
+require "./classes.rb"
 
     def initialize(tokens)
         @tokens = tokens
