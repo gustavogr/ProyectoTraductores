@@ -14,6 +14,7 @@
 #   15 / 02 / 2016
 
 $currentTable = nil
+$matrix = ProgramMatrix.new()
 
 class ContextError < StandardError
 end
@@ -44,7 +45,9 @@ class ProgramNode
     end
 
     def eval
+        $currentTable = @symTable
         @instructions.eval
+        $currentTable = @symTable.father
     end
 
 end
@@ -101,7 +104,10 @@ class BehaviorNode
     end
 
     def eval
+        oldTable = $currentTable
+        $currentTable = @symTable 
         @instructions.eval
+        $currentTable = oldTable 
     end
 
     def duplicate
@@ -407,7 +413,11 @@ class AritExprNode < BinExprNode
         when :MULT
             @expr1.eval * @expr2.eval
         when :DIV
-            @expr1.eval / @expr2.eval
+            begin 
+                @expr1.eval / @expr2.eval
+            rescue ZeroDivisionError
+                "Division entre 0"
+            end
         when :MOD
             @expr1.eval % @expr2.eval
         end
@@ -696,4 +706,27 @@ class SymbolTable
         }
     end
     
+end
+
+class ProgramMatrix
+    def initialize
+        @filled = {}
+    end
+
+    def add(x,y,value)
+        begin
+            @filled[x][y] = value
+        rescue 
+            @filed[x] = {}
+            @filled[x][y] = value
+        end
+    end
+
+    def get(x,y)
+        begin
+            @filled[x][y]
+        rescue
+            nil
+        end 
+    end
 end

@@ -1,8 +1,7 @@
 definir matriz
 como valido la entrada del read
-Falta actualizar la current table en la corrida
 Comer milkyway
-
+arreglar chequeo de behavior list
 
 ================
 
