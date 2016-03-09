@@ -115,7 +115,7 @@ class Lexer
             #  Tambien se verifica que no siga un caracter valido de palabra
             when /\A\d+(\W|\z)/
                 sub = program.slice!(/\A\d+/)
-                self.tokensList << TkNum.new(sub, line, column) 
+                self.tokensList << TkNum.new(sub.to_i, line, column) 
                 column += sub.length
 
             ## Identificadores

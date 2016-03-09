@@ -35,13 +35,6 @@ class ProgramNode
         end
     end 
     
-    ###########
-    # DEBUGGEO
-    ###########
-    def printSymTable()
-        p @symTable
-    end
-
     def check
         @symTable.checkBehaviors                         
         @symTable.father = $currentTable
@@ -49,10 +42,12 @@ class ProgramNode
         @instructions.check 
         $currentTable = @symTable.father
     end
+
+    def eval
+        @instructions.eval
+    end
+
 end
-
-
-
 
 # Nodo que contiene una lista de instruciones
 class InstListNode 
@@ -65,6 +60,14 @@ class InstListNode
         self 
     end
     
+    def check
+        @instList.each {|inst| inst.check}
+    end
+
+    def eval
+        @instList.each {|inst| inst.eval}
+    end 
+
     def to_s(level)
         if @instList.size > 1 then 
             printable = "" 
@@ -74,11 +77,6 @@ class InstListNode
             @instList[0].to_s(level)
         end
     end
-
-    def check
-        @instList.each {|inst| inst.check}
-    end
-
 end
 
 class BehaviorNode
@@ -96,10 +94,14 @@ class BehaviorNode
         oldTable = $currentTable
         $currentTable = @symTable 
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
-            @condition.check == :BOOL
+            @condition.check == :BOOL # aqui no deberia levantarse una excepcion?
         end
         @instructions.check
         $currentTable = oldTable
+    end
+
+    def eval
+        @instructions.eval
     end
 
     def duplicate
@@ -122,8 +124,12 @@ class BotInstListNode
 
     def check
        @instList.each {|inst| inst.check} 
-
     end
+
+    def eval
+       @instList.each {|inst| inst.eval}
+    end 
+
 end
 
 
@@ -158,6 +164,30 @@ class BehaviorListNode
 
     end
 
+    def eval(inst)
+        case inst
+        when :ACTIVATE
+            @bhList.each {|behavior|
+                if behavior.condition == :ACTIVATION then
+                    behavior.eval; break
+                end
+            }
+        when :ADVANCE
+            @bhList.each {|behavior|
+                bc = behavior.condition
+                if bc != :ACTIVATION and bc != :DEACTIVATION and bc.eval then
+                    behavior.eval; break
+                end
+            }
+        when :DEACTIVATE
+            @bhList.each {|behavior|
+                if behavior.condition == :DEACTIVATION then
+                    behavior.eval; end
+                end
+            }
+        end
+    end
+
     def duplicate
         result = BehaviorListNode.new()
         @bhList.each { |behavior| 
@@ -180,6 +210,10 @@ class StoreNode
         end
     end
 
+    def eval
+        $currentTable.update("me", @expr.eval)
+    end
+
 end
 
 # Guarda el valor de la matriz en el robot
@@ -192,6 +226,12 @@ class CollectNode
         meType = $currentTable.lookup('me').type
         $currentTable.insert(@ident, SymAttribute.new(meType,nil)) unless @ident == "me"
     end
+
+    def eval
+        raise "valor de matriz incompatible con el robot" if vm.type != $currentTable.lookup('me').type
+        #$currentTable.update("me", VALOR_MATRIZ)
+    end
+
 end
 
 class DropNode
@@ -203,6 +243,10 @@ class DropNode
         @expr.check
     end
 
+    def eval
+        #pos = $currentTable.lookup('me').position
+        #matriz[pos] = @expr.eval
+    end
 end
 
 class MoveNode
@@ -215,7 +259,23 @@ class MoveNode
         expT = @expr.check unless @expr == nil # luego debe ser no negativa
         raise ContextError, "Move: #{@expr} no es de tipo entero." unless @expr == nil or expT == :INT
     end
-    
+
+    def eval
+        steps = @expr.eval 
+        raise "Movimiento negativo" if steps < 0
+
+        bot = $currentTable.lookup('me')
+        case @to
+        when :LEFT 
+            bot.pos[:x] -= steps                
+        when :RIGHT 
+            bot.pos[:x] += steps
+        when :UP 
+            bot.pos[:y] += steps
+        when :DOWN
+            bot.pos[:y] -= steps
+        end
+    end
 end
 
 class ReadNode
@@ -227,6 +287,12 @@ class ReadNode
         meType = $currentTable.lookup('me').type
         $currentTable.insert(@ident, SymAttribute.new(meType,nil)) unless @ident == "me"
     end
+
+    def eval
+        tmp = gets.chomp
+        # hay que volver a pasarle el lexer a esto? xD 
+        # quizas y estoy mamao        
+    end
 end
 
 class SendNode
@@ -234,6 +300,11 @@ class SendNode
     end
 
     def check
+    end
+
+    def eval
+        #peitos de saltos de linea incoming
+        print $currentTable.lookup('me').value
     end
 end
 
@@ -250,6 +321,13 @@ class IdentListNode
         self
     end
     
+    def check
+        @identList.each {|ident| ident.check}
+    end
+
+    def eval(inst)
+        @identList.each {|ident| ident.eval(inst)}
+
     def to_s(level)
         printable = ""
         var = "- var: "
@@ -257,9 +335,6 @@ class IdentListNode
         printable
     end
 
-    def check
-        @identList.each {|ident| ident.check}
-    end
 
 end
 
@@ -275,6 +350,15 @@ class UnExprNode
         expT = @expr.check
         raise ContextError, "Error de tipo. Operador:#{@operator}. Tipo de operando: #{expT}." unless expT == @type
         @type
+    end
+
+    def eval
+        case @operator
+        when :RESTA
+            @expr.eval * (-1)
+        when :NEGACION
+            not @expr.eval
+        end
     end
 
     def to_s(level)
@@ -313,6 +397,21 @@ class AritExprNode < BinExprNode
         super(operator, expr1, expr2, :INT)
     end
 
+    def eval
+        case @operator
+        when :SUMA
+            @expr1.eval + @expr2.eval
+        when :RESTA
+            @expr1.eval - @expr2.eval
+        when :MULT
+            @expr1.eval * @expr2.eval
+        when :DIV
+            @expr1.eval / @expr2.eval
+        when :MOD
+            @expr1.eval % @expr2.eval
+        end
+    end
+
     def to_s(level)
         "ARIT_EXPR\n" + super
     end
@@ -322,6 +421,15 @@ end
 class BoolExprNode < BinExprNode
     def initialize(operator, expr1, expr2)
         super(operator, expr1, expr2, :BOOL)
+    end
+
+    def eval
+        case @operator
+        when :CONJUNCION
+            @expr1.eval and @expr2.eval
+        when :DISYUNCION
+            @expr1.eval or @expr2.eval
+        end
     end
 
     def to_s(level)
@@ -342,6 +450,23 @@ class RelExprNode < BinExprNode
         @type 
     end
 
+    def eval
+        case @operator
+        when :MENOR
+            @expr1.eval < @expr2.eval
+        when :MAYOR
+            @expr1.eval > @expr2.eval            
+        when :MENORIGUAL
+            @expr1.eval <= @expr2.eval
+        when :MAYORIGUAL
+            @expr1.eval >= @expr2.eval
+        when :IGUAL
+            @expr1.eval == @expr2.eval
+        when :NOIGUAL
+            @expr1.eval != @expr2.eval
+        end
+    end
+
     def to_s(level)
         "REL_EXPR\n" + super
     end
@@ -360,6 +485,10 @@ class ConditionalNode
         @ifBody.check
         @elseBody.check unless @elseBody == nil
     end
+
+    def eval
+        @condition.eval ? @ifBody.eval : (@elseBody.eval unless elseBody == nil)
+    end 
 
     def to_s(level)
         printable = "CONDITIONAL\n" +
@@ -385,6 +514,13 @@ class UndfIterNode
         @body.check
     end
 
+    def eval
+        #el peo aqui de quedarse pegado?
+        while @condition.eval do
+            @body.eval
+        end
+    end
+
     def to_s(level)
         "UNDF_ITER\n" +
         "    "*level + "- condition: " + @condition.to_s(level+1) + "\n" +
@@ -407,6 +543,10 @@ class BasicInstrNode
         "#{@id}\n" +
         @identifiers.to_s(level)
     end
+
+    def eval
+        @identifiers.eval(id)
+    end
 end
 
 class Terminal
@@ -415,12 +555,16 @@ class Terminal
         @type = type
     end
     
-    def to_s(level)
+    def check
+        @type
+    end
+
+    def eval
         @value
     end
 
-    def check
-        @type
+    def to_s(level)
+        @value
     end
 end
 
@@ -436,6 +580,9 @@ class CharNode < Terminal
     def initialize(value)
         super(value, :CHAR)
     end
+
+    def eval
+    end
 end
 
 # Nodo que contiene True o False
@@ -443,6 +590,12 @@ class BoolNode < Terminal
     def initialize(value)
         super(value, :BOOL)
     end
+
+    # Me valgo de que aqui solo entra TRUE Y FALSE
+    def eval
+        value == "TRUE"
+    end
+
 end
 
 # Nodo que contiene una Variable
@@ -453,7 +606,6 @@ class VariableNode < Terminal
         super(value, :ident)
     end
 
-
     def check      
         if result = $currentTable.lookup(@value) then
             return result.type
@@ -461,6 +613,22 @@ class VariableNode < Terminal
             raise ContextError, "Variable #{@value} no inicializada."
         end      
     end
+
+    def eval(inst)
+        robot = $currentTable.lookup(@value)
+        case inst
+        when :ACTIVATE
+            raise "reactivacion de robot" if robot.state == :ACT
+        when :ADVANCE
+            raise "avance de robot desactivado" if robot.state == :DEACT
+        when :DEACTIVATE
+            raise "redesactivacion de robot" if robot.state == :DEACT
+        end
+
+        robot.behaviors.eval(inst)
+    end
+
+
 end
 
 ####################
@@ -468,14 +636,17 @@ end
 ####################
 
 class SymAttribute 
-    attr_accessor :value 
+    attr_accessor :value, :state, :position 
     attr_reader :type, :behaviors
 
     def initialize(type, behaviors)
         @type = type
         @value = nil
         @behaviors = behaviors
+        @state = :DEACT
+        @position = { x => 0, y => 0}
     end
+
 end
 
 # Clase que representa una Tabla de Simbolos

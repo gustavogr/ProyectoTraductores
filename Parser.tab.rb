@@ -864,7 +864,7 @@ module_eval(<<'.,.,', 'Parser.y', 165)
 
 module_eval(<<'.,.,', 'Parser.y', 166)
   def _reduce_61(val, _values, result)
-     result = BoolExprNode.new(:DISJUNCION, val[0], val[2]) 
+     result = BoolExprNode.new(:DISYUNCION, val[0], val[2]) 
     result
   end
 .,.,

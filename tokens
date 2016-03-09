@@ -33,7 +33,7 @@ send            --> TkSend
 
 varX -> TkIdent("varX")
 me  --> TkMe
-p - TkCharacter('p')
+'p' - TkCharacter('p')
 4269 -> TkNum(4269)
 
 <=  => TkMenorIgual

@@ -164,7 +164,7 @@ class Parser
     | PARABRE expression PARCIERRA        { result = val[1] }
     | NEGACION expression                 { result = UnExprNode.new(:NEGACION, val[1], :bool) }
     | expression CONJUNCION expression    { result = BoolExprNode.new(:CONJUNCION, val[0], val[2]) }
-    | expression DISYUNCION expression    { result = BoolExprNode.new(:DISJUNCION, val[0], val[2]) }
+    | expression DISYUNCION expression    { result = BoolExprNode.new(:DISYUNCION, val[0], val[2]) }
     | expression MENORIGUAL expression    { result = RelExprNode.new(:MENORIGUAL, val[0], val[2]) }
     | expression MAYORIGUAL expression    { result = RelExprNode.new(:MAYORIGUAL, val[0], val[2]) }
     | expression IGUAL expression         { result = RelExprNode.new(:IGUAL, val[0], val[2]) }
