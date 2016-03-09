@@ -106,7 +106,7 @@ class BehaviorNode
     def eval
         oldTable = $currentTable
         $currentTable = @symTable 
-        @instructions.eval
+        @instructions.eval(bot)
         $currentTable = oldTable 
     end
 
@@ -170,7 +170,7 @@ class BehaviorListNode
 
     end
 
-    def eval(inst)
+    def eval(inst, bot)
         case inst
         when :ACTIVATE
             @bhList.each {|behavior|
@@ -188,7 +188,7 @@ class BehaviorListNode
         when :DEACTIVATE
             @bhList.each {|behavior|
                 if behavior.condition == :DEACTIVATION then
-                    behavior.eval; end
+                    behavior.eval; break
                 end
             }
         end
@@ -234,8 +234,15 @@ class CollectNode
     end
 
     def eval
-        raise "valor de matriz incompatible con el robot" if vm.type != $currentTable.lookup('me').type or vm = nil
-        #$currentTable.update("me", VALOR_MATRIZ)
+
+        me = $currentTable.lookup("me")
+        matrixElem = get(me.position[:x], me.position[:y])
+        if matrixElem then
+            raise "valor de matriz incompatible con el robot" if matrixElem[1] != me.type
+            $currentTable.update("me", matrixValue[0])
+        else
+            raise "posicion de matriz vacia"
+        end
     end
 
 end
@@ -636,7 +643,7 @@ class VariableNode < Terminal
             raise "redesactivacion de robot" if robot.state == :DEACT
         end
 
-        robot.behaviors.eval(inst)
+        robot.behaviors.eval(inst, robot)
     end
 
 
@@ -713,12 +720,12 @@ class ProgramMatrix
         @filled = {}
     end
 
-    def add(x,y,value,type)
+    def add(x,y,value)
         begin
-            @filled[x][y] = [value,type]
+            @filled[x][y] = [value, type]
         rescue 
             @filed[x] = {}
-            @filled[x][y] = [value,type]
+            @filled[x][y] = [value, type]
         end
     end
 
