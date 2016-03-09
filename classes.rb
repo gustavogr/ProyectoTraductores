@@ -175,7 +175,7 @@ class BehaviorListNode
         when :ADVANCE
             @bhList.each {|behavior|
                 bc = behavior.condition
-                if bc != :ACTIVATION and bc != :DEACTIVATION and bc.eval then
+                if (bc != :ACTIVATION and bc != :DEACTIVATION and bc.eval) or bc == :DEFAULT then
                     behavior.eval; break
                 end
             }
@@ -228,7 +228,7 @@ class CollectNode
     end
 
     def eval
-        raise "valor de matriz incompatible con el robot" if vm.type != $currentTable.lookup('me').type
+        raise "valor de matriz incompatible con el robot" if vm.type != $currentTable.lookup('me').type or vm = nil
         #$currentTable.update("me", VALOR_MATRIZ)
     end
 
@@ -261,7 +261,8 @@ class MoveNode
     end
 
     def eval
-        steps = @expr.eval 
+        steps = @expr ? @expr.eval : 1 # me exito esta linea xD
+
         raise "Movimiento negativo" if steps < 0
 
         bot = $currentTable.lookup('me')
