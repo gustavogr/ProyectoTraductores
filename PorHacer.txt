@@ -1,7 +1,8 @@
-definir matriz
 como valido la entrada del read
-Comer milkyway
+terminar de integrar la matriz a las instrucciones de robot
 arreglar chequeo de behavior list
+probar todo
+Comer milkyway
 
 ================
 

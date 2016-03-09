@@ -713,12 +713,12 @@ class ProgramMatrix
         @filled = {}
     end
 
-    def add(x,y,value)
+    def add(x,y,value,type)
         begin
-            @filled[x][y] = value
+            @filled[x][y] = [value,type]
         rescue 
             @filed[x] = {}
-            @filled[x][y] = value
+            @filled[x][y] = [value,type]
         end
     end
 
