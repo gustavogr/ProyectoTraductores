@@ -73,8 +73,8 @@ class Lexer
             
             ## Espacios vacios
             #  Se extraen todos los espacios posibles y se aumenta la columna
-            when /\A +/s 
-                sub = program.slice!(/\A +/)
+            when /\A( |\t)+/s 
+                sub = program.slice!(/\A\s+/)
                 column += sub.length
 
             ## Palabras Reservadas
@@ -105,8 +105,8 @@ class Lexer
             #  Hace match con un solo caracter. Al igual que con las palabras
             #  reservadas se pide que no venga un caracter valido de palabra
             #  despues.
-            when /\A'(\w|\\n|\\t|\\')'(\W|\z)/
-                sub = program.slice!(/\A'(\w|\\n|\\t|\\')'/)
+            when /\A'(.|\\n|\\t|\\')'(\W|\z)/
+                sub = program.slice!(/\A'(.|\\n|\\t|\\')'/)
                 self.tokensList << TkChar.new(sub, line, column)
                 column += sub.length
 

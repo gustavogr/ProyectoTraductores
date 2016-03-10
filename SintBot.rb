@@ -26,6 +26,7 @@ begin
     arbol.check()
     puts arbol
     arbol.eval
+    puts
 
 
 rescue ParseError => e 
@@ -34,6 +35,10 @@ rescue ParseError => e
 
 rescue ContextError => e
 	print "Error de contexto: "
+	puts e
+
+rescue RuntimeError => e
+	print "Error en tiempo de corrida: "
 	puts e
 end
 

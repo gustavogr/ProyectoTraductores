@@ -21,8 +21,34 @@ create
 			store me + x.
 		end
 	end
+	char bot msg
+		on activation:
+			store 'I'. send.
+			store 'n'. send.
+			store 't'. send.
+			store 'r'. send.
+			store 'o'. send.
+			store 'd'. send.
+			store 'u'. send.
+			store 'z'. send.
+			store 'c'. send.
+			store 'a'. send.
+			store ' '. send.
+			store 'u'. send.
+			store 'n'. send.
+			store ' '. send.
+			store 'n'. send.
+			store 'u'. send.
+			store 'm'. send.
+			store 'e'. send.
+			store 'r'. send.
+			store 'o'. send.
+			store ':'. send.
+			store '\n'. send.
+		end
+	end
 execute
-	activate n, f.
+	activate msg, n, f.
 	while n > 0:
 		advance n, f.
 	end

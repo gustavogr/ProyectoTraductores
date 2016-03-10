@@ -6,6 +6,7 @@ create
     end
     on deactivation:
       collect.
+      drop 2 + g.
     end
     on default:
       collect.

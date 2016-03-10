@@ -48,8 +48,8 @@ class ProgramNode
         $currentTable = @symTable
         @instructions.eval
         $currentTable = @symTable.father
-        puts "Matriz resultante"
-        puts $matrix
+        #puts "Matriz resultante"
+        #puts $matrix
     end
 
 end
@@ -313,7 +313,7 @@ class ReadNode
 
     def eval
         me = $currentTable.lookup('me')
-        userIn = gets.chomp
+        userIn = STDIN.gets.chomp
         case me.type
         when :BOOL
             if userIn == "True" then
@@ -324,7 +324,7 @@ class ReadNode
                 raise "Valor booleano esperado" 
             end        
         when :CHAR
-        	
+        
 
         when :INT
             begin
@@ -345,8 +345,18 @@ class SendNode
     end
 
     def eval
-        #peitos de saltos de linea incoming
-        print $currentTable.lookup('me').value
+        value = $currentTable.lookup('me').value
+        case value
+        when "\\n"
+            puts
+        when "\\t"
+            print "\t"
+        when "\\'"
+            print "\'"
+        else
+            print value
+        end
+
     end
 end
 
