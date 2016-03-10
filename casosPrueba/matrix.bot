@@ -5,9 +5,8 @@ create
         end
         on default:
             drop me.
-            right. 
-            up.           
-            store me - 1 '2'.
+            down.           
+            store me - 1.
         end
     end
 

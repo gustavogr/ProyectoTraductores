@@ -324,7 +324,7 @@ class ReadNode
                 raise "Valor booleano esperado" 
             end        
         when :CHAR
-
+        	
 
         when :INT
             begin
@@ -746,10 +746,8 @@ class ProgramMatrix
 
     def add(x,y,value, type)
         begin
-        	p @filled
             @filled[x][y] = [value, type]
         rescue NoMethodError
-        	puts "#{x} #{y}" 
             @filled[x] = {}
             @filled[x][y] = [value, type]
         end

@@ -41,7 +41,7 @@ end
 
 class TkChar < Token
     def initialize(value, line, column)
-        super(:CHARACTER, value, line, column)
+        super(:CHARACTER, value[1...-1], line, column)
     end
 
     def to_s
