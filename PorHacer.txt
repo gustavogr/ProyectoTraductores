@@ -1,6 +1,6 @@
 FALTA
 entrada por expresiones en los behaviors list
-operaciones con robots no inicializados
+
 
 terminar el read
 	que es lo que puede entrar en el read?

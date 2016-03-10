@@ -182,8 +182,13 @@ class BehaviorListNode
             @bhList.each {|behavior|
                 bc = behavior.condition
                 puts bc
-
-                if (bc != :ACTIVATION and bc != :DEACTIVATION) or bc == :DEFAULT then
+                if bc == :ACTIVATION or bc == :DEACTIVATION then 
+                    next 
+                end
+                if bc == :DEFAULT then
+                    behavior.eval; break
+                end
+                if bc.eval then
                     behavior.eval; break
                 end
             }
