@@ -1,0 +1,19 @@
+create
+    int bot n
+        on activation:
+            store 5.
+        end
+        on default:
+            drop me.
+            right. 
+            up.           
+            store me - 1 '2'.
+        end
+    end
+
+execute
+    activate n.
+    while n > 1:
+        advance n.
+    end
+end

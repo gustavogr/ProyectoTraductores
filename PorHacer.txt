@@ -4,6 +4,7 @@ terminar el read
 	entrada de caracteres
 	cuales son los valores que estamos metiendo? caso true y variable ya con true
 terminar el send
+tipo del collect
 
 probar todo
 Comer milkyway

@@ -19,7 +19,6 @@ $currentTable = nil
 class ContextError < StandardError
 end
 
-
 # Nodo que simboliza el programa.
 class ProgramNode
     def initialize(instructions, symTable)
@@ -49,6 +48,7 @@ class ProgramNode
         $currentTable = @symTable
         @instructions.eval
         $currentTable = @symTable.father
+        puts "Matriz resultante"
         puts $matrix
     end
 
@@ -181,7 +181,6 @@ class BehaviorListNode
         when :ADVANCE
             @bhList.each {|behavior|
                 bc = behavior.condition
-                puts bc
                 if bc == :ACTIVATION or bc == :DEACTIVATION then 
                     next 
                 end
@@ -291,13 +290,13 @@ class MoveNode
         me = $currentTable.lookup('me')
         case @to
         when :LEFT 
-            me.pos[:x] -= steps                
+            me.position[:x] -= steps                
         when :RIGHT 
-            me.pos[:x] += steps
+            me.position[:x] += steps
         when :UP 
-            me.pos[:y] += steps
+            me.position[:y] += steps
         when :DOWN
-            me.pos[:y] -= steps
+            me.position[:y] -= steps
         end
     end
 end
@@ -470,7 +469,6 @@ class BoolExprNode < BinExprNode
     end
 
     def eval
-        puts "88888888888888888888888                #{@operator}"
         case @op
         when :CONJUNCION
             @expr1.eval and @expr2.eval
@@ -633,10 +631,6 @@ class BoolNode < Terminal
     def initialize(value)
         super(value, :BOOL)
     end
-
-    def eval
-        @value
-    end
 end
 
 # Nodo que contiene una Variable
@@ -651,7 +645,7 @@ class VariableNode < Terminal
         if result = $currentTable.lookup(@value) then
             return result.type
         else
-            raise ContextError, "Variable #{@value} no inicializada."
+            raise ContextError, "Variable #{@value} no fue declarada."
         end      
     end
 
@@ -732,7 +726,7 @@ class SymbolTable
         if var = self.lookup(name) then 
             var.value = value
         else
-            raise ContextError, "La variable #{name} no ha sido inicializada"
+            raise ContextError, "La variable #{name} no fue inicializada."
         end
     end
 
@@ -752,8 +746,10 @@ class ProgramMatrix
 
     def add(x,y,value, type)
         begin
+        	p @filled
             @filled[x][y] = [value, type]
         rescue NoMethodError
+        	puts "#{x} #{y}" 
             @filled[x] = {}
             @filled[x][y] = [value, type]
         end
