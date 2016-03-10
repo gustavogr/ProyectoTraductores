@@ -1,13 +1,10 @@
 FALTA
-entrada por expresiones en los behaviors list
-
-
 terminar el read
 	que es lo que puede entrar en el read?
 	entrada de caracteres
 	cuales son los valores que estamos metiendo? caso true y variable ya con true
 terminar el send
-explosion en la cara
+
 probar todo
 Comer milkyway
 
