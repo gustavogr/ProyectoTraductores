@@ -5,14 +5,19 @@ create
         end
         on default:
             drop me.
-            down.           
+            down 5/0.           
             store me - 1.
         end
     end
-
-execute
-    activate n.
-    while n > 1:
-        advance n.
+    char bot c
+        on default:
+            collect.
+            down.
+            send.
+        end
     end
+execute
+    activate n,c.
+    advance n,c.
+    deactivate n,c.
 end

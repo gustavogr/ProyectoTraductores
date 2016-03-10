@@ -24,7 +24,7 @@ begin
     arbol = parser.parse
     #arbol.printSymTable()
     arbol.check()
-    puts arbol
+    #puts arbol
     arbol.eval
     puts
 

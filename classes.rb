@@ -239,13 +239,29 @@ class CollectNode
 
     def eval
 
-        me = $currentTable.lookup("me")
-        matrixElem = $matrix.get(me.position[:x], me.position[:y])
-        if matrixElem then
-            raise "valor de matriz incompatible con el robot" if matrixElem[1] != me.type
-            $currentTable.update(@ident, matrixElem[0])
-        else
-            raise "posicion de matriz vacia"
+        me = $currentTable.lookup('me')
+        matrixIn = $matrix.get(me.position[:x], me.position[:y])
+        raise "Posicion de la matriz (#{me.position[:x]},#{me.position[:y]}) se encuentra vacía." unless matrixIn
+        case me.type
+        when :BOOL
+            if matrixIn == "true" then
+                $currentTable.update(@ident, true)         
+            elsif matrixIn == "false" then
+                $currentTable.update(@ident, false)
+            else
+                raise "#{matrixIn} no es de tipo Booleano"  
+            end        
+        when :CHAR
+            sub = matrixIn.slice(/\A(.|\\n|\\t|\\')\z/)
+            $currentTable.update(@ident, sub) if sub
+            raise "#{matrixIn} no es de tipo Caracter" unless sub
+        when :INT
+            begin
+                number = Integer(matrixIn)
+                $currentTable.update(@ident, number)
+            rescue ArgumentError
+                raise "#{matrixIn} no es de tipo Entero"
+            end
         end
     end
 end
@@ -263,8 +279,7 @@ class DropNode
         me = $currentTable.lookup("me")
 
         if me.value then
-            # aqui no va el tipo de me
-            $matrix.add(me.position[:x], me.position[:y], @expr.eval, me.type)
+            $matrix.add(me.position[:x], me.position[:y], @expr.eval)
         else
             raise "Robot no fue inicializado"
         end
@@ -283,7 +298,7 @@ class MoveNode
     end
 
     def eval
-        steps = @expr ? @expr.eval : 1 # me exito esta linea xD
+        steps = @expr ? @expr.eval : 1 # me excito esta linea xD
 
         raise "Movimiento negativo" if steps < 0
 
@@ -316,22 +331,23 @@ class ReadNode
         userIn = STDIN.gets.chomp
         case me.type
         when :BOOL
-            if userIn == "True" then
+            if userIn == "true" then
                 $currentTable.update(@ident, true)         
-            elsif userIn == "False" then
+            elsif userIn == "false" then
                 $currentTable.update(@ident, false)
             else
-                raise "Valor booleano esperado" 
+                raise "#{userIn} no es de tipo Booleano"  
             end        
         when :CHAR
-        
-
+            sub = userIn.slice!(/\A(.|\\n|\\t|\\')\z/)
+            $currentTable.update(@ident, sub) if sub
+            raise "#{userIn} no es de tipo Caracter" unless sub
         when :INT
             begin
                 number = Integer(userIn)
                 $currentTable.update(@ident, number)
             rescue ArgumentError
-                raise "valor entero esperado"
+                raise "#{userIn} no es de tipo Entero"
             end
         end
     end
@@ -346,6 +362,7 @@ class SendNode
 
     def eval
         value = $currentTable.lookup('me').value
+        raise "Robot no inicializado" unless value
         case value
         when "\\n"
             puts
@@ -399,7 +416,7 @@ class UnExprNode
 
     def check
         expT = @expr.check
-        raise ContextError, "Error de tipo. Operador:#{@operator}. Tipo de operando: #{expT}." unless expT == @type
+        raise ContextError, "Error de tipo. Operador: #{@operator}. Tipo de operando: #{expT}." unless expT == @type
         @type
     end
 
@@ -460,7 +477,7 @@ class AritExprNode < BinExprNode
             begin 
                 @expr1.eval / @expr2.eval
             rescue ZeroDivisionError
-                "Division entre 0"
+                 raise "Division entre 0"
             end
         when :MOD
             @expr1.eval % @expr2.eval
@@ -663,7 +680,7 @@ class VariableNode < Terminal
         if var = $currentTable.lookup(@value).value then
             return var
         else
-            raise "ROBOT NO INICIALIZADO"
+            raise "Robot no inicializado."
         end
     end
 
@@ -671,12 +688,12 @@ class VariableNode < Terminal
         robot = $currentTable.lookup(@value)
         case inst
         when :ACTIVATE
-            raise "reactivacion de robot" if robot.state == :ACT
+            raise "Activate de robot previamente activado." if robot.state == :ACT
             robot.state = :ACT
         when :ADVANCE
-            raise "avance de robot desactivado" if robot.state == :DEACT
+            raise "Advance de robot desactivado." if robot.state == :DEACT
         when :DEACTIVATE
-            raise "redesactivacion de robot" if robot.state == :DEACT
+            raise "Deactivate de robot previamente desactivado." if robot.state == :DEACT
             robot.state = :DEACT
         end
 
@@ -754,12 +771,12 @@ class ProgramMatrix
         @filled = {}
     end
 
-    def add(x,y,value, type)
+    def add(x,y,value)
         begin
-            @filled[x][y] = [value, type]
+            @filled[x][y] = value.to_s
         rescue NoMethodError
             @filled[x] = {}
-            @filled[x][y] = [value, type]
+            @filled[x][y] = value.to_s 
         end
     end
 

@@ -160,9 +160,9 @@ class Parser
     | expression MULT expression          { result = AritExprNode.new(:MULT, val[0], val[2]) }
     | expression DIV expression           { result = AritExprNode.new(:DIV, val[0], val[2]) }
     | expression MOD expression           { result = AritExprNode.new(:MOD, val[0], val[2]) }
-    | RESTA expression =RESTA_UNARIA      { result = UnExprNode.new(:RESTA, val[1], :int) }
+    | RESTA expression =RESTA_UNARIA      { result = UnExprNode.new(:RESTA, val[1], :INT) }
     | PARABRE expression PARCIERRA        { result = val[1] }
-    | NEGACION expression                 { result = UnExprNode.new(:NEGACION, val[1], :bool) }
+    | NEGACION expression                 { result = UnExprNode.new(:NEGACION, val[1], :BOOL) }
     | expression CONJUNCION expression    { result = BoolExprNode.new(:CONJUNCION, val[0], val[2]) }
     | expression DISYUNCION expression    { result = BoolExprNode.new(:DISYUNCION, val[0], val[2]) }
     | expression MENORIGUAL expression    { result = RelExprNode.new(:MENORIGUAL, val[0], val[2]) }

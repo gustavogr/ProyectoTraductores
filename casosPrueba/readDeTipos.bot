@@ -1,0 +1,19 @@
+create 
+	int bot i
+		on activation:
+			read.
+		end
+	end
+	char bot c
+		on activation:
+			read.
+		end
+	end
+	bool bot b
+		on activation:
+			read.
+		end
+	end
+execute
+	activate i, c, b.
+end
