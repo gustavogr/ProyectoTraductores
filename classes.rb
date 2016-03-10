@@ -14,7 +14,7 @@
 #   15 / 02 / 2016
 
 $currentTable = nil
-$matrix = ProgramMatrix.new()
+
 
 class ContextError < StandardError
 end
@@ -45,9 +45,11 @@ class ProgramNode
     end
 
     def eval
+        $matrix = ProgramMatrix.new()
         $currentTable = @symTable
         @instructions.eval
         $currentTable = @symTable.father
+        puts $matrix
     end
 
 end
@@ -97,7 +99,7 @@ class BehaviorNode
         oldTable = $currentTable
         $currentTable = @symTable 
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
-            @condition.check == :BOOL # aqui no deberia levantarse una excepcion?
+            raise "expresion no booleana en condicion" unless @condition.check == :BOOL # aqui no deberia levantarse una excepcion?0000000000
         end
         @instructions.check
         $currentTable = oldTable
@@ -106,7 +108,7 @@ class BehaviorNode
     def eval
         oldTable = $currentTable
         $currentTable = @symTable 
-        @instructions.eval(bot)
+        @instructions.eval
         $currentTable = oldTable 
     end
 
@@ -115,7 +117,6 @@ class BehaviorNode
         result.symTable = SymbolTable.new()
         result
     end
-
 end
 
 class BotInstListNode
@@ -135,7 +136,6 @@ class BotInstListNode
     def eval
        @instList.each {|inst| inst.eval}
     end 
-
 end
 
 
@@ -170,7 +170,7 @@ class BehaviorListNode
 
     end
 
-    def eval(inst, bot)
+    def eval(inst)
         case inst
         when :ACTIVATE
             @bhList.each {|behavior|
@@ -181,7 +181,9 @@ class BehaviorListNode
         when :ADVANCE
             @bhList.each {|behavior|
                 bc = behavior.condition
-                if (bc != :ACTIVATION and bc != :DEACTIVATION and bc.eval) or bc == :DEFAULT then
+                puts bc
+
+                if (bc != :ACTIVATION and bc != :DEACTIVATION) or bc == :DEFAULT then
                     behavior.eval; break
                 end
             }
@@ -201,7 +203,6 @@ class BehaviorListNode
         }
         result
     end
-
 end
 
 class StoreNode
@@ -219,7 +220,6 @@ class StoreNode
     def eval
         $currentTable.update("me", @expr.eval)
     end
-
 end
 
 # Guarda el valor de la matriz en el robot
@@ -236,15 +236,14 @@ class CollectNode
     def eval
 
         me = $currentTable.lookup("me")
-        matrixElem = get(me.position[:x], me.position[:y])
+        matrixElem = $matrix.get(me.position[:x], me.position[:y])
         if matrixElem then
             raise "valor de matriz incompatible con el robot" if matrixElem[1] != me.type
-            $currentTable.update("me", matrixValue[0])
+            $currentTable.update(@ident, matrixElem[0])
         else
             raise "posicion de matriz vacia"
         end
     end
-
 end
 
 class DropNode
@@ -257,8 +256,14 @@ class DropNode
     end
 
     def eval
-        #pos = $currentTable.lookup('me').position
-        #matriz[pos] = @expr.eval
+        me = $currentTable.lookup("me")
+
+        if me.value then
+            # aqui no va el tipo de me
+            $matrix.add(me.position[:x], me.position[:y], @expr.eval, me.type)
+        else
+            raise "Robot no fue inicializado"
+        end
     end
 end
 
@@ -278,16 +283,16 @@ class MoveNode
 
         raise "Movimiento negativo" if steps < 0
 
-        bot = $currentTable.lookup('me')
+        me = $currentTable.lookup('me')
         case @to
         when :LEFT 
-            bot.pos[:x] -= steps                
+            me.pos[:x] -= steps                
         when :RIGHT 
-            bot.pos[:x] += steps
+            me.pos[:x] += steps
         when :UP 
-            bot.pos[:y] += steps
+            me.pos[:y] += steps
         when :DOWN
-            bot.pos[:y] -= steps
+            me.pos[:y] -= steps
         end
     end
 end
@@ -303,9 +308,28 @@ class ReadNode
     end
 
     def eval
-        tmp = gets.chomp
-        # hay que volver a pasarle el lexer a esto? xD 
-        # quizas y estoy mamao        
+        me = $currentTable.lookup('me')
+        userIn = gets.chomp
+        case me.type
+        when :BOOL
+            if userIn == "True" then
+                $currentTable.update(@ident, true)         
+            elsif userIn == "False" then
+                $currentTable.update(@ident, false)
+            else
+                raise "Valor booleano esperado" 
+            end        
+        when :CHAR
+
+
+        when :INT
+            begin
+                number = Integer(userIn)
+                $currentTable.update(@ident, number)
+            rescue ArgumentError
+                raise "valor entero esperado"
+            end
+        end
     end
 end
 
@@ -340,7 +364,8 @@ class IdentListNode
     end
 
     def eval(inst)
-        @identList.each {|ident| ident.eval(inst)}
+        @identList.each {|ident| ident.evalM(inst)}
+    end
 
     def to_s(level)
         printable = ""
@@ -348,8 +373,6 @@ class IdentListNode
         @identList.each {|ident| printable += "    "*level + var + ident.to_s(level + 1) + "\n"}
         printable
     end
-
-
 end
 
 # Nodo que contiene una Expresion Unaria
@@ -412,7 +435,7 @@ class AritExprNode < BinExprNode
     end
 
     def eval
-        case @operator
+        case @op
         when :SUMA
             @expr1.eval + @expr2.eval
         when :RESTA
@@ -442,7 +465,8 @@ class BoolExprNode < BinExprNode
     end
 
     def eval
-        case @operator
+        puts "88888888888888888888888                #{@operator}"
+        case @op
         when :CONJUNCION
             @expr1.eval and @expr2.eval
         when :DISYUNCION
@@ -469,7 +493,7 @@ class RelExprNode < BinExprNode
     end
 
     def eval
-        case @operator
+        case @op
         when :MENOR
             @expr1.eval < @expr2.eval
         when :MAYOR
@@ -505,7 +529,7 @@ class ConditionalNode
     end
 
     def eval
-        @condition.eval ? @ifBody.eval : (@elseBody.eval unless elseBody == nil)
+        @condition.eval ? @ifBody.eval : (@elseBody.eval unless @elseBody == nil)
     end 
 
     def to_s(level)
@@ -533,7 +557,6 @@ class UndfIterNode
     end
 
     def eval
-        #el peo aqui de quedarse pegado?
         while @condition.eval do
             @body.eval
         end
@@ -563,7 +586,7 @@ class BasicInstrNode
     end
 
     def eval
-        @identifiers.eval(id)
+        @identifiers.eval(@id)
     end
 end
 
@@ -582,7 +605,7 @@ class Terminal
     end
 
     def to_s(level)
-        @value
+        @value.to_s
     end
 end
 
@@ -598,9 +621,6 @@ class CharNode < Terminal
     def initialize(value)
         super(value, :CHAR)
     end
-
-    def eval
-    end
 end
 
 # Nodo que contiene True o False
@@ -609,11 +629,9 @@ class BoolNode < Terminal
         super(value, :BOOL)
     end
 
-    # Me valgo de que aqui solo entra TRUE Y FALSE
     def eval
-        value == "TRUE"
+        @value
     end
-
 end
 
 # Nodo que contiene una Variable
@@ -632,27 +650,34 @@ class VariableNode < Terminal
         end      
     end
 
-    def eval(inst)
+    def eval
+        if var = $currentTable.lookup(@value).value then
+            return var
+        else
+            raise "ROBOT NO INICIALIZADO"
+        end
+    end
+
+    def evalM(inst)
         robot = $currentTable.lookup(@value)
         case inst
         when :ACTIVATE
             raise "reactivacion de robot" if robot.state == :ACT
+            robot.state = :ACT
         when :ADVANCE
             raise "avance de robot desactivado" if robot.state == :DEACT
         when :DEACTIVATE
             raise "redesactivacion de robot" if robot.state == :DEACT
+            robot.state = :DEACT
         end
 
-        robot.behaviors.eval(inst, robot)
+        robot.behaviors.eval(inst)
     end
-
-
 end
 
 ####################
 # Tabla de Simbolos
 ####################
-
 class SymAttribute 
     attr_accessor :value, :state, :position 
     attr_reader :type, :behaviors
@@ -662,10 +687,10 @@ class SymAttribute
         @value = nil
         @behaviors = behaviors
         @state = :DEACT
-        @position = { x => 0, y => 0}
+        @position = { :x => 0, :y => 0}
     end
-
 end
+
 
 # Clase que representa una Tabla de Simbolos
 class SymbolTable
@@ -712,19 +737,19 @@ class SymbolTable
             attributes.behaviors.check()
         }
     end
-    
 end
+
 
 class ProgramMatrix
     def initialize
         @filled = {}
     end
 
-    def add(x,y,value)
+    def add(x,y,value, type)
         begin
             @filled[x][y] = [value, type]
-        rescue 
-            @filed[x] = {}
+        rescue NoMethodError
+            @filled[x] = {}
             @filled[x][y] = [value, type]
         end
     end
@@ -736,4 +761,10 @@ class ProgramMatrix
             nil
         end 
     end
+
+    #debug
+    def to_s
+        p @filled
+    end
 end
+

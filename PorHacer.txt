@@ -1,13 +1,13 @@
-como valido la entrada del read
-terminar de integrar la matriz a las instrucciones de robot
-arreglar chequeo de behavior list
+FALTA
+entrada por expresiones en los behaviors list
+operaciones con robots no inicializados
+
+terminar el read
+	que es lo que puede entrar en el read?
+	entrada de caracteres
+	cuales son los valores que estamos metiendo? caso true y variable ya con true
+terminar el send
+explosion en la cara
 probar todo
 Comer milkyway
 
-================
-
-Refinar los bhlist nodes en el parseo es viable?
-
-
-
-chequeos gafos listos

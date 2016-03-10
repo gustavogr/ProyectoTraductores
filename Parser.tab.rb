@@ -764,14 +764,14 @@ module_eval(<<'.,.,', 'Parser.y', 147)
 
 module_eval(<<'.,.,', 'Parser.y', 148)
   def _reduce_46(val, _values, result)
-     result = BoolNode.new(val[0]) 
+     result = BoolNode.new(true) 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'Parser.y', 149)
   def _reduce_47(val, _values, result)
-     result = BoolNode.new(val[0]) 
+     result = BoolNode.new(false) 
     result
   end
 .,.,

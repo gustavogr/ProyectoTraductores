@@ -8,7 +8,7 @@ create
      on me > 1:
         collect as a.
         read as b.
-        drop a < 'a'.
+        drop a < 5.
      end
  end
 
@@ -20,7 +20,7 @@ execute
  if bar > 2 - contador:
      advance contador.
      advance contador.
- else :
+ else:
      advance bar.
      advance bar.
  end

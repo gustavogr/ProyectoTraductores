@@ -25,6 +25,7 @@ begin
     #arbol.printSymTable()
     arbol.check()
     puts arbol
+    arbol.eval
 
 
 rescue ParseError => e 
