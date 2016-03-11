@@ -14,4 +14,4 @@
 
 #! /bin/bash
 
-ruby SintBot.rb $1
+ruby Bot.rb $1

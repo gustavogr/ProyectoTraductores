@@ -15,6 +15,9 @@
 
 require_relative 'token.rb'
 
+class LexicalError < StandardError
+end
+
 class Lexer
 
     ## 
@@ -60,7 +63,7 @@ class Lexer
     #  En cada iteracion se hace match del inicio
     #  del programa con las diferentes Regexp y se procesa
     #  según sea el caso.
-    def analize(file)
+    def initialize(file)
         program = File.read(file)   # Programa a Analizar
         line = 1                    # Contador para mostrar el numero de linea
         column = 1                  # Contador para mostrar el numero de columna
@@ -146,7 +149,7 @@ class Lexer
             when /\A[\d_]\w/
                 sub = program.slice!(/\A[\d_]+/)
                 hasErrors = true
-                puts "Error: Caracter inesperado \"#{sub[0]}\" en la fila #{line}, columna #{column}"
+                raise LexicalError, "Caracter inesperado \"#{sub[0]}\" en la fila #{line}, columna #{column}"
                 column += sub.length
 
             ## Errores
@@ -155,7 +158,7 @@ class Lexer
             else
                 sub = program.slice!(0)
                 hasErrors = true
-                puts "Error: Caracter inesperado \"#{sub}\" en la fila #{line}, columna #{column}"
+                raise LexicalError, "Caracter inesperado \"#{sub}\" en la fila #{line}, columna #{column}"
                 column += 1
         
             end 

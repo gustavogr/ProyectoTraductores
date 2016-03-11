@@ -13,6 +13,8 @@
 # Ultima modificacion: 
 #   15 / 02 / 2016
 
+require_relative 'matrix.rb'
+
 $currentTable = nil
 
 
@@ -48,8 +50,6 @@ class ProgramNode
         $currentTable = @symTable
         @instructions.eval
         $currentTable = @symTable.father
-        #puts "Matriz resultante"
-        #puts $matrix
     end
 
 end
@@ -164,8 +164,8 @@ class BehaviorListNode
             deac += 1 if cond == :DEACTIVATION
             default += 1 if cond == :DEFAULT
             behavior.check()
-            raise ContextError, "Error: condiciones de robot" if ac > 1 or deac > 1 or default > 1
-            raise ContextError, "Error: condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
+            raise ContextError, "condiciones de robot" if ac > 1 or deac > 1 or default > 1
+            raise ContextError, "condicion default de robot no se encuentra al final." if default == 1 and cond != :DEFAULT 
         }
 
     end
@@ -241,7 +241,7 @@ class CollectNode
 
         me = $currentTable.lookup('me')
         matrixIn = $matrix.get(me.position[:x], me.position[:y])
-        raise "Posicion de la matriz (#{me.position[:x]},#{me.position[:y]}) se encuentra vacía." unless matrixIn
+        raise "Posicion de la matriz (#{me.position[:x]},#{me.position[:y]}) se encuentra vacia." unless matrixIn
         case me.type
         when :BOOL
             if matrixIn == "true" then
@@ -553,7 +553,7 @@ class ConditionalNode
     end
 
     def check  
-        raise ContextError, "Error: Expresion de condicional no es de tipo booleano." unless @condition.check == :BOOL
+        raise ContextError, "Expresion de condicional no es de tipo booleano." unless @condition.check == :BOOL
         @ifBody.check
         @elseBody.check unless @elseBody == nil
     end
@@ -582,7 +582,7 @@ class UndfIterNode
     end
 
     def check
-        raise ContextError, "Error: Condicion de Iteracion no es de tipo booleano." unless @condition.check == :BOOL
+        raise ContextError, "Condicion de Iteracion no es de tipo booleano." unless @condition.check == :BOOL
         @body.check
     end
 
@@ -766,31 +766,5 @@ class SymbolTable
 end
 
 
-class ProgramMatrix
-    def initialize
-        @filled = {}
-    end
 
-    def add(x,y,value)
-        begin
-            @filled[x][y] = value.to_s
-        rescue NoMethodError
-            @filled[x] = {}
-            @filled[x][y] = value.to_s 
-        end
-    end
-
-    def get(x,y)
-        begin
-            @filled[x][y]
-        rescue
-            nil
-        end 
-    end
-
-    #debug
-    def to_s
-        p @filled
-    end
-end
 

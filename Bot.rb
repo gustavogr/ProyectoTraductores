@@ -1,7 +1,6 @@
-# SintBot.rb
+# Bot.rb
 # 
-# Programa que llama al interprete (por ahora solo lexer y parser) 
-#   con el archivo que se suministre
+# Interprete del lenguaje Bot 
 #
 # Autores:
 #   Gustavo Gutierrez   11-10428
@@ -16,18 +15,17 @@
 require_relative 'lexer.rb' 
 require_relative 'Parser.tab.rb' 
 
-lex = Lexer.new
-lex.analize(ARGV[0])
-
 begin
-    parser = Parser.new(lex)
-    arbol = parser.parse
-    #arbol.printSymTable()
-    arbol.check()
-    #puts arbol
-    arbol.eval
+    tokens = Lexer.new(ARGV[0])
+    parser = Parser.new(tokens)
+    ast = parser.parse
+    ast.check()
+    ast.eval
     puts
 
+rescue LexicalError => e 
+    print "Error lexico: "
+    puts e 
 
 rescue ParseError => e 
     print "Error de sintaxis: "
@@ -38,7 +36,7 @@ rescue ContextError => e
 	puts e
 
 rescue RuntimeError => e
-	print "Error en tiempo de corrida: "
+	print "Error en ejecucion: "
 	puts e
 end
 
