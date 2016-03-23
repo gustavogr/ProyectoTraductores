@@ -1,0 +1,36 @@
+errores en los casos de prueba:
+
+a+b.bot
+uso de receive en vez de bot
+en a+b.bot falta un end para la declaracion del bot b.
+se intenta usar el robot b como "b" y no como "me" dentro del comportamiento del robot b
+
+exp.bot
+errores con la letra acentuada
+
+factorial.bot
+Uso de receive
+condicion default no esta al final de la lista de comportamientos en el robot "f"
+le falta un end a la declaracion del robot "f"
+
+fibonacci.bot
+Uso de receive.
+uso de letras acentuadas en los comentarios.
+falta un punto al final de la instruccion store en la linea 31.
+
+hola-mundo.bot 
+Esta perfecto!
+
+sort.bot
+uso de vocales acentuadas.
+condicion default no esta al final en el robot adder.
+---- me dice robot no inicialiado.
+
+sum.bot
+condicion default no esta al final en el robot adder.
+
+
+
+
+
+

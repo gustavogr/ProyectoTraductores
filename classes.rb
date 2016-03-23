@@ -677,8 +677,8 @@ class VariableNode < Terminal
     end
 
     def eval
-        if var = $currentTable.lookup(@value).value then
-            return var
+        if var = $currentTable.lookup(@value) then
+            return var.value
         else
             raise "Robot no inicializado."
         end

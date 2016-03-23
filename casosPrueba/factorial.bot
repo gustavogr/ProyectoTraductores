@@ -6,7 +6,7 @@ $- factorial.bot:
 create
   int bot n
     on activation:
-      recieve.
+      read.
     end
     on default:
       drop me.
@@ -17,14 +17,14 @@ create
     on activation:
       store 1.
     end
+    on deactivation:
+      send.
+    end
     on default:
       collect as x.
       store me * x.
     end
-    on deactivation:
-      send.
-    end
-
+  end
 execute
   activate n, f.
   while n > 1:
