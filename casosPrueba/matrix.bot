@@ -5,7 +5,7 @@ create
         end
         on default:
             drop me.
-            down 5/0.           
+            down 5-4.           
             store me - 1.
         end
     end

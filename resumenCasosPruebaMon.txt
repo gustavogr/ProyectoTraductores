@@ -24,7 +24,9 @@ Esta perfecto!
 sort.bot
 uso de vocales acentuadas.
 condicion default no esta al final en el robot adder.
----- me dice robot no inicialiado.
+Al bot printer le faltaba una instruccion up para funcionar.
+En el behavior me > 0 del bot compare faltaba swippear el up y el down.
+La iteracion while m > 0 debe ser while m > 1 o se caen en posiciones no inicializadas de la matriz.
 
 sum.bot
 condicion default no esta al final en el robot adder.

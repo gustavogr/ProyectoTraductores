@@ -35,7 +35,7 @@ create
       up.
     end
     on default:
-      collect. send.
+      collect. send. up.
     end
   end
   
@@ -82,9 +82,9 @@ execute
           up. down.
         end
         on me > 0:
-          collect as x. up.
+          collect as x. down.
           collect as y. drop x.
-          down. drop y.
+          up. drop y.
         end
         on deactivation:
           down.
@@ -93,7 +93,7 @@ execute
     
     execute
       activate m.
-      while m > 0:
+      while m > 1:
         activate compare.
         advance compare, m.
         deactivate compare.
