@@ -20,6 +20,8 @@ $currentTable = nil
 
 class ContextError < StandardError
 end
+        
+$matrix = ProgramMatrix.new()
 
 # Nodo que simboliza el programa.
 class ProgramNode
@@ -46,7 +48,6 @@ class ProgramNode
     end
 
     def eval
-        $matrix = ProgramMatrix.new()
         $currentTable = @symTable
         @instructions.eval
         $currentTable = @symTable.father
@@ -99,7 +100,7 @@ class BehaviorNode
         oldTable = $currentTable
         $currentTable = @symTable 
         if @condition != :ACTIVATION and @condition != :DEACTIVATION and @condition != :DEFAULT then
-            raise "expresion no booleana en condicion" unless @condition.check == :BOOL # aqui no deberia levantarse una excepcion?0000000000
+            raise "expresion no booleana en condicion" unless @condition.check == :BOOL 
         end
         @instructions.check
         $currentTable = oldTable
@@ -187,7 +188,11 @@ class BehaviorListNode
                 if bc == :DEFAULT then
                     behavior.eval; break
                 end
-                if bc.eval then
+                oldTable = $currentTable
+                $currentTable = behavior.symTable 
+                result = bc.eval
+                $currentTable = oldTable
+                if result then
                     behavior.eval; break
                 end
             }
@@ -242,27 +247,10 @@ class CollectNode
         me = $currentTable.lookup('me')
         matrixIn = $matrix.get(me.position[:x], me.position[:y])
         raise "Posicion de la matriz (#{me.position[:x]},#{me.position[:y]}) se encuentra vacia." unless matrixIn
-        case me.type
-        when :BOOL
-            if matrixIn == "true" then
-                $currentTable.update(@ident, true)         
-            elsif matrixIn == "false" then
-                $currentTable.update(@ident, false)
-            else
-                raise "#{matrixIn} no es de tipo Booleano"  
-            end        
-        when :CHAR
-            sub = matrixIn.slice(/\A(.|\\n|\\t|\\')\z/)
-            $currentTable.update(@ident, sub) if sub
-            raise "#{matrixIn} no es de tipo Caracter" unless sub
-        when :INT
-            begin
-                number = Integer(matrixIn)
-                $currentTable.update(@ident, number)
-            rescue ArgumentError
-                raise "#{matrixIn} no es de tipo Entero"
-            end
-        end
+        message = "Posicion de la matriz (#{me.position[:x]},#{me.position[:y]}) (#{matrixIn[1]}) no es del mismo tipo que el robot (#{me.type})."
+        raise message unless me.type == matrixIn[1]
+        $currentTable.update(@ident, matrixIn[0])
+        
     end
 end
 
@@ -279,7 +267,7 @@ class DropNode
         me = $currentTable.lookup("me")
 
         if me.value then
-            $matrix.add(me.position[:x], me.position[:y], @expr.eval)
+            $matrix.add(me.position[:x], me.position[:y], @expr.eval, @expr.type)
         else
             raise "Robot no fue inicializado"
         end
@@ -408,6 +396,8 @@ end
 
 # Nodo que contiene una Expresion Unaria
 class UnExprNode
+    attr_accessor :type
+
     def initialize(operator, expression, type)
         @operator = operator
         @expr = expression
@@ -438,6 +428,8 @@ end
 
 # Nodo que contiene una Expresion Binaria
 class BinExprNode
+    attr_accessor :type
+
     def initialize(operator, expr1, expr2, type)
         @op = operator
         @expr1 = expr1 
@@ -676,11 +668,15 @@ class VariableNode < Terminal
         end      
     end
 
+    def type
+        $currentTable.lookup(@value).type
+    end
+
     def eval
         if var = $currentTable.lookup(@value) then
             return var.value
         else
-            raise "Robot no inicializado."
+            raise "Variable #{@value} no inicializada."
         end
     end
 
