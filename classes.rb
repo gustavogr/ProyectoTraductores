@@ -16,12 +16,10 @@
 require_relative 'matrix.rb'
 
 $currentTable = nil
-
+$matrix = ProgramMatrix.new()
 
 class ContextError < StandardError
 end
-        
-$matrix = ProgramMatrix.new()
 
 # Nodo que simboliza el programa.
 class ProgramNode
@@ -383,7 +381,8 @@ class IdentListNode
     end
 
     def eval(inst)
-        @identList.each {|ident| ident.evalM(inst)}
+        @identList.each {|ident| puts "Ejecutando #{inst} al bot #{ident.to_s(0)}" 
+            ident.evalM(inst)}
     end
 
     def to_s(level)
