@@ -48,6 +48,7 @@ class ProgramNode
     def eval
         $currentTable = @symTable
         @instructions.eval
+        @symTable.reset
         $currentTable = @symTable.father
     end
 
@@ -381,8 +382,7 @@ class IdentListNode
     end
 
     def eval(inst)
-        @identList.each {|ident| puts "Ejecutando #{inst} al bot #{ident.to_s(0)}" 
-            ident.evalM(inst)}
+        @identList.each {|ident| ident.evalM(inst)}
     end
 
     def to_s(level)
@@ -710,6 +710,11 @@ class SymAttribute
         @state = :DEACT
         @position = { :x => 0, :y => 0}
     end
+    def reset
+        @value = nil
+        @state = :DEACT
+        @position = { :x => 0, :y => 0} 
+    end
 end
 
 
@@ -756,6 +761,11 @@ class SymbolTable
         @symbols.each { |key, attributes|
             attributes.behaviors.initTables(attributes)
             attributes.behaviors.check()
+        }
+    end
+    def reset
+        @symbols.each { |key, attributes|
+            attributes.reset
         }
     end
 end
