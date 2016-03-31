@@ -612,6 +612,8 @@ class BasicInstrNode
 end
 
 class Terminal
+    attr_accessor :type
+    
     def initialize(value, type)
         @value = value
         @type = type
@@ -635,6 +637,7 @@ class NumberNode < Terminal
     def initialize(value)
         super(value, :INT)
     end
+
 end
 
 # Nodo que contiene caracteres de BOT
