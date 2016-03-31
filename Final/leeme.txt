@@ -1,0 +1,11 @@
+Entrega final del interprete de BOT.
+Se probaron con exito los casos de prueba suministrados.
+La implementacion de la tabla de simbolos es una clase dentro del archivo classes.rb, debido a su alta relacion con el AST
+de resto los nombres de archivos explican bien sus contenidos.
+
+corrida 
+./Bot <archivo>
+
+Gracias!
+11-10743 Jose Pascarella
+11-10428 Gustavo Gutierrez 
